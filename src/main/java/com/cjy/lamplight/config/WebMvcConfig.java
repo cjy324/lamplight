@@ -60,7 +60,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 				.excludePathPatterns("/v2/api-docs")
 				.excludePathPatterns("/webjars/**")
 				.excludePathPatterns("/adm/**").excludePathPatterns("/gen/**").excludePathPatterns("/resource/**")
-				.excludePathPatterns("/usr/home/main").excludePathPatterns("/usr/member/authKey")
+				.excludePathPatterns("/usr/home/main").excludePathPatterns("/usr/member/authKey").excludePathPatterns("/usr/member/list")
 				.excludePathPatterns("/usr/member/login").excludePathPatterns("/usr/member/doLogin")
 				.excludePathPatterns("/usr/member/join").excludePathPatterns("/usr/member/doJoin")
 				.excludePathPatterns("/usr/article/list").excludePathPatterns("/usr/article/detail")

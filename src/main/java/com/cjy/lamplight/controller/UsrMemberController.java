@@ -1,5 +1,6 @@
 package com.cjy.lamplight.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,40 @@ public class UsrMemberController {
 
 	@Autowired
 	private MemberService memberService;
+	
+	@GetMapping("/usr/member/list")
+	@ResponseBody
+	public ResultData showList(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId,
+			String searchKeywordType, String searchKeyword, @RequestParam(defaultValue = "1") int page,
+			@RequestParam Map<String, Object> param) {
+		if (searchKeywordType != null) {
+			searchKeywordType = searchKeywordType.trim();
+		}
+
+		if (searchKeywordType == null || searchKeywordType.length() == 0) {
+			searchKeywordType = "name";
+		}
+
+		if (searchKeyword != null && searchKeyword.length() == 0) {
+			searchKeyword = null;
+		}
+
+		if (searchKeyword != null) {
+			searchKeyword = searchKeyword.trim();
+		}
+
+		if (searchKeyword == null) {
+			searchKeywordType = null;
+		}
+
+		int itemsInAPage = 20;
+
+		List<Member> members = memberService.getForPrintMembers(searchKeywordType, searchKeyword, page, itemsInAPage, param);
+
+		req.setAttribute("members", members);	
+
+		return new ResultData("S-1", "성공", "members", members);
+	}
 
 	@PostMapping("/usr/member/doJoin")
 	@ResponseBody
