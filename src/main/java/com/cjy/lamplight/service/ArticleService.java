@@ -11,7 +11,7 @@ import com.cjy.lamplight.dao.ArticleDao;
 import com.cjy.lamplight.dto.Article;
 import com.cjy.lamplight.dto.Board;
 import com.cjy.lamplight.dto.GenFile;
-import com.cjy.lamplight.dto.Member;
+import com.cjy.lamplight.dto.Client;
 import com.cjy.lamplight.dto.ResultData;
 import com.cjy.lamplight.util.Util;
 
@@ -31,7 +31,7 @@ public class ArticleService {
 	@Autowired
 	private ArticleDao articleDao;
 	@Autowired
-	private MemberService memberService;
+	private ClientService memberService;
 
 	public Article getArticle(int id) {
 		return articleDao.getArticle(id);
@@ -70,9 +70,9 @@ public class ArticleService {
 		return new ResultData("S-1", "게시물을 수정하였습니다.", "id", id);
 	}
 
-	public ResultData getActorCanModifyRd(Article article, Member actor) {
+	public ResultData getActorCanModifyRd(Article article, Client actor) {
 		//1. 작성인 본인인 경우
-		if (article.getMemberId() == actor.getId()) {
+		if (article.getClientId() == actor.getId()) {
 			return new ResultData("S-1", "가능합니다.");
 		}
 		//2. 관리자인 경우
@@ -83,7 +83,7 @@ public class ArticleService {
 		return new ResultData("F-1", "권한이 없습니다.");
 	}
 
-	public ResultData getActorCanDeleteRd(Article article, Member actor) {
+	public ResultData getActorCanDeleteRd(Article article, Client actor) {
 		return getActorCanModifyRd(article, actor);
 	}
 

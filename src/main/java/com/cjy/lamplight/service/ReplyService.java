@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cjy.lamplight.dao.ReplyDao;
-import com.cjy.lamplight.dto.Member;
+import com.cjy.lamplight.dto.Client;
 import com.cjy.lamplight.dto.Reply;
 import com.cjy.lamplight.dto.ResultData;
 
@@ -15,7 +15,7 @@ public class ReplyService {
 	@Autowired
 	private ReplyDao replyDao;
 	@Autowired
-	private MemberService memberService;
+	private ClientService memberService;
 
 	public List<Reply> getForPrintReplies(String relTypeCode, int relId) {
 		return replyDao.getForPrintReplies(relTypeCode, relId);
@@ -25,8 +25,8 @@ public class ReplyService {
 		return replyDao.getReply(id);
 	}
 
-	public ResultData getActorCanDeleteRd(Reply reply, Member actor) {
-		if (reply.getMemberId() == actor.getId()) {
+	public ResultData getActorCanDeleteRd(Reply reply, Client actor) {
+		if (reply.getClientId() == actor.getId()) {
 			return new ResultData("S-1", "가능합니다.");
 		}
 
@@ -43,7 +43,7 @@ public class ReplyService {
 		return new ResultData("S-1", "삭제하였습니다.", "id", id);
 	}
 
-	public ResultData getActorCanModifyRd(Reply reply, Member actor) {
+	public ResultData getActorCanModifyRd(Reply reply, Client actor) {
 		return getActorCanDeleteRd(reply, actor);
 	}
 

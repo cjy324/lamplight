@@ -6,23 +6,23 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cjy.lamplight.dao.MemberDao;
+import com.cjy.lamplight.dao.ClientDao;
+import com.cjy.lamplight.dto.Client;
 import com.cjy.lamplight.dto.GenFile;
-import com.cjy.lamplight.dto.Member;
 import com.cjy.lamplight.dto.ResultData;
 import com.cjy.lamplight.util.Util;
 
 @Service
-public class MemberService {
+public class ClientService {
 	
 	@Autowired
-	MemberDao memberDao;
+	ClientDao clientDao;
 	
 	@Autowired
 	GenFileService genFileService;
 
 	public ResultData join(Map<String, Object> param) {
-		memberDao.join(param);
+		clientDao.join(param);
 
 		int id = Util.getAsInt(param.get("id"), 0);
 		
@@ -31,29 +31,29 @@ public class MemberService {
 		return new ResultData("S-1", param.get("nickname") + "님, 환영합니다.", "id", id);
 	}
 	
-	public Member getMember(int id) {
-		return memberDao.getMember(id);
+	public Client getClient(int id) {
+		return clientDao.getClient(id);
 	}
 
-	public Member getMemberByLoginId(String loginId) {
-		return memberDao.getMemberByLoginId(loginId);
+	public Client getClientByLoginId(String loginId) {
+		return clientDao.getClientByLoginId(loginId);
 	}
 
-	public ResultData modifyMember(Map<String, Object> param) {
-		memberDao.modifyMember(param);
+	public ResultData modifyClient(Map<String, Object> param) {
+		clientDao.modifyClient(param);
 		
 		return new ResultData("S-1", "회원정보가 수정되었습니다.");
 	}
 
-	public boolean isAdmin(Member actor) {
+	public boolean isAdmin(Client actor) {
 		return actor.getAuthLevel() == 7;
 	}
 
-	public Member getMemberByAuthKey(String authKey) {
-		return memberDao.getMemberByAuthKey(authKey);
+	public Client getClientByAuthKey(String authKey) {
+		return clientDao.getClientByAuthKey(authKey);
 	}
 
-	public List<Member> getForPrintMembers(String searchKeywordType, String searchKeyword, int page, int itemsInAPage, Map<String, Object> param) {
+	public List<Client> getForPrintClients(String searchKeywordType, String searchKeyword, int page, int itemsInAPage, Map<String, Object> param) {
 		int limitStart = (page - 1) * itemsInAPage;
 		int limitTake = itemsInAPage;
 
@@ -62,11 +62,11 @@ public class MemberService {
 		param.put("limitStart", limitStart);
 		param.put("limitTake", limitTake);
 
-		return memberDao.getForPrintMembers(param);
+		return clientDao.getForPrintClients(param);
 	}
 
-	public static String getAuthLevelName(Member member) {
-		switch (member.getAuthLevel()) {
+	public static String getAuthLevelName(Client client) {
+		switch (client.getAuthLevel()) {
 		case 7:
 			return "관리자";
 		case 3:
@@ -76,8 +76,8 @@ public class MemberService {
 		}
 	}
 
-	public static String getAuthLevelNameColor(Member member) {
-		switch (member.getAuthLevel()) {
+	public static String getAuthLevelNameColor(Client client) {
+		switch (client.getAuthLevel()) {
 		case 7:
 			return "red";
 		case 3:
@@ -87,40 +87,43 @@ public class MemberService {
 		}
 	}
 
-	public Member getForPrintMember(int id) {
-		return memberDao.getForPrintMember(id);
+	public Client getForPrintClient(int id) {
+		return clientDao.getForPrintClient(id);
 	}
 
 
-	public Member getForPrintMemberByAuthKey(String authKey) {
-		Member member = memberDao.getMemberByAuthKey(authKey);
+	public Client getForPrintClientByAuthKey(String authKey) {
+		Client client = clientDao.getClientByAuthKey(authKey);
 		//기본 멤버에서 추가정보를 업데이트해서 리턴
-		updateForPrint(member);
+		updateForPrint(client);
 		
-		return member;
+		return client;
 	}
 
 
-	public Member getForPrintMemberByLoginId(String loginId) {
-		Member member = memberDao.getMemberByLoginId(loginId);
+	public Client getForPrintClientByLoginId(String loginId) {
+		Client client = clientDao.getClientByLoginId(loginId);
 		//기본 멤버에서 추가정보를 업데이트해서 리턴
-		updateForPrint(member);
+		updateForPrint(client);
 		
-		return member;
+		return client;
 	}
 	
 	//기본멤버 정보에 추가 정보를 업데이트해서 리턴
-	private void updateForPrint(Member member) {
+	private void updateForPrint(Client client) {
 		//멤버의 섬네일 이미지 가져오기
-		GenFile genFile = genFileService.getGenFile("member", member.getId(), "common", "attachment", 1);
+		GenFile genFile = genFileService.getGenFile("client", client.getId(), "common", "attachment", 1);
 		
 		//만약, 멤버의 섬네일 이미지가 있으면 extra__thumbImg 업데이트
 		if(genFile != null) {
 			String imgUrl = genFile.getForPrintUrl();
-			member.setExtra__thumbImg(imgUrl);
+			client.setExtra__thumbImg(imgUrl);
 		}
 		
 	}
-	
+
+	public List<Client> getClients() {
+		return clientDao.getClients();
+	}
 	
 }

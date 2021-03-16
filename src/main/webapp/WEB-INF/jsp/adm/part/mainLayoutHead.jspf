@@ -22,7 +22,7 @@
 					</a>
 				</li>
 				<li>
-					<a class="text-xl px-4 flex items-center h-full hover:underline" href="/adm/member/list">
+					<a class="text-xl px-4 flex items-center h-full hover:underline" href="/adm/client/list">
 						<span>회원 관리</span>
 					</a>
 				</li>
@@ -37,7 +37,7 @@
 					</a>
 				</li>
 				<li>
-					<a class="text-xl px-4 flex items-center h-full hover:underline" href="/adm/member/doLogout">
+					<a class="text-xl px-4 flex items-center h-full hover:underline" href="/adm/client/doLogout">
 						<span>관리자 로그아웃</span>
 					</a>
 				</li>

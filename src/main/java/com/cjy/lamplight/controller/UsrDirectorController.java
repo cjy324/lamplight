@@ -13,51 +13,28 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cjy.lamplight.dto.Member;
+import com.cjy.lamplight.dto.Director;
 import com.cjy.lamplight.dto.ResultData;
-import com.cjy.lamplight.service.MemberService;
+import com.cjy.lamplight.service.DirectorService;
 
 @Controller
-public class UsrMemberController {
+public class UsrDirectorController {
 
 	@Autowired
-	private MemberService memberService;
+	private DirectorService directorService;
 	
-	@GetMapping("/usr/member/list")
+	@GetMapping("/usr/director/list")
 	@ResponseBody
-	public ResultData showList(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId,
-			String searchKeywordType, String searchKeyword, @RequestParam(defaultValue = "1") int page,
-			@RequestParam Map<String, Object> param) {
-		if (searchKeywordType != null) {
-			searchKeywordType = searchKeywordType.trim();
-		}
+	public ResultData showList(HttpServletRequest req) {
 
-		if (searchKeywordType == null || searchKeywordType.length() == 0) {
-			searchKeywordType = "name";
-		}
+		List<Director> directors = directorService.getDirectors();
 
-		if (searchKeyword != null && searchKeyword.length() == 0) {
-			searchKeyword = null;
-		}
+		req.setAttribute("directors", directors);	
 
-		if (searchKeyword != null) {
-			searchKeyword = searchKeyword.trim();
-		}
-
-		if (searchKeyword == null) {
-			searchKeywordType = null;
-		}
-
-		int itemsInAPage = 20;
-
-		List<Member> members = memberService.getForPrintMembers(searchKeywordType, searchKeyword, page, itemsInAPage, param);
-
-		req.setAttribute("members", members);	
-
-		return new ResultData("S-1", "성공", "members", members);
+		return new ResultData("S-1", "성공", "directors", directors);
 	}
 
-	@PostMapping("/usr/member/doJoin")
+	@PostMapping("/usr/director/doJoin")
 	@ResponseBody
 	public ResultData doJoin(@RequestParam Map<String, Object> param) {
 
@@ -65,9 +42,9 @@ public class UsrMemberController {
 			return new ResultData("F-1", "loginId를 입력해주세요.");
 		}
 
-		Member existingMember = memberService.getMemberByLoginId((String) param.get("loginId"));
+		Director existingDirector = directorService.getDirectorByLoginId((String) param.get("loginId"));
 
-		if (existingMember != null) {
+		if (existingDirector != null) {
 			return new ResultData("F-2", String.format("%s (은)는 이미 사용중인 로그인아이디 입니다.", param.get("loginId")));
 		}
 
@@ -87,34 +64,34 @@ public class UsrMemberController {
 			return new ResultData("F-1", "email을 입력해주세요.");
 		}
 
-		return memberService.join(param);
+		return directorService.join(param);
 	}
 
-	@GetMapping("/usr/member/memberByAuthKey")
+	@GetMapping("/usr/director/directorByAuthKey")
 	@ResponseBody
-	public ResultData showMemberByAuthKey(String authKey) {
+	public ResultData showDirectorByAuthKey(String authKey) {
 		if (authKey == null) {
 			return new ResultData("F-1", "authKey를 입력해주세요.");
 		}
 
-		Member existingMember = memberService.getForPrintMemberByAuthKey(authKey);
+		Director existingDirector = directorService.getForPrintDirectorByAuthKey(authKey);
 
-		if (existingMember == null) {
+		if (existingDirector == null) {
 			return new ResultData("F-2", "유효하지 않은 authKey입니다.");
 		}
-		return new ResultData("S-1", String.format("유효한 회원입니다."), "member", existingMember);
+		return new ResultData("S-1", String.format("유효한 회원입니다."), "director", existingDirector);
 	}
 
-	@PostMapping("/usr/member/authKey")
+	@PostMapping("/usr/director/authKey")
 	@ResponseBody
 	public ResultData showAuthKey(String loginId, String loginPw) {
 		if (loginId == null) {
 			return new ResultData("F-1", "loginId를 입력해주세요.");
 		}
 
-		Member existingMember = memberService.getForPrintMemberByLoginId(loginId);
+		Director existingDirector = directorService.getForPrintDirectorByLoginId(loginId);
 
-		if (existingMember == null) {
+		if (existingDirector == null) {
 			return new ResultData("F-2", "존재하지 않는 로그인아이디 입니다.", "loginId", loginId);
 		}
 
@@ -122,15 +99,15 @@ public class UsrMemberController {
 			return new ResultData("F-1", "loginPw를 입력해주세요.");
 		}
 
-		if (existingMember.getLoginPw().equals(loginPw) == false) {
+		if (existingDirector.getLoginPw().equals(loginPw) == false) {
 			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
 		}
 
-		return new ResultData("S-1", String.format("%s님 환영합니다.", existingMember.getNickname()), "authKey",
-				existingMember.getAuthKey(), "member", existingMember);
+		return new ResultData("S-1", String.format("%s님 환영합니다.", existingDirector.getNickname()), "authKey",
+				existingDirector.getAuthKey(), "director", existingDirector);
 	}
 
-	@PostMapping("/usr/member/doLogin")
+	@PostMapping("/usr/director/doLogin")
 	@ResponseBody
 	public ResultData doLogin(String loginId, String loginPw, HttpSession session) {
 		// HttpSession session
@@ -141,9 +118,9 @@ public class UsrMemberController {
 			return new ResultData("F-1", "loginId를 입력해주세요.");
 		}
 
-		Member existingMember = memberService.getMemberByLoginId(loginId);
+		Director existingDirector = directorService.getDirectorByLoginId(loginId);
 
-		if (existingMember == null) {
+		if (existingDirector == null) {
 			return new ResultData("F-2", "존재하지 않는 로그인아이디 입니다.", "loginId", loginId);
 		}
 
@@ -151,26 +128,26 @@ public class UsrMemberController {
 			return new ResultData("F-1", "loginPw를 입력해주세요.");
 		}
 
-		if (existingMember.getLoginPw().equals(loginPw) == false) {
+		if (existingDirector.getLoginPw().equals(loginPw) == false) {
 			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
 		}
 
 		// 세션에 로그인 회원 id 등록
-		session.setAttribute("loginedMemberId", existingMember.getId());
+		session.setAttribute("loginedDirectorId", existingDirector.getId());
 
-		return new ResultData("S-1", String.format("%s님 환영합니다.", existingMember.getNickname()));
+		return new ResultData("S-1", String.format("%s님 환영합니다.", existingDirector.getNickname()));
 	}
 
-	@PostMapping("/usr/member/doLogout")
+	@PostMapping("/usr/director/doLogout")
 	@ResponseBody
 	public ResultData doLogout(HttpSession session) {
 
-		session.removeAttribute("loginedMemberId");
+		session.removeAttribute("loginedDirectorId");
 
 		return new ResultData("S-1", "로그아웃 되었습니다.");
 	}
 
-	@PostMapping("/usr/member/doModify")
+	@PostMapping("/usr/director/doModify")
 	@ResponseBody
 	public ResultData doModify(@RequestParam Map<String, Object> param, HttpServletRequest req) {
 
@@ -178,10 +155,10 @@ public class UsrMemberController {
 			return new ResultData("F-2", "수정할 회원정보를 입력해주세요.");
 		}
 
-		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
-		param.put("id", loginedMemberId);
+		int loginedDirectorId = (int) req.getAttribute("loginedDirectorId");
+		param.put("id", loginedDirectorId);
 
-		return memberService.modifyMember(param);
+		return directorService.modifyDirector(param);
 	}
 
 }

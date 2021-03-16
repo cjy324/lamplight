@@ -1,6 +1,6 @@
-SELECT * FROM article;
-SELECT * FROM `board`;
-SELECT * FROM `member`;
+
+SELECT * FROM `client`;
+SELECT * FROM `director`;
 SELECT * FROM `genFile`;
 
 TRUNCATE `genFile`;

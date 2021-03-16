@@ -3,11 +3,11 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cjy.lamplight.dao.MemberDao">
+<mapper namespace="com.cjy.lamplight.dao.DirectorDao">
 
-	<select id="getForPrintMembers" resultType="Member">
+	<select id="getForPrintDirectors" resultType="Director">
 		SELECT M.*
-		FROM `member` AS M
+		FROM `director` AS M
 		WHERE 1
 		<if test="searchKeywordType == 'name'">
 			AND M.name LIKE CONCAT('%', #{searchKeyword}, '%')
@@ -30,10 +30,16 @@
 			LIMIT #{limitStart}, #{limitTake}
 		</if>
 	</select>
+	
+	<select id="getDirectors" resultType="Director">
+		SELECT D.*
+		FROM `director` AS D
+		ORDER BY D.id DESC
+	</select>
 
 	<!-- public void join(String title, String body); -->
 	<insert id="join" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO member
+		INSERT INTO director
 		<set> <!-- SET 대신 set으로 감싸주는 것이 관례 -->
 			regDate = NOW(),
 			updateDate = NOW(),
@@ -43,39 +49,42 @@
 			`nickname` = #{nickname},
 			`email` = #{email},
 			`cellphoneNo` = #{cellphoneNo},
+    		`address_state` = #{address_state},
+    		`address_city` = #{address_city},
+    		`address_street` = #{address_street},
 			authKey = CONCAT("authKey1__", UUID(), "__", RAND())
 		</set>
 
 	</insert>
-	<!-- public Member getMember(@Param(value = "id") int id); -->
-	<select id="getMember" resultType="Member">
+	<!-- public Director getDirector(@Param(value = "id") int id); -->
+	<select id="getDirector" resultType="Director">
 		SELECT *
-		FROM `member`
+		FROM `director`
 		WHERE id = #{id}
 	</select>
 	
-	<select id="getForPrintMember" resultType="Member">
+	<select id="getForPrintDirector" resultType="Director">
 		SELECT *
-		FROM `member`
+		FROM `director`
 		WHERE id = #{id}
 	</select>
 	
-	<!-- public Member getMemberByLoginId(@Param(value = "loginId") String loginId); -->
-	<select id="getMemberByLoginId" resultType="Member">
+	<!-- public Director getDirectorByLoginId(@Param(value = "loginId") String loginId); -->
+	<select id="getDirectorByLoginId" resultType="Director">
 		SELECT *
-		FROM `member`
+		FROM `director`
 		WHERE loginId = #{loginId}
 	</select>
 	
-	<select id="getMemberByAuthKey" resultType="Member">
+	<select id="getDirectorByAuthKey" resultType="Director">
 		SELECT *
-		FROM `member`
+		FROM `director`
 		WHERE authKey = #{authKey}
 	</select>
 
-	<!-- public void modifyMember(Map<String, Object> param); -->
-	<update id="modifyMember">
-		UPDATE member
+	<!-- public void modifyDirector(Map<String, Object> param); -->
+	<update id="modifyDirector">
+		UPDATE director
 		<set>
 			<if test="loginPw != null || name != null || nickname != null || cellphoneNo != null || email != null || authLevel != null">
 				updateDate = NOW()

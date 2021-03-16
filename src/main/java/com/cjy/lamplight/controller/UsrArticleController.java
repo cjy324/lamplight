@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cjy.lamplight.dto.Article;
 import com.cjy.lamplight.dto.Board;
-import com.cjy.lamplight.dto.Member;
+import com.cjy.lamplight.dto.Client;
 import com.cjy.lamplight.dto.ResultData;
 import com.cjy.lamplight.service.ArticleService;
 import com.cjy.lamplight.util.Util;
@@ -87,7 +87,7 @@ public class UsrArticleController {
 		//HttpSession session을 HttpServletRequest req로 교체, 인터셉터에서 session 정보를 Request에 담음으로 
 		//session을 가져올 필요 없이 req로 값을 받으면 됨
 		
-		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
+		int loginedClientId = (int)req.getAttribute("loginedClientId");
 
 		if (param.get("title") == null) {
 			return new ResultData("F-1", "title을 입력해주세요.");
@@ -96,7 +96,7 @@ public class UsrArticleController {
 			return new ResultData("F-1", "body를 입력해주세요.");
 		}
 
-		param.put("memberId", loginedMemberId);
+		param.put("memberId", loginedClientId);
 		
 		return articleService.addArticle(param);
 	}
@@ -106,8 +106,8 @@ public class UsrArticleController {
 	public ResultData doDelete(Integer id, HttpServletRequest req) {
 		// int 기본타입 -> null이 들어갈 수 없음
 		// Integer 객체타입 -> null이 들어갈 수 있음
-		//int loginedMemberId = (int)req.getAttribute("loginedMemberId");
-		Member loginedMember = (Member) req.getAttribute("loginedMember");
+		//int loginedClientId = (int)req.getAttribute("loginedClientId");
+		Client loginedClient = (Client) req.getAttribute("loginedClient");
 		
 		if (id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
@@ -119,7 +119,7 @@ public class UsrArticleController {
 			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.");
 		}
 		
-		ResultData actorCanDeleteRd = articleService.getActorCanDeleteRd(article, loginedMember);
+		ResultData actorCanDeleteRd = articleService.getActorCanDeleteRd(article, loginedClient);
 
 		if (actorCanDeleteRd.isFail()) {
 			return actorCanDeleteRd;
@@ -134,8 +134,8 @@ public class UsrArticleController {
 		// int 기본타입 -> null이 들어갈 수 없음
 		// Integer 객체타입 -> null이 들어갈 수 있음
 		
-		//int loginedMemberId = (int)req.getAttribute("loginedMemberId");
-		Member loginedMember = (Member) req.getAttribute("loginedMember");
+		//int loginedClientId = (int)req.getAttribute("loginedClientId");
+		Client loginedClient = (Client) req.getAttribute("loginedClient");
 		
 		int id = Util.getAsInt(param.get("id"), 0);
 
@@ -156,7 +156,7 @@ public class UsrArticleController {
 			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.", "id", id);
 		}
 
-		ResultData actorCanModifyRd = articleService.getActorCanModifyRd(article, loginedMember);
+		ResultData actorCanModifyRd = articleService.getActorCanModifyRd(article, loginedClient);
 
 		if (actorCanModifyRd.isFail()) {
 			return actorCanModifyRd;
@@ -168,7 +168,7 @@ public class UsrArticleController {
 	@PostMapping("/usr/article/doAddReply")
 	@ResponseBody
 	public ResultData doAddReply(@RequestParam Map<String, Object> param, HttpServletRequest req) {
-		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
+		int loginedClientId = (int) req.getAttribute("loginedClientId");
 
 		if (param.get("body") == null) {
 			return new ResultData("F-1", "body를 입력해주세요.");
@@ -178,7 +178,7 @@ public class UsrArticleController {
 			return new ResultData("F-1", "articleId를 입력해주세요.");
 		}
 
-		param.put("memberId", loginedMemberId);
+		param.put("memberId", loginedClientId);
 
 		return articleService.addReply(param);
 	}
