@@ -56,6 +56,7 @@
 		</set>
 
 	</insert>
+	
 	<!-- public Client getClient(@Param(value = "id") int id); -->
 	<select id="getClient" resultType="Client">
 		SELECT *
