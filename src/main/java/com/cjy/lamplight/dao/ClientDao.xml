@@ -36,12 +36,6 @@
 		FROM `client` AS C
 		ORDER BY C.id DESC
 	</select>
-	
-	<select id="getDirectors" resultType="Client">
-		SELECT D.*
-		FROM `director` AS D
-		ORDER BY D.id DESC
-	</select>
 
 	<!-- public void join(String title, String body); -->
 	<insert id="join" useGeneratedKeys="true" keyProperty="id">

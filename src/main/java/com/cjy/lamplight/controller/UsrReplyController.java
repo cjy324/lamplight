@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cjy.lamplight.dto.Article;
+import com.cjy.lamplight.dto.Order;
 import com.cjy.lamplight.dto.Client;
 import com.cjy.lamplight.dto.Reply;
 import com.cjy.lamplight.dto.ResultData;
-import com.cjy.lamplight.service.ArticleService;
+import com.cjy.lamplight.service.OrderService;
 import com.cjy.lamplight.service.ReplyService;
 
 @Controller
@@ -22,7 +22,7 @@ public class UsrReplyController {
 	@Autowired
 	private ReplyService replyService;
 	@Autowired
-	private ArticleService articleService;
+	private OrderService orderService;
 
 	@GetMapping("/usr/reply/list")
 	@ResponseBody
@@ -36,10 +36,10 @@ public class UsrReplyController {
 			return new ResultData("F-1", "relId를 입력해주세요.");
 		}
 
-		if ( relTypeCode.equals("article") ) {
-			Article article = articleService.getArticle(relId);
+		if ( relTypeCode.equals("order") ) {
+			Order order = orderService.getOrder(relId);
 
-			if ( article == null ) {
+			if ( order == null ) {
 				return new ResultData("F-1", "존재하지 않는 게시물 입니다.");
 			}
 		}

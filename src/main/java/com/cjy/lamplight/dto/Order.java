@@ -6,7 +6,7 @@ import java.util.Map;
 import lombok.Data;
 
 @Data
-public class Article {
+public class Order {
 	
 	private int id;
 	private String regDate;
@@ -31,7 +31,7 @@ public class Article {
 		return extra;
 	}
 	
-	public Article(int id, String regDate, String updateDate, String title, String body) {
+	public Order(int id, String regDate, String updateDate, String title, String body) {
 	
 		this.id = id;
 		this.regDate = regDate;

@@ -24,8 +24,8 @@ public class SwaggerConfig {
 	}
 
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("커뮤니티 사이트 API").description("회원가입, 게시물 작성 등의 기능을 제공합니다.")
-				.contact(new Contact("제작자", "https://github.com/jhs512/untactTeacher", "jangka512@gmail.com"))
+		return new ApiInfoBuilder().title("지도사 매칭 서비스(의뢰인) API").description("전문가 검색, 매칭 등")
+				.contact(new Contact("제작자", "https://github.com/cjy324/lamplight", "juy32400@gmail.com"))
 				.version("0.1").build();
 	}
 

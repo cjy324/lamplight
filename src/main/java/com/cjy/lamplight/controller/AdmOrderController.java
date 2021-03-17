@@ -13,24 +13,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartRequest;
 
-import com.cjy.lamplight.dto.Article;
+import com.cjy.lamplight.dto.Order;
 import com.cjy.lamplight.dto.Board;
 import com.cjy.lamplight.dto.GenFile;
 import com.cjy.lamplight.dto.Client;
 import com.cjy.lamplight.dto.ResultData;
-import com.cjy.lamplight.service.ArticleService;
+import com.cjy.lamplight.service.OrderService;
 import com.cjy.lamplight.service.GenFileService;
 import com.cjy.lamplight.util.Util;
 
 @Controller
-public class AdmArticleController extends BaseController{
+public class AdmOrderController extends BaseController{
 
 	@Autowired
-	private ArticleService articleService;
+	private OrderService orderService;
 	@Autowired
 	private GenFileService genFileService;
 
-	@RequestMapping("/adm/article/detail")
+	@RequestMapping("/adm/order/detail")
 	@ResponseBody
 	// 스프링부트: 알아서 json형태로 바꿔 출력값을 리턴해준다.
 	public ResultData showDetail(Integer id) {
@@ -38,21 +38,21 @@ public class AdmArticleController extends BaseController{
 			return new ResultData("F-1", "id를 입력해주세요.");
 		}
 
-		Article article = articleService.getForPrintArticle(id);
+		Order order = orderService.getForPrintOrder(id);
 
-		if (article == null) {
+		if (order == null) {
 			return new ResultData("F-2", "존재하지 않는 게시물번호 입니다.");
 		}
 	
-		return new ResultData("S-1", "성공", "article", article);
+		return new ResultData("S-1", "성공", "order", order);
 	}
 
-	@RequestMapping("/adm/article/list")
+	@RequestMapping("/adm/order/list")
 	//@ResponseBody
 	public String showList(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId, String searchKeywordType, String searchKeyword, @RequestParam(defaultValue = "1") int page) {
 		// @RequestParam(defaultValue = "1") int page : page 파라미터의 값이 없으면 디폴트로 1이다.
 		
-		Board board = articleService.getBoard(boardId);
+		Board board = orderService.getBoard(boardId);
 		
 		req.setAttribute("board", board);
 
@@ -82,37 +82,37 @@ public class AdmArticleController extends BaseController{
 		
 		int itemsInAPage = 10;
 		
-		List<Article> articles = articleService.getForPrintArticles(boardId, searchKeywordType, searchKeyword, page, itemsInAPage);
+		List<Order> orders = orderService.getForPrintOrders(boardId, searchKeywordType, searchKeyword, page, itemsInAPage);
 		
 		
 		// 21.03.06 게시물 리스트에서 첨부 이미지 가져오는 쿼리를 게시물 마다 1번씩 실행하지 않도록 로직 변경함에 따라 필요 없음
-		/* 각 article에 달려있는 첨부파일 섬네일 가져오기 시작 */
+		/* 각 order에 달려있는 첨부파일 섬네일 가져오기 시작 */
 		/*
-		for ( Article article : articles ) {
+		for ( Order order : orders ) {
 											//String relTypeCode, int relId, String typeCode, String type2Code, int fileNo
-			GenFile genFile = genFileService.getGenFile("article", article.getId(), "common", "attachment", 1);
+			GenFile genFile = genFileService.getGenFile("order", order.getId(), "common", "attachment", 1);
 
 			if ( genFile != null ) {
 				//img의 url을 가져오기
-				article.setExtra__thumbImg(genFile.getForPrintUrl());
+				order.setExtra__thumbImg(genFile.getForPrintUrl());
 			}
 		}
 		*/
-		/* 각 article에 달려있는 첨부파일 섬네일 가져오기 끝 */
+		/* 각 order에 달려있는 첨부파일 섬네일 가져오기 끝 */
 		
 		
 		
-		req.setAttribute("articles", articles);
+		req.setAttribute("orders", orders);
 
-		return "adm/article/list";
+		return "adm/order/list";
 	}
 	
-	@RequestMapping("/adm/article/add")
+	@RequestMapping("/adm/order/add")
 	public String showAdd(@RequestParam Map<String, Object> param, HttpServletRequest req) {
-		return "adm/article/add";
+		return "adm/order/add";
 	}
 
-	@RequestMapping("/adm/article/doAdd")
+	@RequestMapping("/adm/order/doAdd")
 	public String doAdd(@RequestParam Map<String, Object> param, HttpServletRequest req, MultipartRequest multipartRequest) {
 		//HttpSession session을 HttpServletRequest req로 교체, 인터셉터에서 session 정보를 Request에 담음으로 
 		//session을 가져올 필요 없이 req로 값을 받으면 됨
@@ -126,12 +126,12 @@ public class AdmArticleController extends BaseController{
 			return msgAndBack(req, "body를 입력해주세요.");
 		}
 
-		param.put("memberId", loginedClientId);
+		param.put("clientId", loginedClientId);
 		
-		ResultData addArticleRd = articleService.addArticle(param);
+		ResultData addOrderRd = orderService.addOrder(param);
 		
-		// addArticleRd map의 body에서 key값이 id인 것을 가져와라
-		int newArticleId = (int) addArticleRd.getBody().get("id");
+		// addOrderRd map의 body에서 key값이 id인 것을 가져와라
+		int newOrderId = (int) addOrderRd.getBody().get("id");
 		
 		
 		/* 이미 ajax상에서 처리하므로 더이상 필요 없음
@@ -139,22 +139,22 @@ public class AdmArticleController extends BaseController{
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap(); //MultipartRequest로 들어온 map 정보를 가져오기
 				
 		
-		//fileMap.keySet() : file__article__0__common__attachment__1
+		//fileMap.keySet() : file__order__0__common__attachment__1
 		for (String fileInputName : fileMap.keySet()) {
-			//fileInputName : file__article__0__common__attachment__1
+			//fileInputName : file__order__0__common__attachment__1
 			MultipartFile multipartFile = fileMap.get(fileInputName);
 			
 			if(multipartFile.isEmpty() == false) {
 				//저장할 파일관련 정보를 넘김
-				genFileService.save(multipartFile, newArticleId);
+				genFileService.save(multipartFile, newOrderId);
 			}
 			
 		}
 		*/
-		return msgAndReplace(req, newArticleId + "번 게시물이 생성되었습니다.", "../article/detail?id=" + newArticleId);
+		return msgAndReplace(req, newOrderId + "번 게시물이 생성되었습니다.", "../order/detail?id=" + newOrderId);
 	}
 
-	@RequestMapping("/adm/article/doDelete")
+	@RequestMapping("/adm/order/doDelete")
 	@ResponseBody
 	public ResultData doDelete(Integer id, HttpServletRequest req) {
 		// int 기본타입 -> null이 들어갈 수 없음
@@ -166,34 +166,34 @@ public class AdmArticleController extends BaseController{
 			return new ResultData("F-1", "id를 입력해주세요.");
 		}
 
-		Article article = articleService.getArticle(id);
+		Order order = orderService.getOrder(id);
 
-		if (article == null) {
+		if (order == null) {
 			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.");
 		}
 		
-		ResultData actorCanDeleteRd = articleService.getActorCanDeleteRd(article, loginedClient);
+		ResultData actorCanDeleteRd = orderService.getActorCanDeleteRd(order, loginedClient);
 
 		if (actorCanDeleteRd.isFail()) {
 			return actorCanDeleteRd;
 		}
 
-		return articleService.deleteArticle(id);
+		return orderService.deleteOrder(id);
 	}
 	
-	@RequestMapping("/adm/article/modify")
+	@RequestMapping("/adm/order/modify")
 	public String showModify(Integer id, HttpServletRequest req) {
 		if (id == null) {
 			return msgAndBack(req, "id를 입력해주세요.");
 		}
 
-		Article article = articleService.getForPrintArticle(id);
+		Order order = orderService.getForPrintOrder(id);
 		
-		if (article == null) {
+		if (order == null) {
 			return msgAndBack(req, "존재하지 않는 게시물번호 입니다.");
 		}
 
-		List<GenFile> genfiles = genFileService.getGenFiles("article", article.getId(), "common", "attachment");
+		List<GenFile> genfiles = genFileService.getGenFiles("order", order.getId(), "common", "attachment");
 
 		Map<String, GenFile> filesMap = new HashMap<>();
 
@@ -201,14 +201,14 @@ public class AdmArticleController extends BaseController{
 			filesMap.put(genfile.getFileNo() + "", genfile);
 		}
 
-		article.getExtraNotNull().put("file__common__attachment", filesMap);
-		req.setAttribute("article", article);
+		order.getExtraNotNull().put("file__common__attachment", filesMap);
+		req.setAttribute("order", order);
 
-		return "adm/article/modify";
+		return "adm/order/modify";
 	}
 	
 
-	@RequestMapping("/adm/article/doModify")
+	@RequestMapping("/adm/order/doModify")
 	@ResponseBody
 	public ResultData doModify(@RequestParam Map<String, Object> param, HttpServletRequest req) {
 		// int 기본타입 -> null이 들어갈 수 없음
@@ -230,22 +230,22 @@ public class AdmArticleController extends BaseController{
 			return new ResultData("F-1", "body를 입력해주세요.");
 		}
 
-		Article article = articleService.getArticle(id);
+		Order order = orderService.getOrder(id);
 
-		if (article == null) {
+		if (order == null) {
 			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.", "id", id);
 		}
 
-		ResultData actorCanModifyRd = articleService.getActorCanModifyRd(article, loginedClient);
+		ResultData actorCanModifyRd = orderService.getActorCanModifyRd(order, loginedClient);
 
 		if (actorCanModifyRd.isFail()) {
 			return actorCanModifyRd;
 		}
 		
-		return articleService.modifyArticle(param);
+		return orderService.modifyOrder(param);
 	}
 	
-	@RequestMapping("/adm/article/doAddReply")
+	@RequestMapping("/adm/order/doAddReply")
 	@ResponseBody
 	public ResultData doAddReply(@RequestParam Map<String, Object> param, HttpServletRequest req) {
 		int loginedClientId = (int) req.getAttribute("loginedClientId");
@@ -254,12 +254,12 @@ public class AdmArticleController extends BaseController{
 			return new ResultData("F-1", "body를 입력해주세요.");
 		}
 
-		if (param.get("articleId") == null) {
-			return new ResultData("F-1", "articleId를 입력해주세요.");
+		if (param.get("orderId") == null) {
+			return new ResultData("F-1", "orderId를 입력해주세요.");
 		}
 
-		param.put("memberId", loginedClientId);
+		param.put("clientId", loginedClientId);
 
-		return articleService.addReply(param);
+		return orderService.addReply(param);
 	}
 }

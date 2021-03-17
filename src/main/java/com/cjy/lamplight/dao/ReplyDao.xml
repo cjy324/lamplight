@@ -9,8 +9,8 @@
 		SELECT R.*,
 		IFNULL(M.nickname, "탈퇴회원") AS extra__writer
 		FROM reply AS R
-		LEFT JOIN `member` AS M
-		ON R.memberId = M.id
+		LEFT JOIN `client` AS M
+		ON R.clientId = M.id
 		WHERE 1
 		AND R.relTypeCode = #{relTypeCode}
 		AND R.relId = #{relId}
