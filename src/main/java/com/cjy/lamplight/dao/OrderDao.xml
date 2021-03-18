@@ -12,7 +12,7 @@
 		WHERE id
 		= #{id}
 	</select>
-	<!-- public Order getForPrintOrder(@Param("id") int id); -->
+
 	<select id="getForPrintOrder" resultType="Order">
 		SELECT A.*,
 		IFNULL(M.nickname, "탈퇴회원") AS extra__writer
@@ -23,56 +23,24 @@
 		WHERE A.id = #{id}
 	</select>
 
-	<!-- public List<Order> getOrders(@Param("searchKeywordType") String 
-		searchKeywordType, @Param("searchKeyword") String searchKeyword); -->
+
 	<select id="orders" resultType="Order">
 		SELECT *
 		FROM order
-		WHERE 1
-		<if test="searchKeywordType == 'title'">
-			AND title LIKE CONCAT('%', #{searchKeyword}, '%')
-		</if>
-		<if test="searchKeywordType == 'body'">
-			AND `body` LIKE CONCAT('%', #{searchKeyword}, '%')
-		</if>
-		<if test="searchKeywordType == 'titleAndBody'">
-			AND (title LIKE CONCAT('%', #{searchKeyword}, '%') OR
-			`body` LIKE CONCAT('%', #{searchKeyword}, '%'))
-		</if>
 		ORDER BY id DESC
 	</select>
 
-	<!-- public List<Order> getForPrintOrders(@Param("boardId") int boardId, 
-		@Param("searchKeywordType") String searchKeywordType, @Param("searchKeyword") 
-		String searchKeyword, @Param("limitStart") int limitStart, @Param("limitTake") 
-		int limitTake); -->
+
 	<select id="getForPrintOrders" resultType="Order">
-		SELECT A.*,
-		IFNULL(M.nickname, "탈퇴회원") AS extra__writer,
-		B.name AS extra__boardName
-		FROM order AS A
-		LEFT JOIN `client` AS M
-		ON A.clientId = M.id
-		LEFT JOIN `board` AS B
-		ON A.boardId = B.id
-		WHERE 1
-		<if test="boardId != null">
-			AND A.boardId = #{boardId}
-		</if>
-		<if test="searchKeywordType == 'title'">
-			AND A.title LIKE CONCAT('%', #{searchKeyword}, '%')
-		</if>
-		<if test="searchKeywordType == 'body'">
-			AND A.`body` LIKE CONCAT('%', #{searchKeyword}, '%')
-		</if>
-		<if test="searchKeywordType == 'titleAndBody'">
-			AND (A.title LIKE CONCAT('%', #{searchKeyword}, '%') OR
-			A.`body` LIKE CONCAT('%', #{searchKeyword}, '%'))
-		</if>
-		ORDER BY A.id DESC
-		<if test="limitStart != null and limitTake != null">
-			LIMIT #{limitStart}, #{limitTake}
-		</if>
+		SELECT O.*,
+		IFNULL(C.nickname, "탈퇴회원") AS extra__client,
+		IFNULL(D.nickname, "탈퇴회원") AS extra__director
+		FROM order AS O
+		LEFT JOIN `client` AS C
+		ON O.clientId = C.id
+		LEFT JOIN `director` AS D
+		ON O.clientId = D.id
+		ORDER BY O.id DESC
 	</select>
 
 	<!-- public void addOrder(String title, String body); -->

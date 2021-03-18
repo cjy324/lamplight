@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cjy.lamplight.dto.Client;
+import com.cjy.lamplight.dto.Member;
 import com.cjy.lamplight.dto.ResultData;
-import com.cjy.lamplight.service.ClientService;
+import com.cjy.lamplight.service.MemberService;
 import com.cjy.lamplight.util.Util;
 
 @Controller
-public class AdmClientController extends BaseController {
+public class AdmMemberController extends BaseController {
 
 	@Autowired
-	private ClientService clientService;
+	private MemberService memberService;
 
-	@RequestMapping("/adm/client/list")
+	@RequestMapping("/adm/member/list")
 	public String showList(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId,
 			String searchKeywordType, String searchKeyword, @RequestParam(defaultValue = "1") int page,
 			@RequestParam Map<String, Object> param) {
@@ -50,20 +50,20 @@ public class AdmClientController extends BaseController {
 
 		int itemsInAPage = 20;
 
-		List<Client> clients = clientService.getForPrintClients(searchKeywordType, searchKeyword, page, itemsInAPage, param);
+		List<Member> members = memberService.getForPrintMembers(searchKeywordType, searchKeyword, page, itemsInAPage, param);
 
-		req.setAttribute("clients", clients);	
+		req.setAttribute("members", members);	
 
-		return "adm/client/list";
+		return "adm/member/list";
 	}
 	
 	
-	@RequestMapping("/adm/client/join")
+	@RequestMapping("/adm/member/join")
 	public String showJoin() {
-		return "adm/client/join";
+		return "adm/member/join";
 	}
 	
-	@GetMapping("/adm/client/getLoginIdDup")
+	@GetMapping("/adm/member/getLoginIdDup")
 	@ResponseBody
 	public ResultData getLoginIdDup(String loginId) {
 		if (loginId == null) {
@@ -90,9 +90,9 @@ public class AdmClientController extends BaseController {
 			return new ResultData("F-1", "로그인아이디는 영문소문자와 숫자의 조합으로 구성되어야 합니다.");
 		}
 
-		Client existingClient = clientService.getClientByLoginId(loginId);
+		Member existingMember = memberService.getMemberByLoginId(loginId);
 
-		if (existingClient != null) {
+		if (existingMember != null) {
 			return new ResultData("F-2", String.format("%s(은)는 이미 사용중인 로그인아이디 입니다.", loginId));
 		}
 
@@ -100,16 +100,16 @@ public class AdmClientController extends BaseController {
 	}
 	
 
-	@RequestMapping("/adm/client/doJoin")
+	@RequestMapping("/adm/member/doJoin")
 	@ResponseBody
 	public String doJoin(@RequestParam Map<String, Object> param) {
 		if (param.get("loginId") == null) {
 			return Util.msgAndBack("loginId를 입력해주세요.");
 		}
 
-		Client existingClient = clientService.getClientByLoginId((String) param.get("loginId"));
+		Member existingMember = memberService.getMemberByLoginId((String) param.get("loginId"));
 
-		if (existingClient != null) {
+		if (existingMember != null) {
 			return Util.msgAndBack("이미 사용중인 로그인아이디 입니다.");
 		}
 
@@ -133,22 +133,22 @@ public class AdmClientController extends BaseController {
 			return Util.msgAndBack("cellphoneNo를 입력해주세요.");
 		}
 
-		clientService.join(param);
+		memberService.join(param);
 
 		String msg = String.format("%s님 환영합니다.", param.get("nickname"));
 
-		String redirectUrl = Util.ifEmpty((String) param.get("redirectUrl"), "../client/login");
+		String redirectUrl = Util.ifEmpty((String) param.get("redirectUrl"), "../member/login");
 
 		return Util.msgAndReplace(msg, redirectUrl);
 	}
 
-	@RequestMapping("/adm/client/login")
-	// @ResponseBody: @ResponseBody를 안하면 /WEB-INF/jsp/adm/client/login.jsp를 찾는다.
+	@RequestMapping("/adm/member/login")
+	// @ResponseBody: @ResponseBody를 안하면 /WEB-INF/jsp/adm/member/login.jsp를 찾는다.
 	public String showLogin() {
-		return "adm/client/login";
+		return "adm/member/login";
 	}
 
-	@RequestMapping("/adm/client/doLogin")
+	@RequestMapping("/adm/member/doLogin")
 	@ResponseBody
 	public String doLogin(String loginId, String loginPw, String redirectUrl, HttpSession session) {
 		// HttpSession session
@@ -160,9 +160,9 @@ public class AdmClientController extends BaseController {
 			return Util.msgAndBack("loginId를 입력해주세요.");
 		}
 
-		Client existingClient = clientService.getClientByLoginId(loginId);
+		Member existingMember = memberService.getMemberByLoginId(loginId);
 
-		if (existingClient == null) {
+		if (existingMember == null) {
 			// return new ResultData("F-2", "존재하지 않는 로그인아이디 입니다.", "loginId", loginId);
 			return Util.msgAndBack("존재하지 않는 로그인아이디 입니다.");
 		}
@@ -172,55 +172,55 @@ public class AdmClientController extends BaseController {
 			return Util.msgAndBack("loginPw를 입력해주세요.");
 		}
 
-		if (existingClient.getLoginPw().equals(loginPw) == false) {
+		if (existingMember.getLoginPw().equals(loginPw) == false) {
 			// return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");\
 			return Util.msgAndBack("비밀번호가 일치하지 않습니다.");
 		}
 
-		if (clientService.isAdmin(existingClient) == false) {
+		if (memberService.isAdmin(existingMember) == false) {
 			// return new ResultData("F-4", "관리자만 접근할 수 있는 페이지 입니다.");
 			return Util.msgAndBack("관리자만 접근할 수 있는 페이지 입니다.");
 		}
 
 		// 세션에 로그인 회원 id 등록
-		session.setAttribute("loginedClientId", existingClient.getId());
+		session.setAttribute("loginedMemberId", existingMember.getId());
 
-		String msg = String.format("%s님 환영합니다.", existingClient.getNickname());
+		String msg = String.format("%s님 환영합니다.", existingMember.getNickname());
 
 		redirectUrl = Util.ifEmpty(redirectUrl, "../home/main");
 
 		// return new ResultData("S-1", String.format("%s님 환영합니다.",
-		// existingClient.getNickname()));
+		// existingMember.getNickname()));
 		return Util.msgAndReplace(msg, redirectUrl);
 	}
 
-	@RequestMapping("/adm/client/doLogout")
+	@RequestMapping("/adm/member/doLogout")
 	@ResponseBody
 	public String doLogout(HttpSession session) {
-		session.removeAttribute("loginedClientId");
+		session.removeAttribute("loginedMemberId");
 
-		return Util.msgAndReplace("로그아웃 되었습니다.", "../client/login");
+		return Util.msgAndReplace("로그아웃 되었습니다.", "../member/login");
 	}
 	
-	@RequestMapping("/adm/client/modify")
+	@RequestMapping("/adm/member/modify")
 	public String showModify(Integer id, HttpServletRequest req) {
 		if (id == null) {
 			return msgAndBack(req, "id를 입력해주세요.");
 		}
 
-		Client client = clientService.getForPrintClient(id);
+		Member member = memberService.getForPrintMember(id);
 
-		req.setAttribute("client", client);
+		req.setAttribute("member", member);
 
-		if (client == null) {
+		if (member == null) {
 			return msgAndBack(req, "존재하지 않는 회원번호 입니다.");
 		}
 
-		return "adm/client/modify";
+		return "adm/member/modify";
 	}
 	
 
-	@RequestMapping("/adm/client/doModify")
+	@RequestMapping("/adm/member/doModify")
 	@ResponseBody
 	public ResultData doModify(@RequestParam Map<String, Object> param, int id) {
 
@@ -230,7 +230,7 @@ public class AdmClientController extends BaseController {
 
 		param.put("id", id);
 
-		return clientService.modifyClient(param);
+		return memberService.modifyMember(param);
 	}
 
 }

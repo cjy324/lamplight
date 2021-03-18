@@ -22,8 +22,8 @@
 					</a>
 				</li>
 				<li>
-					<a class="text-xl px-4 flex items-center h-full hover:underline" href="/usr/board/list">
-						<span>게시판</span>
+					<a class="text-xl px-4 flex items-center h-full hover:underline" href="/usr/member/list">
+						<span>Directors</span>
 					</a>
 				</li>
 				<li>
@@ -33,14 +33,14 @@
 				</li>
 				<c:if test="${not isLogined}">
 				<li>
-					<a class="text-xl px-4 flex items-center h-full hover:underline" href="/usr/client/login">
+					<a class="text-xl px-4 flex items-center h-full hover:underline" href="/usr/member/login">
 						<span>로그인</span>
 					</a>
 				</li>
 				</c:if>
 				<c:if test="${isLogined}">
 				<li>
-					<a class="text-xl px-4 flex items-center h-full hover:underline" href="/usr/client/doLogout">
+					<a class="text-xl px-4 flex items-center h-full hover:underline" href="/usr/member/doLogout">
 						<span>로그아웃</span>
 					</a>
 				</li>

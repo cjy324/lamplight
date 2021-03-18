@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartRequest;
 import com.cjy.lamplight.dto.Order;
 import com.cjy.lamplight.dto.Board;
 import com.cjy.lamplight.dto.GenFile;
-import com.cjy.lamplight.dto.Client;
+import com.cjy.lamplight.dto.Member;
 import com.cjy.lamplight.dto.ResultData;
 import com.cjy.lamplight.service.OrderService;
 import com.cjy.lamplight.service.GenFileService;
@@ -49,58 +49,8 @@ public class AdmOrderController extends BaseController{
 
 	@RequestMapping("/adm/order/list")
 	//@ResponseBody
-	public String showList(HttpServletRequest req, @RequestParam(defaultValue = "1") int boardId, String searchKeywordType, String searchKeyword, @RequestParam(defaultValue = "1") int page) {
-		// @RequestParam(defaultValue = "1") int page : page 파라미터의 값이 없으면 디폴트로 1이다.
-		
-		Board board = orderService.getBoard(boardId);
-		
-		req.setAttribute("board", board);
-
-		if ( board == null ) {
-			return msgAndBack(req, "존재하지 않는 게시판 입니다.");
-		}
-		
-		if (searchKeywordType != null) {
-			searchKeywordType = searchKeywordType.trim();
-		}
-
-		if (searchKeywordType == null || searchKeywordType.length() == 0) {
-			searchKeywordType = "titleAndBody";
-		}
-
-		if (searchKeyword != null && searchKeyword.length() == 0) {
-			searchKeyword = null;
-		}
-
-		if (searchKeyword != null) {
-			searchKeyword = searchKeyword.trim();
-		}
-
-		if ( searchKeyword == null ) {
-			searchKeywordType = null;
-		}
-		
-		int itemsInAPage = 10;
-		
-		List<Order> orders = orderService.getForPrintOrders(boardId, searchKeywordType, searchKeyword, page, itemsInAPage);
-		
-		
-		// 21.03.06 게시물 리스트에서 첨부 이미지 가져오는 쿼리를 게시물 마다 1번씩 실행하지 않도록 로직 변경함에 따라 필요 없음
-		/* 각 order에 달려있는 첨부파일 섬네일 가져오기 시작 */
-		/*
-		for ( Order order : orders ) {
-											//String relTypeCode, int relId, String typeCode, String type2Code, int fileNo
-			GenFile genFile = genFileService.getGenFile("order", order.getId(), "common", "attachment", 1);
-
-			if ( genFile != null ) {
-				//img의 url을 가져오기
-				order.setExtra__thumbImg(genFile.getForPrintUrl());
-			}
-		}
-		*/
-		/* 각 order에 달려있는 첨부파일 섬네일 가져오기 끝 */
-		
-		
+	public String showList(HttpServletRequest req){
+		List<Order> orders = orderService.getForPrintOrders();
 		
 		req.setAttribute("orders", orders);
 
@@ -117,7 +67,7 @@ public class AdmOrderController extends BaseController{
 		//HttpSession session을 HttpServletRequest req로 교체, 인터셉터에서 session 정보를 Request에 담음으로 
 		//session을 가져올 필요 없이 req로 값을 받으면 됨
 		
-		int loginedClientId = (int)req.getAttribute("loginedClientId");
+		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
 
 		if (param.get("title") == null) {
 			return msgAndBack(req, "title을 입력해주세요.");
@@ -126,7 +76,7 @@ public class AdmOrderController extends BaseController{
 			return msgAndBack(req, "body를 입력해주세요.");
 		}
 
-		param.put("clientId", loginedClientId);
+		param.put("memberId", loginedMemberId);
 		
 		ResultData addOrderRd = orderService.addOrder(param);
 		
@@ -159,8 +109,8 @@ public class AdmOrderController extends BaseController{
 	public ResultData doDelete(Integer id, HttpServletRequest req) {
 		// int 기본타입 -> null이 들어갈 수 없음
 		// Integer 객체타입 -> null이 들어갈 수 있음
-		//int loginedClientId = (int)req.getAttribute("loginedClientId");
-		Client loginedClient = (Client) req.getAttribute("loginedClient");
+		//int loginedMemberId = (int)req.getAttribute("loginedMemberId");
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
 		
 		if (id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
@@ -172,7 +122,7 @@ public class AdmOrderController extends BaseController{
 			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.");
 		}
 		
-		ResultData actorCanDeleteRd = orderService.getActorCanDeleteRd(order, loginedClient);
+		ResultData actorCanDeleteRd = orderService.getActorCanDeleteRd(order, loginedMember);
 
 		if (actorCanDeleteRd.isFail()) {
 			return actorCanDeleteRd;
@@ -214,8 +164,8 @@ public class AdmOrderController extends BaseController{
 		// int 기본타입 -> null이 들어갈 수 없음
 		// Integer 객체타입 -> null이 들어갈 수 있음
 		
-		//int loginedClientId = (int)req.getAttribute("loginedClientId");
-		Client loginedClient = (Client) req.getAttribute("loginedClient");
+		//int loginedMemberId = (int)req.getAttribute("loginedMemberId");
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
 		
 		int id = Util.getAsInt(param.get("id"), 0);
 
@@ -236,7 +186,7 @@ public class AdmOrderController extends BaseController{
 			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.", "id", id);
 		}
 
-		ResultData actorCanModifyRd = orderService.getActorCanModifyRd(order, loginedClient);
+		ResultData actorCanModifyRd = orderService.getActorCanModifyRd(order, loginedMember);
 
 		if (actorCanModifyRd.isFail()) {
 			return actorCanModifyRd;
@@ -248,7 +198,7 @@ public class AdmOrderController extends BaseController{
 	@RequestMapping("/adm/order/doAddReply")
 	@ResponseBody
 	public ResultData doAddReply(@RequestParam Map<String, Object> param, HttpServletRequest req) {
-		int loginedClientId = (int) req.getAttribute("loginedClientId");
+		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
 
 		if (param.get("body") == null) {
 			return new ResultData("F-1", "body를 입력해주세요.");
@@ -258,7 +208,7 @@ public class AdmOrderController extends BaseController{
 			return new ResultData("F-1", "orderId를 입력해주세요.");
 		}
 
-		param.put("clientId", loginedClientId);
+		param.put("memberId", loginedMemberId);
 
 		return orderService.addReply(param);
 	}

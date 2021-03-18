@@ -138,7 +138,7 @@
 	});
 	
 </script>
-<section class="section-login">
+<section class="section-Join">
 	<div
 		class="container mx-auto min-h-screen flex items-center justify-center">
 		<div class="w-full">
@@ -147,7 +147,7 @@
 					<span>
 						<i class="fas fa-people-arrows"></i>
 					</span>
-					<span>Client Join</span>
+					<span>Member Join</span>
 				</a>
 			</div>
 			<form class="formLogin bg-white shadow-md rounded px-8 pt-6 pb-8 mt-4"
@@ -208,6 +208,30 @@
 							class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
 							autofocus="autofocus" type="text" placeholder="닉네임을 입력해주세요."
 							name="nickname" maxlength="20" />
+					</div>
+				</div>
+				<div class="flex flex-col mb-4 md:flex-row">
+					<div class="p-1 md:w-36 md:flex md:items-center">
+						<span>유형</span>
+					</div>
+					<div class="p-1 md:flex-grow">
+						<select class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker" autofocus="autofocus" name="authLevel">
+							<option value="3">의뢰인</option>
+							<option value="4">도우미</option>
+							<option value="5">지도사</option>
+						</select>
+					</div>
+				</div>
+				<div class="flex flex-col mb-4 md:flex-row">
+					<div class="p-1 md:w-36 md:flex md:items-center">
+						<span>지역</span>
+					</div>
+					<div class="p-1 md:flex-grow">
+						<select class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker" autofocus="autofocus" name="address">
+							<option value="대전광역시">대전광역시</option>
+							<option value="경기도">경기도</option>
+							<option value="전라북도">전라북도</option>
+						</select>
 					</div>
 				</div>
 				<div class="flex flex-col mb-4 md:flex-row">

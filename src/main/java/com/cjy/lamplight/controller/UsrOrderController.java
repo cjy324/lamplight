@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cjy.lamplight.dto.Order;
 import com.cjy.lamplight.dto.Board;
-import com.cjy.lamplight.dto.Client;
+import com.cjy.lamplight.dto.Member;
 import com.cjy.lamplight.dto.ResultData;
 import com.cjy.lamplight.service.OrderService;
 import com.cjy.lamplight.util.Util;
@@ -43,60 +43,28 @@ public class UsrOrderController {
 	}
 
 	@GetMapping("/usr/order/list")
-	@ResponseBody
-	public ResultData showList(@RequestParam(defaultValue = "1") int boardId, String searchKeywordType, String searchKeyword, @RequestParam(defaultValue = "1") int page) {
-		// @RequestParam(defaultValue = "1") int page : page 파라미터의 값이 없으면 디폴트로 1이다.
+	public String showList(HttpServletRequest req) {
+
+		List<Order> orders = orderService.getForPrintOrders();
+
+		req.setAttribute("orders", orders);
 		
-		Board board = orderService.getBoard(boardId);
-
-		if ( board == null ) {
-			return new ResultData("F-1", "존재하지 않는 게시판 입니다.");
-		}
-		
-		if (searchKeywordType != null) {
-			searchKeywordType = searchKeywordType.trim();
-		}
-
-		if (searchKeywordType == null || searchKeywordType.length() == 0) {
-			searchKeywordType = "titleAndBody";
-		}
-
-		if (searchKeyword != null && searchKeyword.length() == 0) {
-			searchKeyword = null;
-		}
-
-		if (searchKeyword != null) {
-			searchKeyword = searchKeyword.trim();
-		}
-
-		if ( searchKeyword == null ) {
-			searchKeywordType = null;
-		}
-		
-		int itemsInAPage = 10;
-		
-		List<Order> orders = orderService.getForPrintOrders(boardId, searchKeywordType, searchKeyword, page, itemsInAPage);
-		
-
-		return new ResultData("S-1", "성공", "orders", orders);
+		return "/usr/order/list";
 	}
 
 	@PostMapping("/usr/order/doAdd")
 	@ResponseBody
 	public ResultData doAdd(@RequestParam Map<String, Object> param, HttpServletRequest req) {
-		//HttpSession session을 HttpServletRequest req로 교체, 인터셉터에서 session 정보를 Request에 담음으로 
-		//session을 가져올 필요 없이 req로 값을 받으면 됨
-		
-		int loginedClientId = (int)req.getAttribute("loginedClientId");
 
-		if (param.get("title") == null) {
-			return new ResultData("F-1", "title을 입력해주세요.");
-		}
+		
+		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
+
+
 		if (param.get("body") == null) {
 			return new ResultData("F-1", "body를 입력해주세요.");
 		}
 
-		param.put("clientId", loginedClientId);
+		param.put("memberId", loginedMemberId);
 		
 		return orderService.addOrder(param);
 	}
@@ -106,8 +74,8 @@ public class UsrOrderController {
 	public ResultData doDelete(Integer id, HttpServletRequest req) {
 		// int 기본타입 -> null이 들어갈 수 없음
 		// Integer 객체타입 -> null이 들어갈 수 있음
-		//int loginedClientId = (int)req.getAttribute("loginedClientId");
-		Client loginedClient = (Client) req.getAttribute("loginedClient");
+		//int loginedMemberId = (int)req.getAttribute("loginedMemberId");
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
 		
 		if (id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
@@ -119,7 +87,7 @@ public class UsrOrderController {
 			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.");
 		}
 		
-		ResultData actorCanDeleteRd = orderService.getActorCanDeleteRd(order, loginedClient);
+		ResultData actorCanDeleteRd = orderService.getActorCanDeleteRd(order, loginedMember);
 
 		if (actorCanDeleteRd.isFail()) {
 			return actorCanDeleteRd;
@@ -134,8 +102,8 @@ public class UsrOrderController {
 		// int 기본타입 -> null이 들어갈 수 없음
 		// Integer 객체타입 -> null이 들어갈 수 있음
 		
-		//int loginedClientId = (int)req.getAttribute("loginedClientId");
-		Client loginedClient = (Client) req.getAttribute("loginedClient");
+		//int loginedMemberId = (int)req.getAttribute("loginedMemberId");
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
 		
 		int id = Util.getAsInt(param.get("id"), 0);
 
@@ -156,7 +124,7 @@ public class UsrOrderController {
 			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.", "id", id);
 		}
 
-		ResultData actorCanModifyRd = orderService.getActorCanModifyRd(order, loginedClient);
+		ResultData actorCanModifyRd = orderService.getActorCanModifyRd(order, loginedMember);
 
 		if (actorCanModifyRd.isFail()) {
 			return actorCanModifyRd;
@@ -168,7 +136,7 @@ public class UsrOrderController {
 	@PostMapping("/usr/order/doAddReply")
 	@ResponseBody
 	public ResultData doAddReply(@RequestParam Map<String, Object> param, HttpServletRequest req) {
-		int loginedClientId = (int) req.getAttribute("loginedClientId");
+		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
 
 		if (param.get("body") == null) {
 			return new ResultData("F-1", "body를 입력해주세요.");
@@ -178,7 +146,7 @@ public class UsrOrderController {
 			return new ResultData("F-1", "orderId를 입력해주세요.");
 		}
 
-		param.put("clientId", loginedClientId);
+		param.put("memberId", loginedMemberId);
 
 		return orderService.addReply(param);
 	}

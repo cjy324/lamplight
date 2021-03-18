@@ -8,47 +8,84 @@ CREATE TABLE `order` (
     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     regDate DATETIME NOT NULL,
     updateDate DATETIME NOT NULL,
-    option1 CHAR(100) NOT NULL,
+    option1 CHAR(200) NOT NULL,
     option1qty INT(10) UNSIGNED NOT NULL,
-    option2 CHAR(100) NOT NULL,
+    option2 CHAR(200) NOT NULL,
     option2qty INT(10) UNSIGNED NOT NULL,
-    option3 CHAR(100) NOT NULL,
+    option3 CHAR(200) NOT NULL,
     option3qty INT(10) UNSIGNED NOT NULL,
-    option4 CHAR(100) NOT NULL,
+    option4 CHAR(200) NOT NULL,
     option4qty INT(10) UNSIGNED NOT NULL,
-    option5 CHAR(100) NOT NULL,
+    option5 CHAR(200) NOT NULL,
     option5qty INT(10) UNSIGNED NOT NULL,
+    title CHAR(200) NOT NULL,
     `body` TEXT NOT NULL,
     `directorId` INT(10) UNSIGNED NOT NULL,
     `clientId` INT(10) UNSIGNED NOT NULL
 );
 
-# 의뢰인 회원 테이블 생성
-CREATE TABLE `client` (
+# 테스트 의뢰 생성
+INSERT INTO `order`
+SET regDate = NOW(),
+    updateDate = NOW(),
+    option1 = '옵션1',
+    option1qty = 10,
+    option2 = '옵션2',
+    option2qty = 20,
+    option3 = '옵션3',
+    option3qty = 30,
+    option4 = '옵션4',
+    option4qty = 40,
+    option5 = '옵션5',
+    option5qty = 50,
+    title = 'user2님 의뢰',
+    `body` = '기타 요청 사항',
+    `directorId` = 4,
+    `clientId` = 2;
+
+INSERT INTO `order`
+SET regDate = NOW(),
+    updateDate = NOW(),
+    option1 = '옵션1',
+    option1qty = 10,
+    option2 = '옵션2',
+    option2qty = 20,
+    option3 = '옵션3',
+    option3qty = 30,
+    option4 = '옵션4',
+    option4qty = 40,
+    option5 = '옵션5',
+    option5qty = 50,
+    title = 'user3님 의뢰',
+    `body` = '기타 요청 사항2',
+    `directorId` = 4,
+    `clientId` = 3;
+ 
+# 회원 테이블 생성
+CREATE TABLE `member` (
     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     regDate DATETIME NOT NULL,
     updateDate DATETIME NOT NULL,
     loginId CHAR(30) NOT NULL,
     loginPw VARCHAR(100) NOT NULL,
     authKey CHAR(80) NOT NULL,
-    authLevel SMALLINT(2) UNSIGNED DEFAULT 3 NOT NULL COMMENT '(3=일반,7=관리자)',
+    authLevel SMALLINT(2) UNSIGNED DEFAULT 3 NOT NULL COMMENT '(3=의뢰인,4=도우미,5=지도사,7=관리자)',
     `name` CHAR(30) NOT NULL,
     `nickname` CHAR(30) NOT NULL,
     `email` CHAR(100) NOT NULL,
     `cellphoneNo` CHAR(20) NOT NULL,
-    `address_state` CHAR(100) NOT NULL,
-    `address_city` CHAR(100) NOT NULL,
-    `address_street` CHAR(100) NOT NULL
+    `address` CHAR(100) NOT NULL
+
 );
 
 # 로그인 ID로 검색했을 때
-ALTER TABLE `client` ADD UNIQUE INDEX (`loginId`);
+ALTER TABLE `member` ADD UNIQUE INDEX (`loginId`);
 
 # authKey 칼럼에 유니크 인덱스 추가
-ALTER TABLE `client` ADD UNIQUE INDEX (`authKey`);
+ALTER TABLE `member` ADD UNIQUE INDEX (`authKey`);
 
 # 회원, 테스트 데이터 생성
-INSERT INTO `client`
+INSERT INTO `member`
 SET regDate = NOW(),
     updateDate = NOW(),
     loginId = 'user1',
@@ -59,11 +96,9 @@ SET regDate = NOW(),
     `nickname` = 'user1',
     `email` = 'user1@user1.com',
     `cellphoneNo` = 01011111111,
-    `address_state` = '대전광역시',
-    `address_city` = '유성구',
-    `address_street` = '반석동';
+    `address` = '대전광역시';
 
-INSERT INTO `client`
+INSERT INTO `member`
 SET regDate = NOW(),
     updateDate = NOW(),
     loginId = 'user2',
@@ -74,11 +109,9 @@ SET regDate = NOW(),
     `nickname` = 'user2',
     `email` = 'user2@user2.com',
     `cellphoneNo` = 01022222222,
-    `address_state` = '경기도',
-    `address_city` = '이천시',
-    `address_street` = '장수동';
+    `address` = '경기도';
 
-INSERT INTO `client`
+INSERT INTO `member`
 SET regDate = NOW(),
     updateDate = NOW(),
     loginId = 'user3',
@@ -89,79 +122,47 @@ SET regDate = NOW(),
     `nickname` = 'user3',
     `email` = 'user3@user3.com',
     `cellphoneNo` = 01033333333,
-    `address_state` = '전라북도',
-    `address_city` = '익산시',
-    `address_street` = '익산동';
+    `address` = '전라북도';
     
-# 의뢰인 회원 테이블 생성
-CREATE TABLE `director` (
-    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    regDate DATETIME NOT NULL,
-    updateDate DATETIME NOT NULL,
-    loginId CHAR(30) NOT NULL,
-    loginPw VARCHAR(100) NOT NULL,
-    authKey CHAR(80) NOT NULL,
-    authLevel SMALLINT(2) UNSIGNED DEFAULT 3 NOT NULL COMMENT '(3=일반,7=관리자)',
-    `name` CHAR(30) NOT NULL,
-    `nickname` CHAR(30) NOT NULL,
-    `email` CHAR(100) NOT NULL,
-    `cellphoneNo` CHAR(20) NOT NULL,
-    `address_state` CHAR(100) NOT NULL,
-    `address_city` CHAR(100) NOT NULL,
-    `address_street` CHAR(100) NOT NULL
-);
-
-# 로그인 ID로 검색했을 때
-ALTER TABLE `director` ADD UNIQUE INDEX (`loginId`);
-
-# authKey 칼럼에 유니크 인덱스 추가
-ALTER TABLE `director` ADD UNIQUE INDEX (`authKey`);
-
-# 회원, 테스트 데이터 생성
-INSERT INTO `director`
+INSERT INTO `member`
 SET regDate = NOW(),
     updateDate = NOW(),
     loginId = 'tester1',
     loginPw = 'tester1',
     authKey = 'authKey1__4',
-    authLevel = 3,
+    authLevel = 5,
     `name` = 'tester1',
     `nickname` = 'tester1',
     `email` = 'tester1@tester1.com',
     `cellphoneNo` = 01044444444,
-    `address_state` = '대전광역시',
-    `address_city` = '유성구',
-    `address_street` = '반석동';
+    `address` = '대전광역시';
 
-INSERT INTO `director`
+
+INSERT INTO `member`
 SET regDate = NOW(),
     updateDate = NOW(),
     loginId = 'tester2',
     loginPw = 'tester2',
     authKey = 'authKey5__5',
-    authLevel = 3,
+    authLevel = 5,
     `name` = 'tester2',
     `nickname` = 'tester2',
     `email` = 'tester2@tester2.com',
     `cellphoneNo` = 01055555555,
-    `address_state` = '경기도',
-    `address_city` = '이천시',
-    `address_street` = '장수동';
+    `address` = '경기도';
 
-INSERT INTO `director`
+INSERT INTO `member`
 SET regDate = NOW(),
     updateDate = NOW(),
     loginId = 'tester3',
     loginPw = 'tester3',
     authKey = 'authKey6__6',
-    authLevel = 3,
+    authLevel = 5,
     `name` = 'tester3',
     `nickname` = 'tester3',
     `email` = 'tester3@tester3.com',
     `cellphoneNo` = 01066666666,
-    `address_state` = '전라북도',
-    `address_city` = '익산시',
-    `address_street` = '익산동';
+    `address` = '전라북도';
 
 # 파일 테이블 추가
 CREATE TABLE genFile (

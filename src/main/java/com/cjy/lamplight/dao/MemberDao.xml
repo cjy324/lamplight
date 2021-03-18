@@ -3,43 +3,27 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cjy.lamplight.dao.ClientDao">
+<mapper namespace="com.cjy.lamplight.dao.MemberDao">
 
-	<select id="getForPrintClients" resultType="Client">
+	<select id="getForPrintMembers" resultType="Member">
 		SELECT M.*
-		FROM `client` AS M
+		FROM `member` AS M
 		WHERE 1
-		<if test="searchKeywordType == 'name'">
-			AND M.name LIKE CONCAT('%', #{searchKeyword}, '%')
-		</if>
-		<if test="searchKeywordType == 'nickname'">
-			AND M.`nickname` LIKE CONCAT('%', #{searchKeyword}, '%')
-		</if>
-		<if test="searchKeywordType == 'nameAndNickname'">
-			AND (M.name LIKE CONCAT('%', #{searchKeyword}, '%') OR
-			M.nickname LIKE CONCAT('%', #{searchKeyword}, '%'))
-		</if>
-		<if test="searchKeywordType == 'loginId'">
-			AND M.loginId LIKE CONCAT('%', #{searchKeyword}, '%')
-		</if>
 		<if test="authLevel != null and authLevel != ''">
 			AND M.authLevel = #{authLevel}
 		</if>
 		ORDER BY M.id DESC
-		<if test="limitStart != null and limitTake != null">
-			LIMIT #{limitStart}, #{limitTake}
-		</if>
 	</select>
 	
-	<select id="getClients" resultType="Client">
-		SELECT C.*
-		FROM `client` AS C
-		ORDER BY C.id DESC
+	<select id="getMembers" resultType="Member">
+		SELECT M.*
+		FROM `member` AS M
+		ORDER BY M.id DESC
 	</select>
 
 	<!-- public void join(String title, String body); -->
 	<insert id="join" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO client
+		INSERT INTO member
 		<set> <!-- SET 대신 set으로 감싸주는 것이 관례 -->
 			regDate = NOW(),
 			updateDate = NOW(),
@@ -49,43 +33,41 @@
 			`nickname` = #{nickname},
 			`email` = #{email},
 			`cellphoneNo` = #{cellphoneNo},
-    		`address_state` = #{address_state},
-    		`address_city` = #{address_city},
-    		`address_street` = #{address_street},
+    		`address` = #{address},
+    		authLevel = #{authLevel},
 			authKey = CONCAT("authKey1__", UUID(), "__", RAND())
 		</set>
 
 	</insert>
-	
-	<!-- public Client getClient(@Param(value = "id") int id); -->
-	<select id="getClient" resultType="Client">
+	<!-- public Member getMember(@Param(value = "id") int id); -->
+	<select id="getMember" resultType="Member">
 		SELECT *
-		FROM `client`
+		FROM `member`
 		WHERE id = #{id}
 	</select>
 	
-	<select id="getForPrintClient" resultType="Client">
+	<select id="getForPrintMember" resultType="Member">
 		SELECT *
-		FROM `client`
+		FROM `member`
 		WHERE id = #{id}
 	</select>
 	
-	<!-- public Client getClientByLoginId(@Param(value = "loginId") String loginId); -->
-	<select id="getClientByLoginId" resultType="Client">
+	<!-- public Member getMemberByLoginId(@Param(value = "loginId") String loginId); -->
+	<select id="getMemberByLoginId" resultType="Member">
 		SELECT *
-		FROM `client`
+		FROM `member`
 		WHERE loginId = #{loginId}
 	</select>
 	
-	<select id="getClientByAuthKey" resultType="Client">
+	<select id="getMemberByAuthKey" resultType="Member">
 		SELECT *
-		FROM `client`
+		FROM `member`
 		WHERE authKey = #{authKey}
 	</select>
 
-	<!-- public void modifyClient(Map<String, Object> param); -->
-	<update id="modifyClient">
-		UPDATE client
+	<!-- public void modifyMember(Map<String, Object> param); -->
+	<update id="modifyMember">
+		UPDATE member
 		<set>
 			<if test="loginPw != null || name != null || nickname != null || cellphoneNo != null || email != null || authLevel != null">
 				updateDate = NOW()
@@ -107,6 +89,9 @@
 			</if>
 			<if test="authLevel != null">
 				, authLevel = #{authLevel}
+			</if>
+			<if test="address != null">
+				, `address` = #{address}
 			</if>
 		</set>
 		WHERE id = #{id}

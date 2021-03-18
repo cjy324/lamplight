@@ -1,14 +1,14 @@
 package com.cjy.lamplight.dto;
 
 
-import com.cjy.lamplight.service.DirectorService;
+import com.cjy.lamplight.service.MemberService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
 
 @Data
-public class Director {
+public class Member {
 	private int id;
 	private String regDate;
 	private String updateDate;
@@ -24,16 +24,15 @@ public class Director {
 	private String nickname;
 	private String cellphoneNo;
 	private String email;
-	private String address_state;
-	private String address_city;
-	private String address_street;
+	private String address;
+
 	
 	private String extra__thumbImg;
 	
 	public String getAuthLevelName() {
-		return DirectorService.getAuthLevelName(this);
+		return MemberService.getAuthLevelName(this);
 	}
 	public String getAuthLevelNameColor() {
-		return DirectorService.getAuthLevelNameColor(this);
+		return MemberService.getAuthLevelNameColor(this);
 	}
 }

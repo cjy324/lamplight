@@ -21,13 +21,12 @@ public interface OrderDao {
 	/* Mybatis 적용으로 기존 내용 삭제 */
 	//Mybatis에서 자동으로 만들어 줌
 	Order getOrder(@Param("id") int id);
-	List<Order> getOrders(@Param("searchKeywordType") String searchKeywordType, @Param("searchKeyword") String searchKeyword);
+	List<Order> getOrders();
+	List<Order> getForPrintOrders();
 	void addOrder(Map<String, Object> param);
 	void deleteOrder(@Param("id") int id);
 	void modifyOrder(Map<String, Object> param);
 	Order getForPrintOrder(@Param("id") int id);
-	List<Order> getForPrintOrders(@Param("boardId") int boardId, @Param("searchKeywordType") String searchKeywordType, @Param("searchKeyword") String searchKeyword, @Param("limitStart") int limitStart,
-			@Param("limitTake") int limitTake);
 	Board getBoard(@Param("id") int id);
 	
 	ResultData addReply(Map<String, Object> param);

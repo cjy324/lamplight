@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cjy.lamplight.dto.Order;
-import com.cjy.lamplight.dto.Client;
+import com.cjy.lamplight.dto.Member;
 import com.cjy.lamplight.dto.Reply;
 import com.cjy.lamplight.dto.ResultData;
 import com.cjy.lamplight.service.OrderService;
@@ -52,8 +52,8 @@ public class UsrReplyController {
 	@PostMapping("/usr/reply/doDelete")
 	@ResponseBody
 	public ResultData doDelete(Integer id, HttpServletRequest req) {
-		//int loginedClientId = (int) req.getAttribute("loginedClientId");
-		Client loginedClient = (Client) req.getAttribute("loginedClient");
+		//int loginedMemberId = (int) req.getAttribute("loginedMemberId");
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
 
 		if (id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
@@ -65,7 +65,7 @@ public class UsrReplyController {
 			return new ResultData("F-1", "해당 댓글은 존재하지 않습니다.");
 		}
 
-		ResultData actorCanDeleteRd = replyService.getActorCanDeleteRd(reply, loginedClient);
+		ResultData actorCanDeleteRd = replyService.getActorCanDeleteRd(reply, loginedMember);
 
 		if (actorCanDeleteRd.isFail()) {
 			return actorCanDeleteRd;
@@ -77,8 +77,8 @@ public class UsrReplyController {
 	@PostMapping("/usr/reply/doModify")
 	@ResponseBody
 	public ResultData doModify(Integer id, String body, HttpServletRequest req) {
-		//int loginedClientId = (int)req.getAttribute("loginedClientId");
-		Client loginedClient = (Client) req.getAttribute("loginedClient");
+		//int loginedMemberId = (int)req.getAttribute("loginedMemberId");
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
 		
 		if (id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
@@ -94,7 +94,7 @@ public class UsrReplyController {
 			return new ResultData("F-1", "해당 댓글은 존재하지 않습니다.");
 		}
 
-		ResultData actorCanModifyRd = replyService.getActorCanModifyRd(reply, loginedClient);
+		ResultData actorCanModifyRd = replyService.getActorCanModifyRd(reply, loginedMember);
 
 		if (actorCanModifyRd.isFail()) {
 			return actorCanModifyRd;
