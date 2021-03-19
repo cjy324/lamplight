@@ -20,6 +20,13 @@
 		FROM `member` AS M
 		ORDER BY M.id DESC
 	</select>
+	
+	<select id="getDirectors" resultType="Member">
+		SELECT M.*
+		FROM `member` AS M
+		WHERE authLevel = 5
+		ORDER BY M.id DESC
+	</select>
 
 	<!-- public void join(String title, String body); -->
 	<insert id="join" useGeneratedKeys="true" keyProperty="id">

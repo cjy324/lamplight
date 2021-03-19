@@ -22,7 +22,7 @@
 					</a>
 				</li>
 				<li>
-					<a class="text-xl px-4 flex items-center h-full hover:underline" href="/usr/member/list">
+					<a class="text-xl px-4 flex items-center h-full hover:underline" href="/usr/director/list">
 						<span>Directors</span>
 					</a>
 				</li>

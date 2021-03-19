@@ -72,6 +72,10 @@ public class MemberService {
 			return "관리자";
 		case 3:
 			return "일반";
+		case 4:
+			return "도우미";
+		case 5:
+			return "지도사";
 		default:
 			return "유형 정보 없음";
 		}
@@ -83,6 +87,10 @@ public class MemberService {
 			return "red";
 		case 3:
 			return "gray";
+		case 4:
+			return "blue";
+		case 5:
+			return "purple";
 		default:
 			return "";
 		}
@@ -123,6 +131,10 @@ public class MemberService {
 
 	public List<Member> getMembers() {
 		return memberDao.getMembers();
+	}
+
+	public List<Member> getDirectors() {
+		return memberDao.getDirectors();
 	}
 
 

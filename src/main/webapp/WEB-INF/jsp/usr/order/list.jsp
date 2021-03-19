@@ -4,34 +4,8 @@
 
 <%@ include file="../part/mainLayoutHead.jspf"%>
 
-<script>
-	param.boardId = parseInt("${board.id}");
-</script>	
-
-
 <section class="section-1">
 	<div class="bg-white shadow-md rounded container mx-auto p-8 mt-8">
-		<div class="flex items-center">
-			<select class="py-2 select-board-id">
-				<option value="1">공지사항</option>
-				<option value="2">자유게시판</option>
-			</select>
-			
-			<script>
-			// select의 옵션의 value를 .val(param.boardId)값으로 바꾼다
-			$('.section-1 .select-board-id').val(param.boardId);
-			
-			$('.section-1 .select-board-id').change(function() {
-				//change() : 뭔가 바뀔때마다 실행되는 함수
-				//location.href : 현재 페이지의 URL
-				location.href = '?boardId=' + this.value;
-			});
-			</script>
-			
-			<div class="flex-grow"></div>
-			<a href="add?boardId=${board.id}" class="btn-primary bg-blue-500 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded">글쓰기</a>
-			
-		</div>
 		<div>
 			<c:forEach items="${orders}" var="order">
 			<c:set var="detailUrl" value="detail?id=${order.id}" />
@@ -43,8 +17,8 @@
 					<a href="${detailUrl}" class="font-bold">NO. ${order.id}</a>
 					<a href="${detailUrl}" class="ml-2 font-light text-gray-600">${order.regDate}</a>
 					<div class="flex-grow"></div>
-					<a href="list?boardId=${order.boardId}"
-						class="px-2 py-1 bg-gray-600 text-gray-100 font-bold rounded hover:bg-gray-500">${order.extra__boardName}</a>
+					<a href="list"
+						class="px-2 py-1 bg-gray-600 text-gray-100 font-bold rounded hover:bg-gray-500">리스트보기</a>
 				</div>
 				<div class="mt-2">
 					<a href="${detailUrl}" class="text-2xl text-gray-700 font-bold hover:underline">${order.title}</a>
@@ -67,7 +41,7 @@
 							<img
 								src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=731&amp;q=80"
 								alt="avatar" class="mx-4 w-10 h-10 object-cover rounded-full">
-							<h1 class="text-gray-700 font-bold hover:underline">${order.extra__writer}</h1>
+							<h1 class="text-gray-700 font-bold hover:underline">${order.extra__member}</h1>
 						</a>
 					</div>
 				</div>

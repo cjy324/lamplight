@@ -8,51 +8,58 @@
 	<!-- public Order getOrder(int id); -->
 	<select id="getOrder" resultType="Order">
 		SELECT *
-		FROM order
+		FROM `order`
 		WHERE id
 		= #{id}
 	</select>
 
 	<select id="getForPrintOrder" resultType="Order">
-		SELECT A.*,
+		SELECT O.*,
 		IFNULL(M.nickname, "탈퇴회원") AS extra__writer
-		FROM order AS A
+		FROM order AS O
 		LEFT JOIN
-		`client` AS M
-		ON A.clientId = M.id
-		WHERE A.id = #{id}
+		`member` AS M
+		ON O.clientId = M.id
+		WHERE O.id = #{id}
 	</select>
 
 
 	<select id="orders" resultType="Order">
 		SELECT *
-		FROM order
+		FROM `order`
 		ORDER BY id DESC
 	</select>
 
 
 	<select id="getForPrintOrders" resultType="Order">
 		SELECT O.*,
-		IFNULL(C.nickname, "탈퇴회원") AS extra__client,
-		IFNULL(D.nickname, "탈퇴회원") AS extra__director
-		FROM order AS O
-		LEFT JOIN `client` AS C
-		ON O.clientId = C.id
-		LEFT JOIN `director` AS D
-		ON O.clientId = D.id
+		IFNULL(M.nickname, "탈퇴회원") AS extra__member
+		FROM `order` AS O
+		LEFT JOIN `member` AS M
+		ON O.clientId = M.id
 		ORDER BY O.id DESC
 	</select>
 
 	<!-- public void addOrder(String title, String body); -->
 	<insert id="addOrder" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO order
+		INSERT INTO `order`
 		<set> <!-- SET 대신 set으로 감싸주는 것이 관례 -->
 			regDate = NOW(),
 			updateDate = NOW(),
-			boardId = #{boardId},
-			clientId = #{clientId},
-			title = #{title},
-			`body` = #{body}
+			option1 = #{option1},
+    		option1qty = #{option1qty},
+    		option2 = #{option2},
+    		option2qty = #{option2qty},
+    		option3 = #{option3},
+    		option3qty = #{option3qty},
+    		option4 = #{option4},
+    		option4qty = #{option4qty},
+    		option5 = #{option5},
+    		option5qty = #{option5qty},
+    		title = #{title},
+    		`body` = #{body},
+    		`directorId` = #{directorId},
+    		`clientId` = #{clientId}
 		</set>
 	</insert>
 

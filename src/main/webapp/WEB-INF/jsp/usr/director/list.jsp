@@ -10,6 +10,8 @@
 			<select class="py-2 select-auth-level">
 				<option value="">전체</option>
 				<option value="3">일반회원</option>
+				<option value="4">도우미</option>
+				<option value="5">지도사</option>
 				<option value="7">관리자</option>
 			</select>
 			<script>
@@ -24,7 +26,7 @@
 			</script>
 		</div>
 		<div>
-			<c:forEach items="${members}" var="member">
+			<c:forEach items="${directors}" var="member">
 				<c:set var="detailUrl" value="detail?id=${member.id}" />
 				<div class="flex items-center mt-10">
 					<a href="${detailUrl}" class="font-bold">NO. ${member.id}</a>
@@ -51,22 +53,16 @@
 					</a>
 				</div>
 				<div class="flex items-center mt-4">
-					<a href="detail?id=${member.id}" class="text-blue-500 hover:underline" title="자세히 보기">
+					<a href="../member/detail?id=${member.id}" class="text-blue-500 hover:underline" title="자세히 보기">
 						<span>
 							<i class="fas fa-info"></i>
 							<span class="hidden sm:inline">자세히 보기</span>
 						</span>
 					</a>
-					<a href="modify?id=${member.id}" class="ml-2 text-blue-500 hover:underline">
+					<a href="../order/add?directorId=${member.id}" class="ml-2 text-blue-500 hover:underline">
 						<span>
 							<i class="fas fa-edit"></i>
-							<span class="hidden sm:inline">수정</span>
-						</span>
-					</a>
-					<a onclick="if ( !confirm('삭제하시겠습니까?') ) return false;" href="doDelete?id=${member.id}" class="ml-2 text-blue-500 hover:underline">
-						<span>
-							<i class="fas fa-trash"></i>
-							<span class="hidden sm:inline">삭제</span>
+							<span class="hidden sm:inline">의뢰하기</span>
 						</span>
 					</a>
 					<div class="flex-grow"></div>

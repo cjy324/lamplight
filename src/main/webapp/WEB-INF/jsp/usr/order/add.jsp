@@ -26,12 +26,12 @@ function OrderAdd__checkAndSubmit(form) {
 		form.title.focus();
 		return false;
 	}
-	form.body.value = form.body.value.trim();
+/* 	form.body.value = form.body.value.trim();
 	if ( form.body.value.length == 0 ) {
 		alert('내용을 입력해주세요.');
 		form.body.focus();
 		return false;
-	}
+	} */
 	
 	/* 첨부파일 용량 제한 쿼리 */
 	var maxSizeMb = 50; 
@@ -118,10 +118,13 @@ function OrderAdd__checkAndSubmit(form) {
 
 <section class="section-1">
 	<div class="bg-white shadow-md rounded container mx-auto p-8 mt-8">
+		<div>
+			요청페이지
+		</div>
 		<form onsubmit="OrderAdd__checkAndSubmit(this); return false;" action="doAdd" method="POST" enctype="multipart/form-data">
 			<!-- 파일업로드를 하게되면 먼저 ajax로 전송을 하고 응답으로 value="1,2" 이런식으로 파일 번호가 들어옴-->
 			<input type="hidden" name="genFileIdsStr" value="" />
-			<input type="hidden" name="boardId" value="${param.boardId}" />
+			<input type="hidden" name="directorId" value="${param.directorId}" />
 			<div class="form-row flex flex-col lg:flex-row">
 				<div class="lg:flex lg:items-center lg:w-28">
 					<span>제목</span>
@@ -133,7 +136,88 @@ function OrderAdd__checkAndSubmit(form) {
 			</div>
 			<div class="form-row flex flex-col lg:flex-row">
 				<div class="lg:flex lg:items-center lg:w-28">
-					<span>내용</span>
+					<span>옵션1</span>
+				</div>
+				<div class="lg:flex-grow">
+					<input type="text" name="option1" autofocus="autofocus"
+						class="form-row-input w-full rounded-sm" placeholder="옵션을 입력해주세요." />
+					<select name="option1qty" class="form-row-input w-full rounded-sm">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-row flex flex-col lg:flex-row">
+				<div class="lg:flex lg:items-center lg:w-28">
+					<span>옵션2</span>
+				</div>
+				<div class="lg:flex-grow">
+					<input type="text" name="option2" autofocus="autofocus"
+						class="form-row-input w-full rounded-sm" placeholder="옵션을 입력해주세요." />
+					<select name="option2qty" class="form-row-input w-full rounded-sm">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-row flex flex-col lg:flex-row">
+				<div class="lg:flex lg:items-center lg:w-28">
+					<span>옵션3</span>
+				</div>
+				<div class="lg:flex-grow">
+					<input type="text" name="option3" autofocus="autofocus"
+						class="form-row-input w-full rounded-sm" placeholder="옵션을 입력해주세요." />
+					<select name="option3qty" class="form-row-input w-full rounded-sm">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-row flex flex-col lg:flex-row">
+				<div class="lg:flex lg:items-center lg:w-28">
+					<span>옵션4</span>
+				</div>
+				<div class="lg:flex-grow">
+					<input type="text" name="option4" autofocus="autofocus"
+						class="form-row-input w-full rounded-sm" placeholder="옵션을 입력해주세요." />
+					<select name="option4qty" class="form-row-input w-full rounded-sm">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-row flex flex-col lg:flex-row">
+				<div class="lg:flex lg:items-center lg:w-28">
+					<span>옵션5</span>
+				</div>
+				<div class="lg:flex-grow">
+					<input type="text" name="option5" autofocus="autofocus"
+						class="form-row-input w-full rounded-sm" placeholder="옵션을 입력해주세요." />
+					<select name="option5qty" class="form-row-input w-full rounded-sm">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-row flex flex-col lg:flex-row">
+				<div class="lg:flex lg:items-center lg:w-28">
+					<span>추가 요청 사항</span>
 				</div>
 				<div class="lg:flex-grow">
 					<textarea name="body" class="form-row-input w-full rounded-sm" placeholder="내용을 입력해주세요."></textarea>
@@ -154,11 +238,11 @@ function OrderAdd__checkAndSubmit(form) {
 			
 			<div class="form-row flex flex-col lg:flex-row">
 				<div class="lg:flex lg:items-center lg:w-28">
-					<span>작성</span>
+					
 				</div>
 				<div class="lg:flex-grow">
 					<div class="btns">
-						<input type="submit" class="btn-primary bg-blue-500 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded" value="작성">
+						<input type="submit" class="btn-primary bg-blue-500 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded" value="완료">
 						<input onclick="history.back();" type="button" class="btn-info bg-red-500 hover:bg-red-dark text-white font-bold py-2 px-4 rounded" value="취소">
 					</div>
 				</div>

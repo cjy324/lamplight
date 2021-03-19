@@ -27,6 +27,8 @@ public interface MemberDao {
 
 	List<Member> getMembers();
 
+	List<Member> getDirectors();
+
 
 
 }

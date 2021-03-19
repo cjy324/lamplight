@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +37,30 @@ public class UsrMemberController {
 		//return new ResultData("S-1", "성공", "members", members);
 		
 		return "/usr/member/list";
+	}
+	
+	@GetMapping("/usr/director/list")
+	//@ResponseBody
+	public String showDirectorList(HttpServletRequest req) {
+
+		List<Member> directors = memberService.getDirectors();
+
+		req.setAttribute("directors", directors);	
+
+		//return new ResultData("S-1", "성공", "members", members);
+		
+		return "usr/director/list";
+	}
+	
+	@GetMapping("/usr/member/detail")
+	//@ResponseBody
+	public String showMemberDetail(HttpServletRequest req, int id) {
+
+		Member member = memberService.getForPrintMember(id);
+
+		req.setAttribute("member", member);	
+		
+		return "/usr/member/detail";
 	}
 
 	@RequestMapping("/usr/member/join")
