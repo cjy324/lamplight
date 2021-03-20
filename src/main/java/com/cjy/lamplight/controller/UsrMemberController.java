@@ -21,7 +21,7 @@ import com.cjy.lamplight.service.MemberService;
 import com.cjy.lamplight.util.Util;
 
 @Controller
-public class UsrMemberController {
+public class UsrMemberController extends BaseController {
 
 	@Autowired
 	private MemberService memberService;
@@ -40,27 +40,29 @@ public class UsrMemberController {
 	}
 	
 	@GetMapping("/usr/director/list")
-	//@ResponseBody
-	public String showDirectorList(HttpServletRequest req) {
+	@ResponseBody
+	public ResultData showDirectorList(HttpServletRequest req) {
 
-		List<Member> directors = memberService.getDirectors();
+		List<Member> members = memberService.getDirectors();
 
-		req.setAttribute("directors", directors);	
+		req.setAttribute("members", members);	
 
 		//return new ResultData("S-1", "성공", "members", members);
 		
-		return "usr/director/list";
+		//return "usr/director/list";
+		return new ResultData("S-1", "성공", "members", members);
 	}
 	
-	@GetMapping("/usr/member/detail")
-	//@ResponseBody
-	public String showMemberDetail(HttpServletRequest req, int id) {
+	@GetMapping("/usr/member/profile")
+	@ResponseBody
+	public ResultData showMemberDetail(HttpServletRequest req, int id) {
 
 		Member member = memberService.getForPrintMember(id);
 
 		req.setAttribute("member", member);	
 		
-		return "/usr/member/detail";
+		//return "/usr/member/detail";
+		return new ResultData("S-1", "성공", "member", member);
 	}
 
 	@RequestMapping("/usr/member/join")
@@ -69,6 +71,7 @@ public class UsrMemberController {
 	}
 	
 	@PostMapping("/usr/member/doJoin")
+	@ResponseBody
 	public String doJoin(@RequestParam Map<String, Object> param) {
 
 		if (param.get("loginId") == null) {
@@ -100,6 +103,8 @@ public class UsrMemberController {
 		if (param.get("cellphoneNo") == null) {
 			return Util.msgAndBack("cellphoneNo를 입력해주세요.");
 		}
+		
+		
 
 		memberService.join(param);
 

@@ -15,8 +15,8 @@
 
 	<select id="getForPrintOrder" resultType="Order">
 		SELECT O.*,
-		IFNULL(M.nickname, "탈퇴회원") AS extra__writer
-		FROM order AS O
+		IFNULL(M.nickname, "탈퇴회원") AS extra__member
+		FROM `order` AS O
 		LEFT JOIN
 		`member` AS M
 		ON O.clientId = M.id
@@ -37,6 +37,17 @@
 		FROM `order` AS O
 		LEFT JOIN `member` AS M
 		ON O.clientId = M.id
+		ORDER BY O.id DESC
+	</select>
+	
+	<select id="getForPrintOrdersByMemberId" resultType="Order">
+		SELECT O.*,
+		IFNULL(M.nickname, "탈퇴회원") AS extra__member
+		FROM `order` AS O
+		LEFT JOIN `member` AS M
+		ON O.clientId = M.id
+		WHERE O.clientId = #{memberId}
+		OR O.directorId = #{memberId}
 		ORDER BY O.id DESC
 	</select>
 

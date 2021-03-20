@@ -105,4 +105,8 @@ public class OrderService {
 		return new ResultData("S-1", "성공하였습니다.", "id", id);
 	}
 
+	public List<Order> getForPrintOrdersByMemberId(int memberId) {
+		return orderDao.getForPrintOrdersByMemberId(memberId);
+	}
+
 }

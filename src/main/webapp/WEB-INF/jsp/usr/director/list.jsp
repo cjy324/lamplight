@@ -26,7 +26,7 @@
 			</script>
 		</div>
 		<div>
-			<c:forEach items="${directors}" var="member">
+			<c:forEach items="${members}" var="member">
 				<c:set var="detailUrl" value="detail?id=${member.id}" />
 				<div class="flex items-center mt-10">
 					<a href="${detailUrl}" class="font-bold">NO. ${member.id}</a>

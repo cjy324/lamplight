@@ -43,14 +43,15 @@ public class UsrOrderController extends BaseController {
 		return new ResultData("S-1", "성공", "order", order);
 	}
 
-	@RequestMapping("/usr/order/list")
-	public String showList(HttpServletRequest req) {
+	@GetMapping("/usr/order/list")
+	@ResponseBody
+	public ResultData showList(HttpServletRequest req, int memberId) {
 
-		List<Order> orders = orderService.getForPrintOrders();
+		List<Order> orders = orderService.getForPrintOrdersByMemberId(memberId);
 
 		req.setAttribute("orders", orders);
 		
-		return "/usr/order/list";
+		return new ResultData("S-1", "성공", "orders", orders);
 	}
 
 	@RequestMapping("/usr/order/add")
@@ -59,61 +60,14 @@ public class UsrOrderController extends BaseController {
 	}
 
 	@PostMapping("/usr/order/doAdd")
-	public String doAdd(@RequestParam Map<String, Object> param, HttpServletRequest req, MultipartRequest multipartRequest, int directorId) {
+	@ResponseBody
+	public ResultData doAdd(@RequestParam Map<String, Object> param, HttpServletRequest req) {
 
-		int clientId = (int)req.getAttribute("loginedMemberId");
-		System.out.println(clientId);
-		
-		if(Util.getAsInt(directorId, 0) == 0) {
-			return msgAndBack(req, "directorId를 입력해주세요.");
-		}
-
-		if (param.get("title") == null) {
-			return msgAndBack(req, "title을 입력해주세요.");
-		}
-		
-		if (param.get("body") == null) {
-			return msgAndBack(req, "body를 입력해주세요.");
-		}
-		
-		int option1qty = Util.getAsInt(param.get("option1qty"), 0);
-		int option2qty = Util.getAsInt(param.get("option2qty"), 0);
-		int option3qty = Util.getAsInt(param.get("option3qty"), 0);
-		int option4qty = Util.getAsInt(param.get("option4qty"), 0);
-		int option5qty = Util.getAsInt(param.get("option5qty"), 0);
-		
-		param.put("option1qty", option1qty);
-		param.put("option2qty", option2qty);
-		param.put("option3qty", option3qty);
-		param.put("option4qty", option4qty);
-		param.put("option5qty", option5qty);
-		param.put("clientId", clientId);
-		param.put("directorId", directorId);
-		
 		ResultData addOrderRd = orderService.addOrder(param);
-		
-		// addOrderRd map의 body에서 key값이 id인 것을 가져와라
+
 		int newOrderId = (int) addOrderRd.getBody().get("id");
-		
-		
-		/* 이미 ajax상에서 처리하므로 더이상 필요 없음
-		//MultipartRequest : 첨부파일 기능 관련 요청
-		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap(); //MultipartRequest로 들어온 map 정보를 가져오기
-				
-		
-		//fileMap.keySet() : file__order__0__common__attachment__1
-		for (String fileInputName : fileMap.keySet()) {
-			//fileInputName : file__order__0__common__attachment__1
-			MultipartFile multipartFile = fileMap.get(fileInputName);
-			
-			if(multipartFile.isEmpty() == false) {
-				//저장할 파일관련 정보를 넘김
-				genFileService.save(multipartFile, newOrderId);
-			}
-			
-		}
-		*/
-		return msgAndReplace(req, newOrderId + "번 게시물이 생성되었습니다.", "../order/list");
+
+		return new ResultData("S-1", newOrderId + "번 게시물이 생성되었습니다.", "id", newOrderId);
 	}
 
 	@PostMapping("/usr/order/doDelete")

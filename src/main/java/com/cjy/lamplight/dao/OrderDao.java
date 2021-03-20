@@ -30,4 +30,6 @@ public interface OrderDao {
 	Board getBoard(@Param("id") int id);
 	
 	ResultData addReply(Map<String, Object> param);
+	
+	List<Order> getForPrintOrdersByMemberId(@Param("memberId") int memberId);
 }
