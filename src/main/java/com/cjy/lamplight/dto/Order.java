@@ -22,9 +22,11 @@ public class Order {
 	private String option5;
 	private int option5qty;
 	private String title;
+	private String funeralHome;
 	private String body;
 	private int directorId;
 	private int clientId;
+	private int stepLevel;
 
 	private String extra__member;
 
@@ -41,7 +43,7 @@ public class Order {
 
 	public Order(int id, String regDate, String updateDate, String option1, int option1qty, String option2,
 			int option2qty, String option3, int option3qty, String option4, int option4qty, String option5,
-			int option5qty, String title, String body, int directorId, int clientId) {
+			int option5qty, String title, String funeralHome, String body, int directorId, int clientId, int stepLevel) {
 
 		this.id = id;
 		this.regDate = regDate;
@@ -57,9 +59,11 @@ public class Order {
 		this.option5 = option5;
 		this.option5qty = option5qty;
 		this.title = title;
+		this.funeralHome = funeralHome;
 		this.body = body;
 		this.directorId = directorId;
 		this.clientId = clientId;
+		this.stepLevel = stepLevel;
 
 	}
 

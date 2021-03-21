@@ -41,6 +41,10 @@ public class MemberService {
 
 	public ResultData modifyMember(Map<String, Object> param) {
 		memberDao.modifyMember(param);
+		
+		int id = Util.getAsInt(param.get("id"), 0);
+
+		genFileService.changeInputFileRelIds(param, id);
 
 		return new ResultData("S-1", "회원정보가 수정되었습니다.");
 	}
@@ -97,7 +101,11 @@ public class MemberService {
 	}
 
 	public Member getForPrintMember(int id) {
-		return memberDao.getForPrintMember(id);
+		Member member = memberDao.getForPrintMember(id);
+		
+		updateForPrint(member);
+
+		return member;
 	}
 
 	public Member getForPrintMemberByAuthKey(String authKey) {
@@ -134,7 +142,13 @@ public class MemberService {
 	}
 
 	public List<Member> getDirectors() {
-		return memberDao.getDirectors();
+		List<Member> members = memberDao.getDirectors();
+		
+		for(Member member : members) {
+			updateForPrint(member);
+		}
+		
+		return members;
 	}
 
 

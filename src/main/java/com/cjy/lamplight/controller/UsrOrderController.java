@@ -37,7 +37,7 @@ public class UsrOrderController extends BaseController {
 		Order order = orderService.getForPrintOrder(id);
 
 		if (order == null) {
-			return new ResultData("F-2", "존재하지 않는 게시물번호 입니다.");
+			return new ResultData("F-2", "존재하지 않는 요청서번호 입니다.");
 		}
 	
 		return new ResultData("S-1", "성공", "order", order);
@@ -67,7 +67,7 @@ public class UsrOrderController extends BaseController {
 
 		int newOrderId = (int) addOrderRd.getBody().get("id");
 
-		return new ResultData("S-1", newOrderId + "번 게시물이 생성되었습니다.", "id", newOrderId);
+		return new ResultData("S-1", newOrderId + "작성이 완료되었습니다.", "id", newOrderId);
 	}
 
 	@PostMapping("/usr/order/doDelete")
@@ -85,7 +85,7 @@ public class UsrOrderController extends BaseController {
 		Order order = orderService.getOrder(id);
 
 		if (order == null) {
-			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.");
+			return new ResultData("F-1", "해당 요청서는 존재하지 않습니다.");
 		}
 		
 		ResultData actorCanDeleteRd = orderService.getActorCanDeleteRd(order, loginedMember);
@@ -112,17 +112,10 @@ public class UsrOrderController extends BaseController {
 			return new ResultData("F-1", "id를 입력해주세요.");
 		}
 
-		if (Util.isEmpty(param.get("title"))) {
-			return new ResultData("F-1", "title을 입력해주세요.");
-		}
-		if (Util.isEmpty(param.get("body"))) {
-			return new ResultData("F-1", "body를 입력해주세요.");
-		}
-
 		Order order = orderService.getOrder(id);
 
 		if (order == null) {
-			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.", "id", id);
+			return new ResultData("F-1", "해당 요청서는 존재하지 않습니다.", "id", id);
 		}
 
 		ResultData actorCanModifyRd = orderService.getActorCanModifyRd(order, loginedMember);

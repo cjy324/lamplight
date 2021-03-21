@@ -68,6 +68,7 @@
     		option5 = #{option5},
     		option5qty = #{option5qty},
     		title = #{title},
+    		funeralHome = #{funeralHome},
     		`body` = #{body},
     		`directorId` = #{directorId},
     		`clientId` = #{clientId}
@@ -76,23 +77,30 @@
 
 	<!-- public void deleteOrder(int id); -->
 	<delete id="deleteOrder">
-		DELETE FROM order
+		DELETE FROM `order`
 		WHERE id = #{id}
 	</delete>
 
 	<!-- public void modifyOrder(int id, String title, String body); -->
 	<update id="modifyOrder">
-		UPDATE order
+		UPDATE `order`
 		<set>  <!-- set으로 감싸는 이유? 만약 set안의 내용이 채워지지 않았을 경우 다음 단계 진행 안하고 멈춤(쿼리 오류 방지) -->
-			<if test="title != null or body != null">
-				updateDate = NOW(),
-			</if>
-			<if test="title != null">
-				title = #{title},
-			</if>
-			<if test="body != null">
-				`body` = #{body}
-			</if>
+			updateDate = NOW(),
+			option1 = #{option1},
+    		option1qty = #{option1qty},
+    		option2 = #{option2},
+    		option2qty = #{option2qty},
+    		option3 = #{option3},
+    		option3qty = #{option3qty},
+    		option4 = #{option4},
+    		option4qty = #{option4qty},
+    		option5 = #{option5},
+    		option5qty = #{option5qty},
+    		title = #{title},
+    		funeralHome = #{funeralHome},
+    		`body` = #{body},
+    		`directorId` = #{directorId},
+    		`clientId` = #{clientId}
 		</set>
 		WHERE id = #{id}
 	</update>

@@ -53,7 +53,7 @@ public class UsrMemberController extends BaseController {
 		return new ResultData("S-1", "성공", "members", members);
 	}
 	
-	@GetMapping("/usr/member/profile")
+	@GetMapping("/usr/member/detail")
 	@ResponseBody
 	public ResultData showMemberDetail(HttpServletRequest req, int id) {
 
@@ -208,14 +208,11 @@ public class UsrMemberController extends BaseController {
 
 	@PostMapping("/usr/member/doModify")
 	@ResponseBody
-	public ResultData doModify(@RequestParam Map<String, Object> param, HttpServletRequest req) {
+	public ResultData doModify(@RequestParam Map<String, Object> param) {
 
 		if (param.isEmpty()) {
 			return new ResultData("F-2", "수정할 회원정보를 입력해주세요.");
 		}
-
-		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
-		param.put("id", loginedMemberId);
 
 		return memberService.modifyMember(param);
 	}
