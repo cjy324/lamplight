@@ -28,8 +28,7 @@ public interface OrderDao {
 	void modifyOrder(Map<String, Object> param);
 	Order getForPrintOrder(@Param("id") int id);
 	Board getBoard(@Param("id") int id);
-	
-	ResultData addReply(Map<String, Object> param);
+
 	
 	List<Order> getForPrintOrdersByMemberId(@Param("memberId") int memberId);
 }

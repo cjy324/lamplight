@@ -97,14 +97,6 @@ public class OrderService {
 		return orderDao.getBoard(id);
 	}
 
-	public ResultData addReply(Map<String, Object> param) {
-		orderDao.addReply(param);
-
-		int id = Util.getAsInt(param.get("id"), 0);
-
-		return new ResultData("S-1", "성공하였습니다.", "id", id);
-	}
-
 	public List<Order> getForPrintOrdersByMemberId(int memberId) {
 		return orderDao.getForPrintOrdersByMemberId(memberId);
 	}

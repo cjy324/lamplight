@@ -195,21 +195,4 @@ public class AdmOrderController extends BaseController{
 		return orderService.modifyOrder(param);
 	}
 	
-	@RequestMapping("/adm/order/doAddReply")
-	@ResponseBody
-	public ResultData doAddReply(@RequestParam Map<String, Object> param, HttpServletRequest req) {
-		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
-
-		if (param.get("body") == null) {
-			return new ResultData("F-1", "body를 입력해주세요.");
-		}
-
-		if (param.get("orderId") == null) {
-			return new ResultData("F-1", "orderId를 입력해주세요.");
-		}
-
-		param.put("memberId", loginedMemberId);
-
-		return orderService.addReply(param);
-	}
 }

@@ -2,8 +2,11 @@
 SELECT * FROM `order`;
 SELECT * FROM `member`;
 SELECT * FROM `genFile`;
+SELECT * FROM `review`;
+SELECT * FROM `starRating`;
 
 TRUNCATE `genFile`;
+TRUNCATE `review`;
 
 # 게시물 랜덤생성 쿼리
 INSERT INTO article

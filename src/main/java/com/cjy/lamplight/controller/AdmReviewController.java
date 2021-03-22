@@ -1,30 +1,49 @@
 package com.cjy.lamplight.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cjy.lamplight.dto.Order;
 import com.cjy.lamplight.dto.Member;
-import com.cjy.lamplight.dto.Reply;
+import com.cjy.lamplight.dto.Review;
 import com.cjy.lamplight.dto.ResultData;
 import com.cjy.lamplight.service.OrderService;
-import com.cjy.lamplight.service.ReplyService;
+import com.cjy.lamplight.service.ReviewService;
 
 @Controller
-public class UsrReplyController {
+public class AdmReviewController {
 	@Autowired
-	private ReplyService replyService;
+	private ReviewService reviewService;
 	@Autowired
 	private OrderService orderService;
+	
+	@RequestMapping("/adm/review/doAddReview")
+	@ResponseBody
+	public ResultData doAddReview(@RequestParam Map<String, Object> param, HttpServletRequest req) {
+		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
 
-	@GetMapping("/usr/reply/list")
+		if (param.get("body") == null) {
+			return new ResultData("F-1", "body를 입력해주세요.");
+		}
+
+		if (param.get("orderId") == null) {
+			return new ResultData("F-1", "orderId를 입력해주세요.");
+		}
+
+		param.put("memberId", loginedMemberId);
+
+		return reviewService.addReview(param);
+	}
+
+	@RequestMapping("/adm/review/list")
 	@ResponseBody
 	public ResultData showList(String relTypeCode, Integer relId) {
 
@@ -44,42 +63,42 @@ public class UsrReplyController {
 			}
 		}
 
-		List<Reply> replies = replyService.getForPrintReplies(relTypeCode, relId);
+		List<Review> reviews = reviewService.getForPrintReviews(relTypeCode);
 
-		return new ResultData("S-1", "성공", "replies", replies);
+		return new ResultData("S-1", "성공", "reviews", reviews);
 	}
 	
-	@PostMapping("/usr/reply/doDelete")
+	@RequestMapping("/adm/review/doDelete")
 	@ResponseBody
 	public ResultData doDelete(Integer id, HttpServletRequest req) {
 		//int loginedMemberId = (int) req.getAttribute("loginedMemberId");
 		Member loginedMember = (Member) req.getAttribute("loginedMember");
-
+		
 		if (id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
 		}
 
-		Reply reply = replyService.getReply(id);
+		Review review = reviewService.getReview(id);
 
-		if (reply == null) {
+		if (review == null) {
 			return new ResultData("F-1", "해당 댓글은 존재하지 않습니다.");
 		}
 
-		ResultData actorCanDeleteRd = replyService.getActorCanDeleteRd(reply, loginedMember);
+		ResultData actorCanDeleteRd = reviewService.getActorCanDeleteRd(review, loginedMember);
 
 		if (actorCanDeleteRd.isFail()) {
 			return actorCanDeleteRd;
 		}
 
-		return replyService.deleteReply(id);
+		return reviewService.deleteReview(id);
 	}
 	
-	@PostMapping("/usr/reply/doModify")
+	@RequestMapping("/adm/review/doModify")
 	@ResponseBody
 	public ResultData doModify(Integer id, String body, HttpServletRequest req) {
 		//int loginedMemberId = (int)req.getAttribute("loginedMemberId");
 		Member loginedMember = (Member) req.getAttribute("loginedMember");
-		
+
 		if (id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
 		}
@@ -88,18 +107,20 @@ public class UsrReplyController {
 			return new ResultData("F-1", "body를 입력해주세요.");
 		}
 
-		Reply reply = replyService.getReply(id);
+		Review review = reviewService.getReview(id);
 
-		if (reply == null) {
-			return new ResultData("F-1", "해당 댓글은 존재하지 않습니다.");
+		if (review == null) {
+			return new ResultData("F-1", "해당 리뷰는 존재하지 않습니다.");
 		}
 
-		ResultData actorCanModifyRd = replyService.getActorCanModifyRd(reply, loginedMember);
+		ResultData actorCanModifyRd = reviewService.getActorCanModifyRd(review, loginedMember);
 
 		if (actorCanModifyRd.isFail()) {
 			return actorCanModifyRd;
 		}
 
-		return replyService.modifyReply(id, body);
+		return reviewService.modifyReview(id, body);
 	}
+	
+	
 }

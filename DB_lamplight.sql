@@ -229,3 +229,39 @@ CREATE TABLE genFile (
   PRIMARY KEY (id),
   KEY relId (relId,relTypeCode,typeCode,type2Code,fileNo)
 ); 
+
+
+# 리뷰 테이블 추가
+CREATE TABLE review (
+  id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  regDate DATETIME NOT NULL,
+  updateDate DATETIME NOT NULL,
+  `relTypeCode` CHAR(20) NOT NULL,
+  relId INT(10) UNSIGNED NOT NULL,
+  memberId INT(10) UNSIGNED NOT NULL,
+  `body` TEXT NOT NULL
+);
+
+# 고속 검색을 위해서 인덱스 걸기
+ALTER TABLE review ADD KEY (relTypeCode, relId); 
+# SELECT * FROM reply WHERE relTypeCode = 'article' AND relId = 5; # O
+# SELECT * FROM reply WHERE relTypeCode = 'article'; # O
+# SELECT * FROM reply WHERE relId = 5 AND relTypeCode = 'article'; # X
+
+
+# 평점 테이블 추가
+CREATE TABLE starRating (
+  id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  regDate DATETIME NOT NULL,
+  updateDate DATETIME NOT NULL,
+  `relTypeCode` CHAR(20) NOT NULL,
+  relId INT(10) UNSIGNED NOT NULL,
+  memberId INT(10) UNSIGNED NOT NULL,
+  `point` SMALLINT(1)  # 좋아요 시 +1, 싫어요 시 -1 등 가능
+);
+
+# 고속 검색을 위해서 인덱스 걸기
+ALTER TABLE starRating ADD KEY (relTypeCode, relId); 
+# SELECT * FROM reply WHERE relTypeCode = 'article' AND relId = 5; # O
+# SELECT * FROM reply WHERE relTypeCode = 'article'; # O
+# SELECT * FROM reply WHERE relId = 5 AND relTypeCode = 'article'; # X

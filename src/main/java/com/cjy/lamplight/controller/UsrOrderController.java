@@ -61,7 +61,7 @@ public class UsrOrderController extends BaseController {
 
 	@PostMapping("/usr/order/doAdd")
 	@ResponseBody
-	public ResultData doAdd(@RequestParam Map<String, Object> param, HttpServletRequest req) {
+	public ResultData doAdd(@RequestParam Map<String, Object> param) {
 
 		ResultData addOrderRd = orderService.addOrder(param);
 
@@ -127,21 +127,5 @@ public class UsrOrderController extends BaseController {
 		return orderService.modifyOrder(param);
 	}
 	
-	@PostMapping("/usr/order/doAddReply")
-	@ResponseBody
-	public ResultData doAddReply(@RequestParam Map<String, Object> param, HttpServletRequest req) {
-		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
-
-		if (param.get("body") == null) {
-			return new ResultData("F-1", "body를 입력해주세요.");
-		}
-
-		if (param.get("orderId") == null) {
-			return new ResultData("F-1", "orderId를 입력해주세요.");
-		}
-
-		param.put("memberId", loginedMemberId);
-
-		return orderService.addReply(param);
-	}
+	
 }
