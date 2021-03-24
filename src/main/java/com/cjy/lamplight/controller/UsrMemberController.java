@@ -53,6 +53,19 @@ public class UsrMemberController extends BaseController {
 		return new ResultData("S-1", "성공", "members", members);
 	}
 	
+	@GetMapping("/usr/director/profile")
+	@ResponseBody
+	public ResultData showDirectorDetail(HttpServletRequest req, int id) {
+
+		Member member = memberService.getForPrintMember(id);
+
+		req.setAttribute("member", member);	
+		
+		//return "/usr/member/detail";
+		return new ResultData("S-1", "성공", "member", member);
+	}
+
+	
 	@GetMapping("/usr/member/detail")
 	@ResponseBody
 	public ResultData showMemberDetail(HttpServletRequest req, int id) {

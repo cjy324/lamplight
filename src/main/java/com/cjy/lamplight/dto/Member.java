@@ -29,6 +29,8 @@ public class Member {
 	
 	private String extra__thumbImg;
 	
+	private float extra__ratingPoint;
+	
 	public String getAuthLevelName() {
 		return MemberService.getAuthLevelName(this);
 	}

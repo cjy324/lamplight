@@ -62,4 +62,12 @@ public class ReviewService {
 
 		return new ResultData("S-1", "댓글을 수정하였습니다.", "id", id);
 	}
+
+	public boolean isMemberCanReview(int memberId) {
+		Review review = reviewDao.getReviewByMemberId(memberId);
+		if(review != null) {
+			return false;
+		}
+		return true;
+	}
 }

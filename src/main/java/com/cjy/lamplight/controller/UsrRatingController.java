@@ -1,52 +1,34 @@
 package com.cjy.lamplight.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cjy.lamplight.dto.Member;
+import com.cjy.lamplight.dto.Rating;
 import com.cjy.lamplight.dto.ResultData;
-import com.cjy.lamplight.dto.Review;
 import com.cjy.lamplight.service.MemberService;
-import com.cjy.lamplight.service.ReviewService;
-import com.cjy.lamplight.util.Util;
+import com.cjy.lamplight.service.RatingService;
 
 @Controller
-public class UsrReviewController {
+public class UsrRatingController {
 	@Autowired
-	private ReviewService reviewService;
+	private RatingService ratingService;
 	@Autowired
 	private MemberService memberService;
 	
 	
-	@PostMapping("/usr/review/doAdd")
+	@PostMapping("/usr/rating/doAdd")
 	@ResponseBody
 	public ResultData doAdd(@RequestParam Map<String, Object> param) {
-		int memberId = Util.getAsInt(param.get("memberId"), 0);
-		if(memberId == 0) {
-			return new ResultData("F-1", "memberId를 확인해주세요.");
-		}
 		
-		System.out.println(memberId);
-		
-		boolean isMemberCanReview = reviewService.isMemberCanReview(memberId);
-		
-		if(isMemberCanReview == false) {
-			return new ResultData("F-2", "회원님은 이미 리뷰를 작성하셨습니다.");
-		}
-
-		if (param.get("body") == null) {
-			return new ResultData("F-1", "body를 입력해주세요.");
-		}
-		
+	
 		if (param.get("relTypeCode") == null) {
 			return new ResultData("F-1", "relTypeCode를 입력해주세요.");
 		}
@@ -54,42 +36,40 @@ public class UsrReviewController {
 		if (param.get("relId") == null) {
 			return new ResultData("F-1", "relId를 입력해주세요.");
 		}
-
-		return reviewService.addReview(param);
-	}
-
-	@GetMapping("/usr/review/list")
-	@ResponseBody
-	public ResultData showList(String relTypeCode) {
-
-		if (relTypeCode == null) {
-			return new ResultData("F-1", "relTypeCode를 입력해주세요.");
+		if (param.get("memberId") == null) {
+			return new ResultData("F-1", "memberId를 입력해주세요.");
 		}
-		
 
-		List<Review> reviews = reviewService.getForPrintReviews(relTypeCode);
-
-		return new ResultData("S-1", "성공", "reviews", reviews);
+		return ratingService.addRating(param);
 	}
+
 	
-	@GetMapping("/usr/review/doDelete")
+	@PostMapping("/usr/rating/doDelete")
 	@ResponseBody
-	public ResultData doDelete(Integer id) {
+	public ResultData doDelete(Integer id, HttpServletRequest req) {
+		//int loginedMemberId = (int) req.getAttribute("loginedMemberId");
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
 
 		if (id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
 		}
 
-		Review review = reviewService.getReview(id);
+		Rating rating = ratingService.getRating(id);
 
-		if (review == null) {
+		if (rating == null) {
 			return new ResultData("F-1", "해당 리뷰는 존재하지 않습니다.");
 		}
 
-		return reviewService.deleteReview(id);
+		ResultData actorCanDeleteRd = ratingService.getActorCanDeleteRd(rating, loginedMember);
+
+		if (actorCanDeleteRd.isFail()) {
+			return actorCanDeleteRd;
+		}
+
+		return ratingService.deleteRating(id);
 	}
 	
-	@PostMapping("/usr/review/doModify")
+	@PostMapping("/usr/rating/doModify")
 	@ResponseBody
 	public ResultData doModify(Integer id, String body, HttpServletRequest req) {
 		//int loginedMemberId = (int)req.getAttribute("loginedMemberId");
@@ -103,18 +83,18 @@ public class UsrReviewController {
 			return new ResultData("F-1", "body를 입력해주세요.");
 		}
 
-		Review review = reviewService.getReview(id);
+		Rating rating = ratingService.getRating(id);
 
-		if (review == null) {
+		if (rating == null) {
 			return new ResultData("F-1", "해당 리뷰는 존재하지 않습니다.");
 		}
 
-		ResultData actorCanModifyRd = reviewService.getActorCanModifyRd(review, loginedMember);
+		ResultData actorCanModifyRd = ratingService.getActorCanModifyRd(rating, loginedMember);
 
 		if (actorCanModifyRd.isFail()) {
 			return actorCanModifyRd;
 		}
 
-		return reviewService.modifyReview(id, body);
+		return ratingService.modifyRating(id, body);
 	}
 }
