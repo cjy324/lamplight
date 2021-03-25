@@ -35,9 +35,13 @@ public class UsrReviewController {
 			return new ResultData("F-1", "memberId를 확인해주세요.");
 		}
 		
-		System.out.println(memberId);
+		if (param.get("relId") == null) {
+			return new ResultData("F-1", "relId를 입력해주세요.");
+		}
 		
-		boolean isMemberCanReview = reviewService.isMemberCanReview(memberId);
+		int relId = Util.getAsInt(param.get("relId"), 0);
+		
+		boolean isMemberCanReview = reviewService.isMemberCanReview(memberId, relId);
 		
 		if(isMemberCanReview == false) {
 			return new ResultData("F-2", "회원님은 이미 리뷰를 작성하셨습니다.");
@@ -51,9 +55,7 @@ public class UsrReviewController {
 			return new ResultData("F-1", "relTypeCode를 입력해주세요.");
 		}
 
-		if (param.get("relId") == null) {
-			return new ResultData("F-1", "relId를 입력해주세요.");
-		}
+		
 
 		return reviewService.addReview(param);
 	}

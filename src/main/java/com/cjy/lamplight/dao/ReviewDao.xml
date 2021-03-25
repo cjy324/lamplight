@@ -35,11 +35,12 @@
 		AND R.id = #{id}
 	</select>
 	
-	<select id="getReviewByMemberId" resultType="Review">
+	<select id="getReviewByMemberIdAndRelId" resultType="Review">
 		SELECT R.*
 		FROM review AS R
 		WHERE 1
 		AND R.memberId = #{memberId}
+		AND R.relId = #{relId}
 	</select>
 
 	<delete id="deleteReview">

@@ -33,6 +33,7 @@ public class UsrMemberController extends BaseController {
 		List<Member> members = memberService.getMembers();
 
 		req.setAttribute("members", members);	
+		
 
 		//return new ResultData("S-1", "성공", "members", members);
 		
@@ -44,8 +45,11 @@ public class UsrMemberController extends BaseController {
 	public ResultData showDirectorList(HttpServletRequest req) {
 
 		List<Member> members = memberService.getDirectors();
+		
+		//System.out.println(members.get(9).getExtra__ratingPoint());
 
 		req.setAttribute("members", members);	
+		
 
 		//return new ResultData("S-1", "성공", "members", members);
 		

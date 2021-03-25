@@ -8,7 +8,7 @@
 	<select id="getForPrintMembers" resultType="Member">
 		SELECT M.*,
 		IF(
-		(ROUND(AVG(S.point),1)-(ROUND(AVG(S.point),1)-0.5)) >= 0.5,
+		(ROUND(AVG(S.point),1)-(ROUND(AVG(S.point),1)-0.5)) > 0.5,
  		ROUND(AVG(S.point)),
  		ROUND(AVG(S.point))-0.5
 		) AS extra__starPoint

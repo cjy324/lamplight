@@ -257,7 +257,7 @@ CREATE TABLE rating (
   `relTypeCode` CHAR(20) NOT NULL,
   relId INT(10) UNSIGNED NOT NULL,
   memberId INT(10) UNSIGNED NOT NULL,
-  `point` FLOAT(10)  # 좋아요 시 +1, 싫어요 시 -1 등 가능
+  `point` FLOAT(10)
 );
 
 # 고속 검색을 위해서 인덱스 걸기

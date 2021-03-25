@@ -19,17 +19,17 @@ INSERT INTO rating
 SET regDate = NOW(),
     updateDate = NOW(),
     `relTypeCode` = 'director',
-    relId = 10,
+    relId = 9,
     memberId = 2,
-    `point` = 5;
+    `point` = 3.5;
     
 INSERT INTO rating
 SET regDate = NOW(),
     updateDate = NOW(),
     `relTypeCode` = 'director',
-    relId = 10,
+    relId = 9,
     memberId = 1,
-    `point` = 4;
+    `point` = 3.5;
     
 INSERT INTO rating
 SET regDate = NOW(),
@@ -51,10 +51,10 @@ SET regDate = NOW(),
 # 평점 포인트 포함해서 지도사 리스팅
 SELECT M.*,
 IF(
-(ROUND(AVG(R.point),1)-(ROUND(AVG(R.point),1)-0.5)) >= 0.5,
+(ROUND(AVG(R.point),1)-(ROUND(AVG(R.point),1)-0.5)) > 0.5,
  ROUND(AVG(R.point)),
  ROUND(AVG(R.point))-0.5
-) AS extra__retingPoint
+) AS extra__ratingPoint
 FROM `member` AS M
 LEFT JOIN rating AS R
 ON R.relTypeCode = 'director'
