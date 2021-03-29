@@ -11,24 +11,19 @@ public class Order {
 	private int id;
 	private String regDate;
 	private String updateDate;
-	private String option1;
-	private int option1qty;
-	private String option2;
-	private int option2qty;
-	private String option3;
-	private int option3qty;
-	private String option4;
-	private int option4qty;
-	private String option5;
-	private int option5qty;
+	private int head;
+	private String religion;
+	private String startDate;
+	private String endDate;
 	private String title;
 	private String funeralHome;
 	private String body;
-	private int directorId;
+	private int expertId;
 	private int clientId;
 	private int stepLevel;
 
-	private String extra__member;
+	private String extra__clientName;
+	private String extra__expertName;
 
 	private Map<String, Object> extra;
 
@@ -41,27 +36,20 @@ public class Order {
 		return extra;
 	}
 
-	public Order(int id, String regDate, String updateDate, String option1, int option1qty, String option2,
-			int option2qty, String option3, int option3qty, String option4, int option4qty, String option5,
-			int option5qty, String title, String funeralHome, String body, int directorId, int clientId, int stepLevel) {
+	public Order(int id, String regDate, String updateDate, int head, String religion,
+			String startDate, String endDate, String title, String funeralHome, String body, int expertId, int clientId, int stepLevel) {
 
 		this.id = id;
 		this.regDate = regDate;
 		this.updateDate = updateDate;
-		this.option1 = option1;
-		this.option1qty = option1qty;
-		this.option2 = option2;
-		this.option2qty = option2qty;
-		this.option3 = option3;
-		this.option3qty = option3qty;
-		this.option4 = option4;
-		this.option4qty = option4qty;
-		this.option5 = option5;
-		this.option5qty = option5qty;
+		this.head = head;
+		this.religion = religion;
+		this.startDate = startDate;
+		this.endDate = endDate;
 		this.title = title;
 		this.funeralHome = funeralHome;
 		this.body = body;
-		this.directorId = directorId;
+		this.expertId = expertId;
 		this.clientId = clientId;
 		this.stepLevel = stepLevel;
 

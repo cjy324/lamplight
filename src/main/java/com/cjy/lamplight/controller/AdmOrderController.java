@@ -122,12 +122,12 @@ public class AdmOrderController extends BaseController{
 			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.");
 		}
 		
-		ResultData actorCanDeleteRd = orderService.getActorCanDeleteRd(order, loginedMember);
-
-		if (actorCanDeleteRd.isFail()) {
-			return actorCanDeleteRd;
-		}
-
+		/*
+		 * ResultData actorCanDeleteRd = orderService.getActorCanDeleteRd(order,
+		 * loginedMember);
+		 * 
+		 * if (actorCanDeleteRd.isFail()) { return actorCanDeleteRd; }
+		 */
 		return orderService.deleteOrder(id);
 	}
 	

@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Param;
 
 import com.cjy.lamplight.dto.Board;
 import com.cjy.lamplight.dto.Order;
-import com.cjy.lamplight.dto.ResultData;
 
 /* Mybatis 적용으로 삭제 */
 //Mybatis틑 class가 아닌 interface를 인식함
@@ -29,6 +28,5 @@ public interface OrderDao {
 	Order getForPrintOrder(@Param("id") int id);
 	Board getBoard(@Param("id") int id);
 
-	
 	List<Order> getForPrintOrdersByMemberId(@Param("memberId") int memberId);
 }

@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartRequest;
 
+import com.cjy.lamplight.dto.Client;
+import com.cjy.lamplight.dto.Expert;
 import com.cjy.lamplight.dto.Member;
 import com.cjy.lamplight.dto.Order;
 import com.cjy.lamplight.dto.ResultData;
@@ -76,19 +77,28 @@ public class UsrOrderController extends BaseController {
 		// int 기본타입 -> null이 들어갈 수 없음
 		// Integer 객체타입 -> null이 들어갈 수 있음
 		//int loginedMemberId = (int)req.getAttribute("loginedMemberId");
-		Member loginedMember = (Member) req.getAttribute("loginedMember");
+		
+		ResultData actorCanDeleteRd = new ResultData("F-1", "권한이 없습니다.");
 		
 		if (id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
 		}
 
 		Order order = orderService.getOrder(id);
-
+		
 		if (order == null) {
 			return new ResultData("F-1", "해당 요청서는 존재하지 않습니다.");
 		}
 		
-		ResultData actorCanDeleteRd = orderService.getActorCanDeleteRd(order, loginedMember);
+		if(req.getAttribute("loginedClient") != null) {
+			Client loginedClient = (Client) req.getAttribute("loginedClient");
+			actorCanDeleteRd = orderService.getClientCanDeleteRd(order, loginedClient);
+		}
+		
+		if(req.getAttribute("loginedExpert") != null) {
+			Expert loginedExpert = (Expert) req.getAttribute("loginedExpert");
+			actorCanDeleteRd = orderService.getExpertanDeleteRd(order, loginedExpert);
+		}
 
 		if (actorCanDeleteRd.isFail()) {
 			return actorCanDeleteRd;
@@ -100,12 +110,9 @@ public class UsrOrderController extends BaseController {
 	@PostMapping("/usr/order/doModify")
 	@ResponseBody
 	public ResultData doModify(@RequestParam Map<String, Object> param, HttpServletRequest req) {
-		// int 기본타입 -> null이 들어갈 수 없음
-		// Integer 객체타입 -> null이 들어갈 수 있음
 		
-		//int loginedMemberId = (int)req.getAttribute("loginedMemberId");
-		Member loginedMember = (Member) req.getAttribute("loginedMember");
-		
+		ResultData actorCanModifyRd = new ResultData("F-1", "권한이 없습니다.");
+
 		int id = Util.getAsInt(param.get("id"), 0);
 
 		if (id == 0) {
@@ -117,8 +124,16 @@ public class UsrOrderController extends BaseController {
 		if (order == null) {
 			return new ResultData("F-1", "해당 요청서는 존재하지 않습니다.", "id", id);
 		}
-
-		ResultData actorCanModifyRd = orderService.getActorCanModifyRd(order, loginedMember);
+		
+		if(req.getAttribute("loginedClient") != null) {
+			Client loginedClient = (Client) req.getAttribute("loginedClient");
+			actorCanModifyRd = orderService.getActorCanModifyRd(order, loginedClient);
+		}
+		
+		if(req.getAttribute("loginedExpert") != null) {
+			Expert loginedExpert = (Expert) req.getAttribute("loginedExpert");
+			actorCanModifyRd = orderService.getActorCanModifyRd(order, loginedExpert);
+		}
 
 		if (actorCanModifyRd.isFail()) {
 			return actorCanModifyRd;

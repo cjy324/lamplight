@@ -13,16 +13,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cjy.lamplight.dto.Member;
 import com.cjy.lamplight.dto.Rating;
 import com.cjy.lamplight.dto.ResultData;
-import com.cjy.lamplight.service.MemberService;
 import com.cjy.lamplight.service.RatingService;
 
 @Controller
 public class UsrRatingController {
 	@Autowired
 	private RatingService ratingService;
-	@Autowired
-	private MemberService memberService;
-	
 	
 	@PostMapping("/usr/rating/doAdd")
 	@ResponseBody

@@ -60,21 +60,36 @@ public class WebMvcConfig implements WebMvcConfigurer {
 				.excludePathPatterns("/v2/api-docs")
 				.excludePathPatterns("/webjars/**")
 				.excludePathPatterns("/adm/**").excludePathPatterns("/gen/**").excludePathPatterns("/resource/**")
-				.excludePathPatterns("/usr/home/main").excludePathPatterns("/usr/member/authKey").excludePathPatterns("/usr/member/list").excludePathPatterns("/usr/director/list")
-				.excludePathPatterns("/usr/member/login").excludePathPatterns("/usr/member/doLogin").excludePathPatterns("/usr/member/detail")
-				.excludePathPatterns("/usr/member/join").excludePathPatterns("/usr/member/doJoin").excludePathPatterns("/usr/member/getLoginIdDup")
-				.excludePathPatterns("/usr/member/findLoginId").excludePathPatterns("/usr/director/profile")
-				.excludePathPatterns("/usr/member/doFindLoginId").excludePathPatterns("/usr/member/findLoginPw")
-				.excludePathPatterns("/usr/member/doFindLoginPw").excludePathPatterns("/usr/order/list").excludePathPatterns("/usr/order/detail")
+				.excludePathPatterns("/usr/home/main")
+				.excludePathPatterns("/usr/client/authKey").excludePathPatterns("/usr/client/list")
+				.excludePathPatterns("/usr/client/login").excludePathPatterns("/usr/client/doLogin").excludePathPatterns("/usr/client/detail")
+				.excludePathPatterns("/usr/client/join").excludePathPatterns("/usr/client/doJoin").excludePathPatterns("/usr/client/getLoginIdDup")
+				.excludePathPatterns("/usr/client/findLoginId").excludePathPatterns("/usr/client/doFindLoginId").excludePathPatterns("/usr/client/findLoginPw")
+				.excludePathPatterns("/usr/client/doFindLoginPw")
+				.excludePathPatterns("/usr/expert/authKey").excludePathPatterns("/usr/expert/list")
+				.excludePathPatterns("/usr/expert/login").excludePathPatterns("/usr/expert/doLogin").excludePathPatterns("/usr/expert/detail")
+				.excludePathPatterns("/usr/expert/join").excludePathPatterns("/usr/expert/doJoin").excludePathPatterns("/usr/expert/getLoginIdDup")
+				.excludePathPatterns("/usr/expert/findLoginId").excludePathPatterns("/usr/expert/doFindLoginId").excludePathPatterns("/usr/expert/findLoginPw")
+				.excludePathPatterns("/usr/expert/doFindLoginPw")
+				.excludePathPatterns("/usr/assistant/authKey").excludePathPatterns("/usr/assistant/list")
+				.excludePathPatterns("/usr/assistant/login").excludePathPatterns("/usr/assistant/doLogin").excludePathPatterns("/usr/assistant/detail")
+				.excludePathPatterns("/usr/assistant/join").excludePathPatterns("/usr/assistant/doJoin").excludePathPatterns("/usr/assistant/getLoginIdDup")
+				.excludePathPatterns("/usr/assistant/findLoginId").excludePathPatterns("/usr/assistant/doFindLoginId").excludePathPatterns("/usr/assistant/findLoginPw")
+				.excludePathPatterns("/usr/assistant/doFindLoginPw")
+				.excludePathPatterns("/usr/order/list").excludePathPatterns("/usr/order/detail")
 				.excludePathPatterns("/usr/review/list")
 				.excludePathPatterns("/common/**").excludePathPatterns("/usr/file/test*")
 				.excludePathPatterns("/usr/file/doTest*").excludePathPatterns("/test/**").excludePathPatterns("/error");
 
 		// 로그인 상태에서 접속할 수 없는 URL 전부 기술
 		registry.addInterceptor(needLogoutInterceptor).addPathPatterns("/adm/member/login")
-				.addPathPatterns("/adm/member/doLogin").addPathPatterns("/usr/member/login")
-				.addPathPatterns("/usr/member/doLogin").addPathPatterns("/usr/member/join")
-				.addPathPatterns("/usr/member/doJoin");
+				.addPathPatterns("/adm/member/doLogin")
+				.addPathPatterns("/usr/client/login").addPathPatterns("/usr/client/doLogin")
+				.addPathPatterns("/usr/client/join").addPathPatterns("/usr/client/doJoin")
+				.addPathPatterns("/usr/expert/login").addPathPatterns("/usr/expert/doLogin")
+				.addPathPatterns("/usr/expert/join").addPathPatterns("/usr/expert/doJoin")
+				.addPathPatterns("/usr/assistant/login").addPathPatterns("/usr/assistant/doLogin")
+				.addPathPatterns("/usr/assistant/join").addPathPatterns("/usr/assistant/doJoin");
 		}
 		
 	// 파일첨부를 위한 경로 가져오기 위한 로직

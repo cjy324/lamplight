@@ -15,11 +15,10 @@
 
 	<select id="getForPrintOrder" resultType="Order">
 		SELECT O.*,
-		IFNULL(M.nickname, "탈퇴회원") AS extra__member
+		IFNULL(C.name, "탈퇴회원") AS extra__clientName
 		FROM `order` AS O
-		LEFT JOIN
-		`member` AS M
-		ON O.clientId = M.id
+		LEFT JOIN `client` AS C
+		ON O.clientId = C.id
 		WHERE O.id = #{id}
 	</select>
 
@@ -33,21 +32,27 @@
 
 	<select id="getForPrintOrders" resultType="Order">
 		SELECT O.*,
-		IFNULL(M.nickname, "탈퇴회원") AS extra__member
+		IFNULL(C.name, "탈퇴회원") AS extra__clientName,
+		IFNULL(E.name, "탈퇴회원") AS extra__expertName
 		FROM `order` AS O
-		LEFT JOIN `member` AS M
-		ON O.clientId = M.id
+		LEFT JOIN `client` AS C
+		ON O.clientId = C.id
+		LEFT JOIN `expert` AS E
+		ON O.expertId = E.id
 		ORDER BY O.id DESC
 	</select>
 	
 	<select id="getForPrintOrdersByMemberId" resultType="Order">
 		SELECT O.*,
-		IFNULL(M.nickname, "탈퇴회원") AS extra__member
+		IFNULL(C.name, "탈퇴회원") AS extra__clientName,
+		IFNULL(E.name, "탈퇴회원") AS extra__expertName
 		FROM `order` AS O
-		LEFT JOIN `member` AS M
-		ON O.clientId = M.id
+		LEFT JOIN `client` AS C
+		ON O.clientId = C.id
+		LEFT JOIN `expert` AS E
+		ON O.expertId = E.id
 		WHERE O.clientId = #{memberId}
-		OR O.directorId = #{memberId}
+		OR O.expertId = #{memberId}
 		ORDER BY O.id DESC
 	</select>
 
@@ -57,20 +62,14 @@
 		<set> <!-- SET 대신 set으로 감싸주는 것이 관례 -->
 			regDate = NOW(),
 			updateDate = NOW(),
-			option1 = #{option1},
-    		option1qty = #{option1qty},
-    		option2 = #{option2},
-    		option2qty = #{option2qty},
-    		option3 = #{option3},
-    		option3qty = #{option3qty},
-    		option4 = #{option4},
-    		option4qty = #{option4qty},
-    		option5 = #{option5},
-    		option5qty = #{option5qty},
+			`head` = #{head},
+    		religion = #{religion},
+    		`startDate` = #{startDate},
+    		`endDate` = #{endDate},
     		title = #{title},
     		funeralHome = #{funeralHome},
     		`body` = #{body},
-    		`directorId` = #{directorId},
+    		`expertId` = #{expertId},
     		`clientId` = #{clientId}
 		</set>
 	</insert>
@@ -86,30 +85,20 @@
 		UPDATE `order`
 		<set>  <!-- set으로 감싸는 이유? 만약 set안의 내용이 채워지지 않았을 경우 다음 단계 진행 안하고 멈춤(쿼리 오류 방지) -->
 			updateDate = NOW(),
-			option1 = #{option1},
-    		option1qty = #{option1qty},
-    		option2 = #{option2},
-    		option2qty = #{option2qty},
-    		option3 = #{option3},
-    		option3qty = #{option3qty},
-    		option4 = #{option4},
-    		option4qty = #{option4qty},
-    		option5 = #{option5},
-    		option5qty = #{option5qty},
+			`head` = #{head},
+    		religion = #{religion},
+    		`startDate` = #{startDate},
+    		`endDate` = #{endDate},
     		title = #{title},
     		funeralHome = #{funeralHome},
     		`body` = #{body},
-    		`directorId` = #{directorId},
+    		`expertId` = #{expertId},
     		`clientId` = #{clientId}
+    		<if test="stepLevel != null">
+    			, stepLevel = #{stepLevel}
+    		</if>
 		</set>
 		WHERE id = #{id}
 	</update>
-
-	<!-- public Board getBoard(@Param("id")int id); -->
-	<select id="getBoard" resultType="Board">
-		SELECT *
-		FROM board
-		WHERE id = #{id}
-	</select>
 
 </mapper>
