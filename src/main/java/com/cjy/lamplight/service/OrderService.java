@@ -2,16 +2,16 @@ package com.cjy.lamplight.service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cjy.lamplight.dao.OrderDao;
-import com.cjy.lamplight.dto.Order;
 import com.cjy.lamplight.dto.Board;
-import com.cjy.lamplight.dto.GenFile;
+import com.cjy.lamplight.dto.Client;
+import com.cjy.lamplight.dto.Expert;
 import com.cjy.lamplight.dto.Member;
+import com.cjy.lamplight.dto.Order;
 import com.cjy.lamplight.dto.ResultData;
 import com.cjy.lamplight.util.Util;
 
@@ -45,16 +45,16 @@ public class OrderService {
 		orderDao.addOrder(param);
 
 		int id = Util.getAsInt(param.get("id"), 0);
-		
+
 		return new ResultData("S-1", "성공하였습니다.", "id", id);
 	}
 
 	public ResultData deleteOrder(int id) {
 		orderDao.deleteOrder(id);
-		
-		//게시물에 달린 첨부파일도 같이 삭제
-		//1. DB에서 삭제
-		//2. 저장소에서 삭제
+
+		// 게시물에 달린 첨부파일도 같이 삭제
+		// 1. DB에서 삭제
+		// 2. 저장소에서 삭제
 		genFileService.deleteGenFiles("order", id);
 
 		return new ResultData("S-1", "삭제하였습니다.", "id", id);
@@ -66,23 +66,6 @@ public class OrderService {
 		int id = Util.getAsInt(param.get("id"), 0);
 
 		return new ResultData("S-1", "요청서를 수정하였습니다.", "id", id);
-	}
-
-	public ResultData getActorCanModifyRd(Order order, Member actor) {
-		//1. 작성인 본인인 경우
-		if (order.getClientId() == actor.getId()) {
-			return new ResultData("S-1", "가능합니다.");
-		}
-		//2. 관리자인 경우
-		if (memberService.isAdmin(actor)) {
-			return new ResultData("S-2", "가능합니다.");
-		}
-		//3. 작성인, 관리자 둘다 아닌 경우
-		return new ResultData("F-1", "권한이 없습니다.");
-	}
-
-	public ResultData getActorCanDeleteRd(Order order, Member actor) {
-		return getActorCanModifyRd(order, actor);
 	}
 
 	public Order getForPrintOrder(Integer id) {
@@ -99,6 +82,34 @@ public class OrderService {
 
 	public List<Order> getForPrintOrdersByMemberId(int memberId) {
 		return orderDao.getForPrintOrdersByMemberId(memberId);
+	}
+
+	public ResultData getClientCanDeleteRd(Order order, Client client) {
+		return getActorCanModifyRd(order, client);
+	}
+
+	public ResultData getExpertanDeleteRd(Order order, Expert expert) {
+		return getActorCanModifyRd(order, expert);
+	}
+
+	public ResultData getActorCanModifyRd(Order order, Object actor) {
+
+		// 1. 의뢰인 본인인 경우
+		if (actor instanceof Client) {
+			Client client = (Client) actor;
+			if (order.getClientId() == client.getId()) {
+				return new ResultData("S-1", "가능합니다.");
+			}
+		}
+		// 2. 전문가 본인인 경우
+		if (actor instanceof Expert) {
+			Expert expert = (Expert) actor;
+			if (order.getExpertId() == expert.getId()) {
+				return new ResultData("S-1", "가능합니다.");
+			}
+		}
+
+		return new ResultData("F-1", "권한이 없습니다.");
 	}
 
 }

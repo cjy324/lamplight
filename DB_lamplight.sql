@@ -8,20 +8,14 @@ CREATE TABLE `order` (
     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     regDate DATETIME NOT NULL,
     updateDate DATETIME NOT NULL,
-    option1 CHAR(200) NOT NULL,
-    option1qty INT(10) UNSIGNED NOT NULL,
-    option2 CHAR(200) NOT NULL,
-    option2qty INT(10) UNSIGNED NOT NULL,
-    option3 CHAR(200) NOT NULL,
-    option3qty INT(10) UNSIGNED NOT NULL,
-    option4 CHAR(200) NOT NULL,
-    option4qty INT(10) UNSIGNED NOT NULL,
-    option5 CHAR(200) NOT NULL,
-    option5qty INT(10) UNSIGNED NOT NULL,
-    title CHAR(200) NOT NULL,
-    `body` TEXT NOT NULL,
-    funeralHome CHAR(200) NOT NULL,
-    `directorId` INT(10) UNSIGNED NOT NULL,
+    `head` INT(10) UNSIGNED NOT NULL, #예상인원수
+    religion CHAR(200) NOT NULL, #종교
+    `startDate` DATETIME NOT NULL, #장례시작일
+    `endDate` DATETIME NOT NULL, #장례종료일
+    title CHAR(200) NOT NULL, 
+    `body` TEXT NOT NULL, #상세요구사항
+    funeralHome CHAR(200) NOT NULL, #장례식장
+    `expertId` INT(10) UNSIGNED NOT NULL,
     `clientId` INT(10) UNSIGNED NOT NULL,
     stepLevel SMALLINT(2) UNSIGNED DEFAULT 1 NOT NULL COMMENT '(1=의뢰요청(의뢰검토),2=의뢰승인(장례준비),3=장례진행중,4=장례종료(결제미완료),5=결제완료)'
 );
@@ -30,183 +24,213 @@ CREATE TABLE `order` (
 INSERT INTO `order`
 SET regDate = NOW(),
     updateDate = NOW(),
-    option1 = '옵션1',
-    option1qty = 10,
-    option2 = '옵션2',
-    option2qty = 20,
-    option3 = '옵션3',
-    option3qty = 30,
-    option4 = '옵션4',
-    option4qty = 40,
-    option5 = '옵션5',
-    option5qty = 50,
-    title = 'user2님 의뢰',
+    head = 200,
+    religion = '기독교',
+    `startDate` = '2021-04-01 12:12:12',
+    `endDate` = '2021-04-03 20:20:20',
+    title = 'user1님 의뢰',
     funeralHome = '대전장례식장',
     `body` = '기타 요청 사항',
-    `directorId` = 4,
-    `clientId` = 2;
+    `expertId` = 1,
+    `clientId` = 1;
 
 INSERT INTO `order`
 SET regDate = NOW(),
     updateDate = NOW(),
-    option1 = '옵션1',
-    option1qty = 10,
-    option2 = '옵션2',
-    option2qty = 20,
-    option3 = '옵션3',
-    option3qty = 30,
-    option4 = '옵션4',
-    option4qty = 40,
-    option5 = '옵션5',
-    option5qty = 50,
-    title = 'user3님 의뢰',
-    funeralHome = '익산장례식장',
-    `body` = '기타 요청 사항2',
-    `directorId` = 4,
-    `clientId` = 3;
+    head = 100,
+    religion = '불교',
+    `startDate` = '2021-04-01 12:12:12',
+    `endDate` = '2021-04-03 20:20:20',
+    title = 'user2님 의뢰',
+    funeralHome = '서울장례식장',
+    `body` = '기타 요청 사항',
+    `expertId` = 1,
+    `clientId` = 2;
+
+# 요청과 관련된 도우미 그룹 테이블 생성   
+CREATE TABLE `orderRelAssts`(
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    orderId INT(10) UNSIGNED NOT NULL,
+    asstId INT(10) UNSIGNED NOT NULL
+);
+
  
-# 회원 테이블 생성
-CREATE TABLE `member` (
+# 의뢰인회원 테이블 생성
+CREATE TABLE `client` (
     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     regDate DATETIME NOT NULL,
     updateDate DATETIME NOT NULL,
     loginId CHAR(30) NOT NULL,
     loginPw VARCHAR(100) NOT NULL,
     authKey CHAR(80) NOT NULL,
-    authLevel SMALLINT(2) UNSIGNED DEFAULT 3 NOT NULL COMMENT '(3=의뢰인,4=도우미,5=지도사,7=관리자)',
     `name` CHAR(30) NOT NULL,
-    `nickname` CHAR(30) NOT NULL,
     `email` CHAR(100) NOT NULL,
     `cellphoneNo` CHAR(20) NOT NULL,
-    `address` CHAR(100) NOT NULL
+    `region` CHAR(100) NOT NULL #지역
 
 );
 
 # 로그인 ID로 검색했을 때
-ALTER TABLE `member` ADD UNIQUE INDEX (`loginId`);
+ALTER TABLE `client` ADD UNIQUE INDEX (`loginId`);
 
 # authKey 칼럼에 유니크 인덱스 추가
-ALTER TABLE `member` ADD UNIQUE INDEX (`authKey`);
+ALTER TABLE `client` ADD UNIQUE INDEX (`authKey`);
 
 # 회원, 테스트 데이터 생성
-INSERT INTO `member`
+INSERT INTO `client`
 SET regDate = NOW(),
     updateDate = NOW(),
     loginId = 'user1',
     loginPw = 'user1',
     authKey = 'authKey1__1',
-    authLevel = 7,
     `name` = 'user1',
-    `nickname` = 'user1',
     `email` = 'user1@user1.com',
     `cellphoneNo` = 01011111111,
-    `address` = '대전광역시';
+    `region` = '대전광역시';
 
-INSERT INTO `member`
+INSERT INTO `client`
 SET regDate = NOW(),
     updateDate = NOW(),
     loginId = 'user2',
     loginPw = 'user2',
     authKey = 'authKey1__2',
-    authLevel = 3,
     `name` = 'user2',
-    `nickname` = 'user2',
     `email` = 'user2@user2.com',
     `cellphoneNo` = 01022222222,
-    `address` = '경기도';
+    `region` = '인천광역시';
 
-INSERT INTO `member`
+INSERT INTO `client`
 SET regDate = NOW(),
     updateDate = NOW(),
     loginId = 'user3',
     loginPw = 'user3',
     authKey = 'authKey1__3',
-    authLevel = 3,
     `name` = 'user3',
-    `nickname` = 'user3',
     `email` = 'user3@user3.com',
     `cellphoneNo` = 01033333333,
-    `address` = '전라북도';
+    `region` = '광주광역시';
     
-INSERT INTO `member`
+# 지도사회원 테이블 생성
+CREATE TABLE `expert` (
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    updateDate DATETIME NOT NULL,
+    loginId CHAR(30) NOT NULL,
+    loginPw VARCHAR(100) NOT NULL,
+    authKey CHAR(80) NOT NULL,
+    acknowledgment_step SMALLINT(2) UNSIGNED DEFAULT 1 NOT NULL COMMENT '(1=가입대기 2=가입승인 3=가입실패)',
+    `name` CHAR(30) NOT NULL,
+    `email` CHAR(100) NOT NULL,
+    `cellphoneNo` CHAR(20) NOT NULL,
+    `region` CHAR(100) NOT NULL, #활동지역
+    `license` CHAR(100) NOT NULL,  #자격증    
+    `career` TEXT NOT NULL #경력
+);
+
+# 로그인 ID로 검색했을 때
+ALTER TABLE `expert` ADD UNIQUE INDEX (`loginId`);
+
+# authKey 칼럼에 유니크 인덱스 추가
+ALTER TABLE `expert` ADD UNIQUE INDEX (`authKey`);
+
+# 전문가회원, 테스트 데이터 생성
+INSERT INTO `expert`
 SET regDate = NOW(),
     updateDate = NOW(),
-    loginId = 'tester1',
-    loginPw = 'tester1',
-    authKey = 'authKey1__4',
-    authLevel = 5,
-    `name` = 'tester1',
-    `nickname` = 'tester1',
-    `email` = 'tester1@tester1.com',
-    `cellphoneNo` = 01044444444,
-    `address` = '대전광역시';
+    loginId = 'expert1',
+    loginPw = 'expert1',
+    authKey = 'authKey2__1',
+    `name` = 'expert1',
+    `email` = 'expert1@expert1.com',
+    `cellphoneNo` = 01011111111,
+    `region` = '대전광역시',
+    `license` = '장례지도사2급',
+    `career` = '3년';
 
-
-INSERT INTO `member`
+INSERT INTO `expert`
 SET regDate = NOW(),
     updateDate = NOW(),
-    loginId = 'tester2',
-    loginPw = 'tester2',
-    authKey = 'authKey1__5',
-    authLevel = 5,
-    `name` = 'tester2',
-    `nickname` = 'tester2',
-    `email` = 'tester2@tester2.com',
-    `cellphoneNo` = 01055555555,
-    `address` = '경기도';
+    loginId = 'expert2',
+    loginPw = 'expert2',
+    authKey = 'authKey2__2',
+    `name` = 'expert2',
+    `email` = 'expert2@expert2.com',
+    `cellphoneNo` = 01022222222,
+    `region` = '서울특별시',
+    `license` = '장례지도사2급',
+    `career` = '5년';
 
-INSERT INTO `member`
+INSERT INTO `expert`
 SET regDate = NOW(),
     updateDate = NOW(),
-    loginId = 'tester3',
-    loginPw = 'tester3',
-    authKey = 'authKey1__6',
-    authLevel = 5,
-    `name` = 'tester3',
-    `nickname` = 'tester3',
-    `email` = 'tester3@tester3.com',
-    `cellphoneNo` = 01066666666,
-    `address` = '전라북도';
+    loginId = 'expert3',
+    loginPw = 'expert3',
+    authKey = 'authKey3__1',
+    `name` = 'expert3',
+    `email` = 'expert3@expert3.com',
+    `cellphoneNo` = 01033333333,
+    `region` = '부산광역시',
+    `license` = '장례지도사2급',
+    `career` = '1년';
     
-INSERT INTO `member`
+# 도우미회원 테이블 생성
+CREATE TABLE `assistant` (
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    updateDate DATETIME NOT NULL,
+    loginId CHAR(30) NOT NULL,
+    loginPw VARCHAR(100) NOT NULL,
+    authKey CHAR(80) NOT NULL,
+    `name` CHAR(30) NOT NULL,
+    `email` CHAR(100) NOT NULL,
+    `cellphoneNo` CHAR(20) NOT NULL,
+    `region` CHAR(100) NOT NULL, #지역
+    `career` TEXT #경력
+
+);
+
+# 로그인 ID로 검색했을 때
+ALTER TABLE `assistant` ADD UNIQUE INDEX (`loginId`);
+
+# authKey 칼럼에 유니크 인덱스 추가
+ALTER TABLE `assistant` ADD UNIQUE INDEX (`authKey`);
+
+# 도우미회원, 테스트 데이터 생성
+INSERT INTO `assistant`
 SET regDate = NOW(),
     updateDate = NOW(),
-    loginId = 'tester4',
-    loginPw = 'tester4',
-    authKey = 'authKey1__7',
-    authLevel = 5,
-    `name` = 'tester4',
-    `nickname` = 'tester4',
-    `email` = 'tester4@tester4.com',
-    `cellphoneNo` = 01044444444,
-    `address` = '대전광역시';
+    loginId = 'asst1',
+    loginPw = 'asst1',
+    authKey = 'authKey3__1',
+    `name` = 'asst1',
+    `email` = 'asst1@asst1.com',
+    `cellphoneNo` = 01011111111,
+    `region` = '대전광역시',
+    `career` = '5년';
 
-
-INSERT INTO `member`
+INSERT INTO `assistant`
 SET regDate = NOW(),
     updateDate = NOW(),
-    loginId = 'tester5',
-    loginPw = 'tester5',
-    authKey = 'authKey1__8',
-    authLevel = 5,
-    `name` = 'tester5',
-    `nickname` = 'tester5',
-    `email` = 'tester5@tester5.com',
-    `cellphoneNo` = 01055555555,
-    `address` = '경기도';
+    loginId = 'asst2',
+    loginPw = 'asst2',
+    authKey = 'authKey3__2',
+    `name` = 'asst2',
+    `email` = 'asst2@asst2.com',
+    `cellphoneNo` = 01022222222,
+    `region` = '인천광역시',
+    `career` = '2년';
 
-INSERT INTO `member`
+INSERT INTO `assistant`
 SET regDate = NOW(),
     updateDate = NOW(),
-    loginId = 'tester6',
-    loginPw = 'tester6',
-    authKey = 'authKey1__9',
-    authLevel = 5,
-    `name` = 'tester6',
-    `nickname` = 'tester6',
-    `email` = 'tester6@tester6.com',
-    `cellphoneNo` = 01066666666,
-    `address` = '전라북도';
+    loginId = 'asst3',
+    loginPw = 'asst3',
+    authKey = 'authKey3__3',
+    `name` = 'asst3',
+    `email` = 'asst3@asst3.com',
+    `cellphoneNo` = 01033333333,
+    `region` = '광주광역시',
+    `career` = '4년';
 
 # 파일 테이블 추가
 CREATE TABLE genFile (
