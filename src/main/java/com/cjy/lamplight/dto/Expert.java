@@ -1,6 +1,9 @@
 package com.cjy.lamplight.dto;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.cjy.lamplight.service.ExpertService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -30,6 +33,7 @@ public class Expert {
 	
 	private String extra__thumbImg;
 	private float extra__ratingPoint;
+	private List<Review> extra__reviews = new ArrayList<Review>();
 	
 	public String getAcknowledgmentStepName() {
 		return ExpertService.getAcknowledgmentStepName(this);

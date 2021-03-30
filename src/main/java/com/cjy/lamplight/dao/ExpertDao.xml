@@ -13,7 +13,7 @@
 		ROUND(AVG(R.point))-0.5
 		) AS extra__ratingPoint
 		FROM `expert` AS E
-		LEFT JOIN starRating AS R
+		LEFT JOIN `rating` AS R
 		ON
 		R.relTypeCode = 'expert'
 		AND E.id = R.relId
@@ -25,7 +25,7 @@
 	<select id="getExperts" resultType="Expert">
 		SELECT E.*,
 		IF(
-		(ROUND(AVG(R.point),1)-(ROUND(AVG(R.point),1)-0.5)) >= 0.5,
+		(ROUND(AVG(R.point),1)-(ROUND(AVG(R.point),1)-0.5)) > 0.5,
 		ROUND(AVG(R.point)),
 		ROUND(AVG(R.point))-0.5
 		) AS extra__ratingPoint

@@ -10,6 +10,7 @@ import com.cjy.lamplight.dao.ExpertDao;
 import com.cjy.lamplight.dto.Expert;
 import com.cjy.lamplight.dto.GenFile;
 import com.cjy.lamplight.dto.ResultData;
+import com.cjy.lamplight.dto.Review;
 import com.cjy.lamplight.util.Util;
 
 @Service
@@ -17,9 +18,10 @@ public class ExpertService {
 
 	@Autowired
 	ExpertDao expertDao;
-
 	@Autowired
 	GenFileService genFileService;
+	@Autowired
+	private ReviewService reviewService;
 
 	public ResultData join(Map<String, Object> param) {
 		expertDao.join(param);
@@ -122,9 +124,22 @@ public class ExpertService {
 		
 		for(Expert expert : experts) {
 			updateForPrint(expert);
+			addReviewList(expert); //각 expert객체마다 review리스트를 담아서 넘겨줌
 		}
 		
 		return experts;
+	}
+
+	private void addReviewList(Expert expert) {
+		String relTypeCode = "expert";
+		List<Review> reviews = reviewService.getForPrintReviews(relTypeCode);
+		
+		for(Review review : reviews) {
+			if(review != null && review.getRelId() == expert.getId()) {
+				expert.getExtra__reviews().add(review);
+			}
+		}
+
 	}
 
 }

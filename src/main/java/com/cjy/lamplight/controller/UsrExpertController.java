@@ -33,9 +33,10 @@ public class UsrExpertController extends BaseController {
 
 		req.setAttribute("experts", experts);	
 
-		//return new ResultData("S-1", "성공", "experts", experts);
+		for(Expert expert : experts) {
+			System.out.println(expert.getExtra__ratingPoint());
+		}
 		
-		//return "usr/director/list";
 		return new ResultData("S-1", "성공", "experts", experts);
 	}
 	

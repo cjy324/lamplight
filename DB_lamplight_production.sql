@@ -20,47 +20,38 @@ FROM article;
 INSERT INTO rating
 SET regDate = NOW(),
     updateDate = NOW(),
-    `relTypeCode` = 'director',
-    relId = 9,
-    memberId = 2,
+    `relTypeCode` = 'expert',
+    relId = 2,
+    clientId = 2,
     `point` = 3.5;
     
 INSERT INTO rating
 SET regDate = NOW(),
     updateDate = NOW(),
-    `relTypeCode` = 'director',
-    relId = 9,
-    memberId = 1,
+    `relTypeCode` = 'expert',
+    relId = 2,
+    clientId = 3,
     `point` = 3.5;
     
 INSERT INTO rating
 SET regDate = NOW(),
     updateDate = NOW(),
-    `relTypeCode` = 'director',
-    relId = 10,
-    memberId = 3,
-    `point` = 2.5;
+    `relTypeCode` = 'expert',
+    relId = 2,
+    clientId = 1,
+    `point` = 3.5;
     
-
-INSERT INTO rating
-SET regDate = NOW(),
-    updateDate = NOW(),
-    `relTypeCode` = 'director',
-    relId = 10,
-    memberId = 3,
-    `point` = 4.5;
 
 # 평점 포인트 포함해서 지도사 리스팅
-SELECT M.*,
+SELECT E.*,
 IF(
 (ROUND(AVG(R.point),1)-(ROUND(AVG(R.point),1)-0.5)) > 0.5,
  ROUND(AVG(R.point)),
  ROUND(AVG(R.point))-0.5
 ) AS extra__ratingPoint
-FROM `member` AS M
+FROM `expert` AS E
 LEFT JOIN rating AS R
-ON R.relTypeCode = 'director'
-AND M.id = R.relId
-WHERE M.authLevel = 5
-GROUP BY M.id
-ORDER BY M.id DESC
+ON R.relTypeCode = 'expert'
+AND E.id = R.relId
+GROUP BY E.id
+ORDER BY E.id DESC
