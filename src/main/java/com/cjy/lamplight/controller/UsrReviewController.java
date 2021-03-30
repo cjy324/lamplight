@@ -23,16 +23,14 @@ import com.cjy.lamplight.util.Util;
 public class UsrReviewController {
 	@Autowired
 	private ReviewService reviewService;
-	@Autowired
-	private MemberService memberService;
 	
 	
 	@PostMapping("/usr/review/doAdd")
 	@ResponseBody
 	public ResultData doAdd(@RequestParam Map<String, Object> param) {
-		int memberId = Util.getAsInt(param.get("memberId"), 0);
-		if(memberId == 0) {
-			return new ResultData("F-1", "memberId를 확인해주세요.");
+		int clientId = Util.getAsInt(param.get("clientId"), 0);
+		if(clientId == 0) {
+			return new ResultData("F-1", "clientId를 확인해주세요.");
 		}
 		
 		if (param.get("relId") == null) {
@@ -41,9 +39,9 @@ public class UsrReviewController {
 		
 		int relId = Util.getAsInt(param.get("relId"), 0);
 		
-		boolean isMemberCanReview = reviewService.isMemberCanReview(memberId, relId);
+		boolean isClientCanReview = reviewService.isClientCanReview(clientId, relId);
 		
-		if(isMemberCanReview == false) {
+		if(isClientCanReview == false) {
 			return new ResultData("F-2", "회원님은 이미 리뷰를 작성하셨습니다.");
 		}
 

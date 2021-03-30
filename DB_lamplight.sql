@@ -10,8 +10,8 @@ CREATE TABLE `order` (
     updateDate DATETIME NOT NULL,
     `head` INT(10) UNSIGNED NOT NULL, #예상인원수
     religion CHAR(200) NOT NULL, #종교
-    `startDate` DATETIME NOT NULL, #장례시작일
-    `endDate` DATETIME NOT NULL, #장례종료일
+    `startDate` DATE NOT NULL, #장례시작일
+    `endDate` DATE NOT NULL, #장례종료일
     title CHAR(200) NOT NULL, 
     `body` TEXT NOT NULL, #상세요구사항
     funeralHome CHAR(200) NOT NULL, #장례식장
@@ -262,7 +262,7 @@ CREATE TABLE review (
   updateDate DATETIME NOT NULL,
   `relTypeCode` CHAR(20) NOT NULL,
   relId INT(10) UNSIGNED NOT NULL,
-  memberId INT(10) UNSIGNED NOT NULL,
+  clientId INT(10) UNSIGNED NOT NULL,
   `body` TEXT NOT NULL
 );
 
@@ -280,7 +280,7 @@ CREATE TABLE rating (
   updateDate DATETIME NOT NULL,
   `relTypeCode` CHAR(20) NOT NULL,
   relId INT(10) UNSIGNED NOT NULL,
-  memberId INT(10) UNSIGNED NOT NULL,
+  clientId INT(10) UNSIGNED NOT NULL,
   `point` FLOAT(10)
 );
 

@@ -13,17 +13,17 @@
 		relTypeCode = #{relTypeCode},
 		relId = #{relId},
 		`body` = #{body},
-		memberId = #{memberId}
+		clientId = #{clientId}
 		</set>
 	</insert>
 	
 
 	<select id="getForPrintReviews" resultType="Review">
 		SELECT R.*,
-		IFNULL(M.nickname, "탈퇴회원") AS extra__writer
+		IFNULL(C.name, "탈퇴회원") AS extra__clientName
 		FROM review AS R
-		LEFT JOIN `member` AS M
-		ON R.memberId = M.id
+		LEFT JOIN `client` AS C
+		ON R.clientId = C.id
 		WHERE 1
 		AND R.relTypeCode = #{relTypeCode}
 	</select>
@@ -35,11 +35,11 @@
 		AND R.id = #{id}
 	</select>
 	
-	<select id="getReviewByMemberIdAndRelId" resultType="Review">
+	<select id="getReviewByClientIdAndRelId" resultType="Review">
 		SELECT R.*
 		FROM review AS R
 		WHERE 1
-		AND R.memberId = #{memberId}
+		AND R.clientId = #{clientId}
 		AND R.relId = #{relId}
 	</select>
 

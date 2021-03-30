@@ -12,7 +12,7 @@
 		updateDate = NOW(),
 		relTypeCode = #{relTypeCode},
 		relId = #{relId},
-		memberId = #{memberId},
+		clientId = #{clientId},
 		`point` = #{point}
 		</set>
 	</insert>
@@ -26,12 +26,12 @@
 	</select>
 
 	<delete id="deleteRating">
-		DELETE FROM Rating
+		DELETE FROM rating
 		WHERE id = #{id}
 	</delete>
 	
 	<update id="modifyRating">
-		UPDATE Rating
+		UPDATE rating
 		<set>
 			<if test="body != null">
 				updateDate = NOW(),

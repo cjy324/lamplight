@@ -36,7 +36,7 @@ public class ReviewService {
 	}
 
 	public ResultData getActorCanDeleteRd(Review review, Member actor) {
-		if (review.getMemberId() == actor.getId()) {
+		if (review.getClientId() == actor.getId()) {
 			return new ResultData("S-1", "가능합니다.");
 		}
 
@@ -63,8 +63,8 @@ public class ReviewService {
 		return new ResultData("S-1", "댓글을 수정하였습니다.", "id", id);
 	}
 
-	public boolean isMemberCanReview(int memberId, int relId) {
-		Review review = reviewDao.getReviewByMemberIdAndRelId(memberId, relId);
+	public boolean isClientCanReview(int clientId, int relId) {
+		Review review = reviewDao.getReviewByClientIdAndRelId(clientId, relId);
 		if(review != null) {
 			return false;
 		}

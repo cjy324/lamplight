@@ -13,8 +13,8 @@ public class Rating {
 	private String updateDate;
 	private String relTypeCode;
 	private int relId;
-	private int memberId;
+	private int clientId;
 	private int point;
 
-	private String extra__writer;
+	private String extra__clientName;
 } 

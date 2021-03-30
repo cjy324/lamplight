@@ -68,10 +68,9 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 		
 		String authKey = request.getParameter("authKey");
 
-		String[] authKies = authKey.split("__");
-		
 		// 파라미터로 authKey가 들어왔으면
 		if (authKey != null && authKey.length() > 0) {
+			String[] authKies = authKey.split("__");
 			
 			if(authKies[0].contains("1")) {
 				loginedClient = clientService.getClientByAuthKey(authKey);

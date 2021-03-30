@@ -1,15 +1,13 @@
 package com.cjy.lamplight.service;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cjy.lamplight.dao.RatingDao;
-import com.cjy.lamplight.dto.Member;
+import com.cjy.lamplight.dto.Client;
 import com.cjy.lamplight.dto.Rating;
-import com.cjy.lamplight.util.Util;
 import com.cjy.lamplight.dto.ResultData;
 
 @Service
@@ -29,13 +27,9 @@ public class RatingService {
 		return ratingDao.getRating(id);
 	}
 
-	public ResultData getActorCanDeleteRd(Rating Rating, Member actor) {
-		if (Rating.getMemberId() == actor.getId()) {
+	public ResultData getActorCanDeleteRd(Rating Rating, Client actor) {
+		if (Rating.getClientId() == actor.getId()) {
 			return new ResultData("S-1", "가능합니다.");
-		}
-
-		if (memberService.isAdmin(actor)) {
-			return new ResultData("S-2", "가능합니다.");
 		}
 
 		return new ResultData("F-1", "권한이 없습니다.");
@@ -47,7 +41,7 @@ public class RatingService {
 		return new ResultData("S-1", "삭제하였습니다.", "id", id);
 	}
 
-	public ResultData getActorCanModifyRd(Rating Rating, Member actor) {
+	public ResultData getActorCanModifyRd(Rating Rating, Client actor) {
 		return getActorCanDeleteRd(Rating, actor);
 	}
 

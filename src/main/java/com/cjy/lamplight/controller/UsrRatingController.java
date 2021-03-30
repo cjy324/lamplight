@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cjy.lamplight.dto.Member;
+import com.cjy.lamplight.dto.Client;
 import com.cjy.lamplight.dto.Rating;
 import com.cjy.lamplight.dto.ResultData;
 import com.cjy.lamplight.service.RatingService;
@@ -32,8 +32,8 @@ public class UsrRatingController {
 		if (param.get("relId") == null) {
 			return new ResultData("F-1", "relId를 입력해주세요.");
 		}
-		if (param.get("memberId") == null) {
-			return new ResultData("F-1", "memberId를 입력해주세요.");
+		if (param.get("clientId") == null) {
+			return new ResultData("F-1", "clientId를 입력해주세요.");
 		}
 
 		return ratingService.addRating(param);
@@ -43,8 +43,8 @@ public class UsrRatingController {
 	@PostMapping("/usr/rating/doDelete")
 	@ResponseBody
 	public ResultData doDelete(Integer id, HttpServletRequest req) {
-		//int loginedMemberId = (int) req.getAttribute("loginedMemberId");
-		Member loginedMember = (Member) req.getAttribute("loginedMember");
+		//int loginedClientId = (int) req.getAttribute("loginedClientId");
+		Client loginedClient = (Client) req.getAttribute("loginedClient");
 
 		if (id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
@@ -56,7 +56,7 @@ public class UsrRatingController {
 			return new ResultData("F-1", "해당 리뷰는 존재하지 않습니다.");
 		}
 
-		ResultData actorCanDeleteRd = ratingService.getActorCanDeleteRd(rating, loginedMember);
+		ResultData actorCanDeleteRd = ratingService.getActorCanDeleteRd(rating, loginedClient);
 
 		if (actorCanDeleteRd.isFail()) {
 			return actorCanDeleteRd;
@@ -68,8 +68,8 @@ public class UsrRatingController {
 	@PostMapping("/usr/rating/doModify")
 	@ResponseBody
 	public ResultData doModify(Integer id, String body, HttpServletRequest req) {
-		//int loginedMemberId = (int)req.getAttribute("loginedMemberId");
-		Member loginedMember = (Member) req.getAttribute("loginedMember");
+		//int loginedClientId = (int)req.getAttribute("loginedClientId");
+		Client loginedClient = (Client) req.getAttribute("loginedClient");
 		
 		if (id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
@@ -85,7 +85,7 @@ public class UsrRatingController {
 			return new ResultData("F-1", "해당 리뷰는 존재하지 않습니다.");
 		}
 
-		ResultData actorCanModifyRd = ratingService.getActorCanModifyRd(rating, loginedMember);
+		ResultData actorCanModifyRd = ratingService.getActorCanModifyRd(rating, loginedClient);
 
 		if (actorCanModifyRd.isFail()) {
 			return actorCanModifyRd;

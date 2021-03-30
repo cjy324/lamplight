@@ -13,8 +13,8 @@ public class Review {
 	private String updateDate;
 	private String relTypeCode;
 	private int relId;
-	private int memberId;
+	private int clientId;
 	private String body;
 
-	private String extra__writer;
+	private String extra__clientName;
 } 

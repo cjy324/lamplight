@@ -1,6 +1,8 @@
 
 SELECT * FROM `order`;
-SELECT * FROM `member`;
+SELECT * FROM `client`;
+SELECT * FROM `expert`;
+SELECT * FROM `assistant`;
 SELECT * FROM `genFile`;
 SELECT * FROM `review`;
 SELECT * FROM `rating`;
