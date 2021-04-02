@@ -17,7 +17,7 @@ CREATE TABLE `order` (
     funeralHome CHAR(200) NOT NULL, #장례식장
     `expertId` INT(10) UNSIGNED NOT NULL,
     `clientId` INT(10) UNSIGNED NOT NULL,
-    stepLevel SMALLINT(2) UNSIGNED DEFAULT 1 NOT NULL COMMENT '(1=의뢰요청(의뢰검토),2=의뢰승인(장례준비),3=장례진행중,4=장례종료(결제미완료),5=결제완료)'
+    stepLevel SMALLINT(2) UNSIGNED DEFAULT 1 NOT NULL COMMENT '(1=의뢰요청(의뢰검토),2=의뢰승인(장례진행),3=장례종료(종료확인요청),4=종료확인(최종종료))'
 );
 
 # 테스트 의뢰 생성
@@ -46,14 +46,7 @@ SET regDate = NOW(),
     `body` = '기타 요청 사항',
     `expertId` = 1,
     `clientId` = 2;
-
-# 요청과 관련된 도우미 그룹 테이블 생성   
-CREATE TABLE `orderRelAssts`(
-    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    orderId INT(10) UNSIGNED NOT NULL,
-    asstId INT(10) UNSIGNED NOT NULL
-);
-
+    
  
 # 의뢰인회원 테이블 생성
 CREATE TABLE `client` (
@@ -289,3 +282,12 @@ ALTER TABLE rating ADD KEY (relTypeCode, relId);
 # SELECT * FROM reply WHERE relTypeCode = 'article' AND relId = 5; # O
 # SELECT * FROM reply WHERE relTypeCode = 'article'; # O
 # SELECT * FROM reply WHERE relId = 5 AND relTypeCode = 'article'; # X
+
+
+# 장례와 관련된 도우미 그룹 테이블 생성
+CREATE TABLE `funeralRelAssts`(
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    orderId INT(10) UNSIGNED NOT NULL,
+    asstId INT(10) UNSIGNED NOT NULL
+);
+

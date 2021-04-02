@@ -1,5 +1,6 @@
 package com.cjy.lamplight.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,9 +47,32 @@ public class UsrOrderController extends BaseController {
 
 	@GetMapping("/usr/order/list")
 	@ResponseBody
-	public ResultData showList(HttpServletRequest req, int memberId) {
+	public ResultData showList(HttpServletRequest req, int memberId, String memberType) {
+		int clientId = 0;
+		int expertId = 0;
+		if(memberType.equals("client")) {
+			clientId = memberId;
+		}
+		if(memberType.equals("expert")) {
+			expertId = memberId;
+		}
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("clientId", clientId);
+		param.put("expertId", expertId);
 
-		List<Order> orders = orderService.getForPrintOrdersByMemberId(memberId);
+		List<Order> orders = orderService.getForPrintOrdersByMemberId(param);
+
+		req.setAttribute("orders", orders);
+		
+		return new ResultData("S-1", "성공", "orders", orders);
+	}
+	
+	@GetMapping("/usr/order/listForAsst")
+	@ResponseBody
+	public ResultData showListForAsst(HttpServletRequest req) {
+
+		List<Order> orders = orderService.getForPrintOrders();
 
 		req.setAttribute("orders", orders);
 		

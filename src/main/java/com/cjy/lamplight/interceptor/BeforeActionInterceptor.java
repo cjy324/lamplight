@@ -59,11 +59,11 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 
 		int loginedClientId = 0;
 		int loginedExpertId = 0;
-		int loginedAsstId = 0;
+		int loginedAssistantId = 0;
 		
 		Client loginedClient = null;
 		Expert loginedExpert = null;
-		Assistant loginedAsst = null;
+		Assistant loginedAssistant = null;
 		
 		
 		String authKey = request.getParameter("authKey");
@@ -97,15 +97,15 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 				}
 			}
 			else if(authKies[0].contains("3")) {
-				loginedAsst = assistantService.getAssistantByAuthKey(authKey);
-				if (loginedAsst == null) {
+				loginedAssistant = assistantService.getAssistantByAuthKey(authKey);
+				if (loginedAssistant == null) {
 					// 인증되지 않은 회원
 					request.setAttribute("authKeyStatus", "invalid");
 				} else {
 					// authKey가 일치한다면 인증된 회원
 					request.setAttribute("authKeyStatus", "valid");
 					// 인증된 회원의 id를 저장(=세션 만료와 상관없이 저장되는 정보)
-					loginedAsstId = loginedAsst.getId();
+					loginedAssistantId = loginedAssistant.getId();
 				}
 			}
 
@@ -127,9 +127,9 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 				loginedExpertId = (int) session.getAttribute("loginedExpertId");
 				loginedExpert = expertService.getExpert(loginedExpertId);
 			}
-			else if (session.getAttribute("loginedAsstId") != null) {
-				loginedAsstId = (int) session.getAttribute("loginedAsstId");
-				loginedAsst = assistantService.getAssistant(loginedAsstId);
+			else if (session.getAttribute("loginedAssistantId") != null) {
+				loginedAssistantId = (int) session.getAttribute("loginedAssistantId");
+				loginedAssistant = assistantService.getAssistant(loginedAssistantId);
 			}
 		}
 
@@ -137,17 +137,17 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 		boolean isLogined = false;
 		boolean isAdmin = false;
 
-		if (loginedClient != null || loginedExpert != null || loginedAsst != null) {
+		if (loginedClient != null || loginedExpert != null || loginedAssistant != null) {
 			isLogined = true;		
 		}
 
 
 		request.setAttribute("loginedClientId", loginedClientId);
 		request.setAttribute("loginedExpertId", loginedExpertId);
-		request.setAttribute("loginedAsstId", loginedAsstId);
+		request.setAttribute("loginedAssistantId", loginedAssistantId);
 		request.setAttribute("loginedClient", loginedClient);
 		request.setAttribute("loginedExpert", loginedExpert);
-		request.setAttribute("loginedAsst", loginedAsst);
+		request.setAttribute("loginedAssistant", loginedAssistant);
 		request.setAttribute("isLogined", isLogined);
 		request.setAttribute("isAdmin", isAdmin);
 		
