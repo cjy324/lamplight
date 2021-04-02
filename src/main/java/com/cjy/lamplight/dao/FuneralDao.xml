@@ -3,7 +3,51 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cjy.lamplight.dao.OrderDao">
+<mapper namespace="com.cjy.lamplight.dao.FuneralDao">
+
+	<select id="getForPrintFunerals" resultType="Funeral">
+		SELECT F.*,
+		IFNULL(C.name, "탈퇴회원") AS extra__clientName,
+		IFNULL(E.name, "탈퇴회원") AS extra__expertName
+		FROM `funeral` AS O
+		LEFT JOIN `client` AS C
+		ON F.clientId = C.id
+		LEFT JOIN `expert` AS E
+		ON F.expertId = E.id
+		ORDER BY F.id DESC
+	</select>
+
+	<select id="getForPrintFuneralsByMemberId" resultType="Funeral">
+		SELECT F.*,
+		IFNULL(C.name, "탈퇴회원") AS extra__clientName,
+		IFNULL(E.name, "탈퇴회원") AS extra__expertName
+		FROM `funeral` AS F
+		LEFT JOIN `client` AS C
+		ON F.clientId = C.id
+		LEFT JOIN `expert` AS E
+		ON F.expertId = E.id
+		WHERE 1
+    	<if test="expertId !== 0">
+    	OR F.expertId = #{expertId}
+    	</if>
+    	<if test="assistantId !== 0">
+    	OR 
+    	(SELECT funeralId
+		FROM funeralRelAssts
+		WHERE assistantId = #{assistantId})
+    	</if>
+		ORDER BY F.id DESC
+	</select>
+	
+	<insert id="asstApplyForFuneral" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO `funeralRelAssts`
+		<set> 
+			orderId = #{orderId},
+			asstId = #{asstId}
+		</set>
+	</insert>
+	
+	
 
 	<!-- public Order getOrder(int id); -->
 	<select id="getOrder" resultType="Order">
@@ -33,54 +77,10 @@
 	</select>
 
 
-	<select id="getForPrintOrders" resultType="Order">
-		SELECT O.*,
-		IFNULL(C.name, "탈퇴회원") AS extra__clientName,
-		IFNULL(E.name, "탈퇴회원") AS extra__expertName
-		FROM `order` AS O
-		LEFT JOIN `client` AS C
-		ON O.clientId = C.id
-		LEFT JOIN `expert` AS E
-		ON O.expertId = E.id
-		ORDER BY O.id DESC
-	</select>
 	
-	<select id="getForPrintOrdersByMemberId" resultType="Order">
-		SELECT O.*,
-		IFNULL(C.name, "탈퇴회원") AS extra__clientName,
-		IFNULL(E.name, "탈퇴회원") AS extra__expertName
-		FROM `order` AS O
-		LEFT JOIN `client` AS C
-		ON O.clientId = C.id
-		LEFT JOIN `expert` AS E
-		ON O.expertId = E.id
-		WHERE 1
-		<if test="clientId !== 0">
-    	OR O.clientId = #{clientId}
-    	</if>
-    	<if test="expertId !== 0">
-    	OR O.expertId = #{expertId}
-    	</if>
-		ORDER BY O.id DESC
-	</select>
+	
+	
 
-	<!-- public void addOrder(String title, String body); -->
-	<insert id="addOrder" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO `order`
-		<set> <!-- SET 대신 set으로 감싸주는 것이 관례 -->
-			regDate = NOW(),
-			updateDate = NOW(),
-			`head` = #{head},
-    		religion = #{religion},
-    		`startDate` = #{startDate},
-    		`endDate` = #{endDate},
-    		title = #{title},
-    		funeralHome = #{funeralHome},
-    		`body` = #{body},
-    		`expertId` = #{expertId},
-    		`clientId` = #{clientId}
-		</set>
-	</insert>
 
 	<!-- public void deleteOrder(int id); -->
 	<delete id="deleteOrder">

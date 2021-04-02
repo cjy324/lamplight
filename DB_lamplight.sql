@@ -283,11 +283,54 @@ ALTER TABLE rating ADD KEY (relTypeCode, relId);
 # SELECT * FROM reply WHERE relTypeCode = 'article'; # O
 # SELECT * FROM reply WHERE relId = 5 AND relTypeCode = 'article'; # X
 
+# 장례 테이블 생성
+CREATE TABLE `funeral` (
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    updateDate DATETIME NOT NULL,
+    `head` INT(10) UNSIGNED NOT NULL, #예상인원수
+    religion CHAR(200) NOT NULL, #종교
+    `startDate` DATE NOT NULL, #장례시작일
+    `endDate` DATE NOT NULL, #장례종료일
+    title CHAR(200) NOT NULL, 
+    `body` TEXT NOT NULL, #상세요구사항
+    funeralHome CHAR(200) NOT NULL, #장례식장
+    `expertId` INT(10) UNSIGNED NOT NULL,
+    `clientId` INT(10) UNSIGNED NOT NULL,
+    stepLevel SMALLINT(2) UNSIGNED DEFAULT 2 NOT NULL COMMENT '(2=의뢰승인(장례진행),3=장례종료(종료확인요청),4=종료확인(최종종료))'
+);
+
+# 테스트 의뢰 생성
+INSERT INTO `funeral`
+SET regDate = NOW(),
+    updateDate = NOW(),
+    head = 200,
+    religion = '기독교',
+    `startDate` = '2021-04-01 12:12:12',
+    `endDate` = '2021-04-03 20:20:20',
+    title = 'user1님 의뢰',
+    funeralHome = '대전장례식장',
+    `body` = '기타 요청 사항',
+    `expertId` = 1,
+    `clientId` = 1;
+
+INSERT INTO `funeral`
+SET regDate = NOW(),
+    updateDate = NOW(),
+    head = 100,
+    religion = '불교',
+    `startDate` = '2021-04-01 12:12:12',
+    `endDate` = '2021-04-03 20:20:20',
+    title = 'user2님 의뢰',
+    funeralHome = '서울장례식장',
+    `body` = '기타 요청 사항',
+    `expertId` = 1,
+    `clientId` = 2;
 
 # 장례와 관련된 도우미 그룹 테이블 생성
 CREATE TABLE `funeralRelAssts`(
     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    orderId INT(10) UNSIGNED NOT NULL,
-    asstId INT(10) UNSIGNED NOT NULL
+    funeralId INT(10) UNSIGNED NOT NULL,
+    assistantId INT(10) UNSIGNED NOT NULL
 );
 

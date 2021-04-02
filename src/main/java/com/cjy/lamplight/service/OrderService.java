@@ -29,8 +29,7 @@ public class OrderService {
 	private GenFileService genFileService;
 	@Autowired
 	private OrderDao orderDao;
-	@Autowired
-	private MemberService memberService;
+
 
 	public Order getOrder(int id) {
 		return orderDao.getOrder(id);
@@ -73,10 +72,6 @@ public class OrderService {
 
 	public List<Order> getForPrintOrders() {
 		return orderDao.getForPrintOrders();
-	}
-
-	public Board getBoard(int id) {
-		return orderDao.getBoard(id);
 	}
 
 	public List<Order> getForPrintOrdersByMemberId(Map<String, Object> param) {
