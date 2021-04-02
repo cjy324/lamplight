@@ -9,7 +9,7 @@
 		SELECT F.*,
 		IFNULL(C.name, "탈퇴회원") AS extra__clientName,
 		IFNULL(E.name, "탈퇴회원") AS extra__expertName
-		FROM `funeral` AS O
+		FROM `funeral` AS F
 		LEFT JOIN `client` AS C
 		ON F.clientId = C.id
 		LEFT JOIN `expert` AS E
@@ -27,16 +27,21 @@
 		LEFT JOIN `expert` AS E
 		ON F.expertId = E.id
 		WHERE 1
-    	<if test="expertId !== 0">
-    	OR F.expertId = #{expertId}
+    	<if test="expertId != 0">
+    	AND F.expertId = #{expertId}
     	</if>
-    	<if test="assistantId !== 0">
-    	OR 
-    	(SELECT funeralId
-		FROM funeralRelAssts
+    	<if test="assistantId != 0">
+    	AND F.id = (
+    	SELECT funeralId 
+    	FROM funeralRelAssts
 		WHERE assistantId = #{assistantId})
     	</if>
 		ORDER BY F.id DESC
+	</select>
+	
+	<select id="getAssistantIdByFuneralId" resultType="Integer">
+		SELECT assistantId
+		FROM funeralRelAssts
 	</select>
 	
 	<insert id="asstApplyForFuneral" useGeneratedKeys="true" keyProperty="id">
@@ -46,67 +51,6 @@
 			asstId = #{asstId}
 		</set>
 	</insert>
-	
-	
 
-	<!-- public Order getOrder(int id); -->
-	<select id="getOrder" resultType="Order">
-		SELECT *
-		FROM `order`
-		WHERE id
-		= #{id}
-	</select>
-
-	<select id="getForPrintOrder" resultType="Order">
-		SELECT O.*,
-		IFNULL(C.name, "탈퇴회원") AS extra__clientName,
-		IFNULL(E.name, "탈퇴회원") AS extra__expertName
-		FROM `order` AS O
-		LEFT JOIN `client` AS C
-		ON O.clientId = C.id
-		LEFT JOIN `expert` AS E
-		ON O.expertId = E.id
-		WHERE O.id = #{id}
-	</select>
-
-
-	<select id="orders" resultType="Order">
-		SELECT *
-		FROM `order`
-		ORDER BY id DESC
-	</select>
-
-
-	
-	
-	
-
-
-	<!-- public void deleteOrder(int id); -->
-	<delete id="deleteOrder">
-		DELETE FROM `order`
-		WHERE id = #{id}
-	</delete>
-
-	<!-- public void modifyOrder(int id, String title, String body); -->
-	<update id="modifyOrder">
-		UPDATE `order`
-		<set>  <!-- set으로 감싸는 이유? 만약 set안의 내용이 채워지지 않았을 경우 다음 단계 진행 안하고 멈춤(쿼리 오류 방지) -->
-			updateDate = NOW(),
-			`head` = #{head},
-    		religion = #{religion},
-    		`startDate` = #{startDate},
-    		`endDate` = #{endDate},
-    		title = #{title},
-    		funeralHome = #{funeralHome},
-    		`body` = #{body},
-    		`expertId` = #{expertId},
-    		`clientId` = #{clientId}
-    		<if test="stepLevel != null">
-    			, stepLevel = #{stepLevel}
-    		</if>
-		</set>
-		WHERE id = #{id}
-	</update>
 
 </mapper>

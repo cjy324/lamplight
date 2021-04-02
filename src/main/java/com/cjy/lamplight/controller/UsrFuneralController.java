@@ -36,12 +36,14 @@ public class UsrFuneralController {
 			assistantId = memberId;
 		}
 		
+		System.out.println("memberType : " + memberType);
+		
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("expertId", expertId);
 		param.put("assistantId", assistantId);
 
 		List<Funeral> funerals = funeralService.getForPrintFuneralsByMemberId(param);
-
+		
 		req.setAttribute("funerals", funerals);
 		
 		return new ResultData("S-1", "성공", "funerals", funerals);

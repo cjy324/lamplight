@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cjy.lamplight.dao.FuneralDao;
+import com.cjy.lamplight.dto.Assistant;
 import com.cjy.lamplight.dto.Funeral;
 import com.cjy.lamplight.dto.ResultData;
+import com.cjy.lamplight.dto.Review;
 
 @Service
 public class FuneralService {
@@ -17,13 +19,36 @@ public class FuneralService {
 	private FuneralDao funeralDao;
 	@Autowired
 	private GenFileService genFileService;
-
-	public List<Funeral> getForPrintFuneralsByMemberId(Map<String, Object> param) {
-		return funeralDao.getForPrintFuneralsByMemberId(param);
+	@Autowired
+	private AssistantService assistantService;
+	
+	public List<Funeral> getForPrintFunerals() {
+		List<Funeral> funerals = funeralDao.getForPrintFunerals();
+		for(Funeral funeral : funerals) {
+			addAssistants(funeral);
+		}
+		
+		return funerals;
 	}
 
-	public List<Funeral> getForPrintFunerals() {
-		return funeralDao.getForPrintFunerals();
+	public List<Funeral> getForPrintFuneralsByMemberId(Map<String, Object> param) {
+		List<Funeral> funerals = funeralDao.getForPrintFuneralsByMemberId(param);
+		
+		for(Funeral funeral : funerals) {
+			addAssistants(funeral);
+		}
+		
+		return funerals;
+	}
+
+	private void addAssistants(Funeral funeral) {
+		List<Assistant> assistants = assistantService.getForPrintAssistants();
+		
+		for(Assistant assistant : assistants) {
+				if(assistant.getExtra__relFuneralId() == funeral.getId()) {
+					funeral.getExtra__assistants().add(assistant);
+				}	
+		}
 	}
 
 	public ResultData asstApplyForFuneral(Map<String, Object> param) {

@@ -26,5 +26,6 @@ public class Assistant {
 	
 	private String extra__thumbImg;
 	private float extra__ratingPoint;
+	private int extra__relFuneralId;
 	
 }

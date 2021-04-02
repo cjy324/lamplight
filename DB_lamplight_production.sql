@@ -55,3 +55,55 @@ ON R.relTypeCode = 'expert'
 AND E.id = R.relId
 GROUP BY E.id
 ORDER BY E.id DESC
+
+
+TRUNCATE funeralRelAssts;
+
+INSERT INTO funeralRelAssts
+SET funeralId=1,
+assistantId = 1;
+
+INSERT INTO funeralRelAssts
+SET funeralId=1,
+assistantId = 2;
+
+INSERT INTO funeralRelAssts
+SET funeralId=1,
+assistantId = 3;
+
+SELECT funeralId 
+FROM funeralRelAssts
+WHERE assistantId = 1;
+
+# 도우미가 진행중인 장례 리스팅
+SELECT F.*,
+IFNULL(C.name, "탈퇴회원") AS extra__clientName,
+IFNULL(E.name, "탈퇴회원") AS extra__expertName
+FROM `funeral` AS F
+LEFT JOIN `client` AS C
+ON F.clientId = C.id
+LEFT JOIN `expert` AS E
+ON F.expertId = E.id
+WHERE F.id = (
+SELECT funeralId 
+FROM funeralRelAssts
+WHERE assistantId = 1
+)
+ORDER BY F.id DESC
+
+# 지도사가 진행중인 장례 리스팅
+SELECT F.*,
+IFNULL(C.name, "탈퇴회원") AS extra__clientName,
+IFNULL(E.name, "탈퇴회원") AS extra__expertName,
+(SELECT A.name
+FROM assistant AS A
+WHERE id = FRA.assistantId) AS extra__assistantId
+FROM `funeral` AS F
+LEFT JOIN `client` AS C
+ON F.clientId = C.id
+LEFT JOIN `expert` AS E
+ON F.expertId = E.id
+LEFT JOIN `funeralRelAssts` AS FRA
+ON F.id = FRA.funeralId
+WHERE F.expertId = 1
+ORDER BY F.id DESC

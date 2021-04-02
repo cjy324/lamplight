@@ -11,7 +11,7 @@ import com.cjy.lamplight.dto.Assistant;
 @Mapper
 public interface AssistantDao {
 
-	List<Assistant> getForPrintAssistants(Map<String, Object> param);
+	List<Assistant> getForPrintAssistants();
 
 	void join(Map<String, Object> param);
 

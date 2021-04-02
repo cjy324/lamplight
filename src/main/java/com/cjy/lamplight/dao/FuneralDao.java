@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.cjy.lamplight.dto.Funeral;
 import com.cjy.lamplight.dto.ResultData;
@@ -16,5 +17,7 @@ public interface FuneralDao {
 	List<Funeral> getForPrintFunerals();
 	
 	ResultData asstApplyForFuneral(Map<String, Object> param);
+
+	List<Integer> getAssistantIdByFuneralId(@Param("funeralId") int funeralId);
 
 }

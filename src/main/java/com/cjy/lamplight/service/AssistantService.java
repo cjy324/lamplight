@@ -53,17 +53,8 @@ public class AssistantService {
 		return assistantDao.getAssistantByAuthKey(authKey);
 	}
 
-	public List<Assistant> getForPrintAssistants(String searchKeywordType, String searchKeyword, int page, int itemsInAPage,
-			Map<String, Object> param) {
-		int limitStart = (page - 1) * itemsInAPage;
-		int limitTake = itemsInAPage;
-
-		param.put("searchKeywordType", searchKeywordType);
-		param.put("searchKeyword", searchKeyword);
-		param.put("limitStart", limitStart);
-		param.put("limitTake", limitTake);
-
-		return assistantDao.getForPrintAssistants(param);
+	public List<Assistant> getForPrintAssistants(){
+		return assistantDao.getForPrintAssistants();
 	}
 
 	public Assistant getForPrintAssistant(int id) {

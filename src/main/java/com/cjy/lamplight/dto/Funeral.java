@@ -1,6 +1,8 @@
 package com.cjy.lamplight.dto;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import lombok.Data;
@@ -24,6 +26,7 @@ public class Funeral {
 
 	private String extra__clientName;
 	private String extra__expertName;
+	private List<Assistant> extra__assistants = new ArrayList<Assistant>();
 
 	private Map<String, Object> extra;
 

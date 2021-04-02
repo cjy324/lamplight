@@ -55,11 +55,11 @@
 		LEFT JOIN `expert` AS E
 		ON O.expertId = E.id
 		WHERE 1
-		<if test="clientId !== 0">
-    	OR O.clientId = #{clientId}
+		<if test="clientId != 0">
+    	AND O.clientId = #{clientId}
     	</if>
-    	<if test="expertId !== 0">
-    	OR O.expertId = #{expertId}
+    	<if test="expertId != 0">
+    	AND O.expertId = #{expertId}
     	</if>
 		ORDER BY O.id DESC
 	</select>
