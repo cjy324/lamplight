@@ -1,5 +1,6 @@
 
 SELECT * FROM `order`;
+SELECT * FROM `funeral`;
 SELECT * FROM `client`;
 SELECT * FROM `expert`;
 SELECT * FROM `assistant`;
@@ -94,16 +95,11 @@ ORDER BY F.id DESC
 # 지도사가 진행중인 장례 리스팅
 SELECT F.*,
 IFNULL(C.name, "탈퇴회원") AS extra__clientName,
-IFNULL(E.name, "탈퇴회원") AS extra__expertName,
-(SELECT A.name
-FROM assistant AS A
-WHERE id = FRA.assistantId) AS extra__assistantId
+IFNULL(E.name, "탈퇴회원") AS extra__expertName
 FROM `funeral` AS F
 LEFT JOIN `client` AS C
 ON F.clientId = C.id
 LEFT JOIN `expert` AS E
 ON F.expertId = E.id
-LEFT JOIN `funeralRelAssts` AS FRA
-ON F.id = FRA.funeralId
 WHERE F.expertId = 1
 ORDER BY F.id DESC

@@ -1,5 +1,6 @@
 package com.cjy.lamplight.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cjy.lamplight.dao.OrderDao;
-import com.cjy.lamplight.dto.Board;
 import com.cjy.lamplight.dto.Client;
 import com.cjy.lamplight.dto.Expert;
 import com.cjy.lamplight.dto.Order;
@@ -27,6 +27,8 @@ public class OrderService {
 
 	@Autowired
 	private GenFileService genFileService;
+	@Autowired
+	private FuneralService funeralService;
 	@Autowired
 	private OrderDao orderDao;
 
@@ -104,6 +106,37 @@ public class OrderService {
 		}
 
 		return new ResultData("F-1", "권한이 없습니다.");
+	}
+
+	public ResultData changeStepLevel(int id, int nextStepLevel) {
+		orderDao.changeStepLevel(id, nextStepLevel);
+		
+		Order changedOrder = getOrder(id);
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("head", changedOrder.getHead());
+		param.put("religion", changedOrder.getReligion());
+		param.put("startDate", changedOrder.getStartDate());
+		param.put("endDate", changedOrder.getEndDate());
+		param.put("title", changedOrder.getTitle());
+		param.put("funeralHome", changedOrder.getFuneralHome());
+		param.put("body", changedOrder.getBody());
+		param.put("expertId", changedOrder.getExpertId());
+		param.put("clientId", changedOrder.getClientId());
+		param.put("stepLevel", changedOrder.getStepLevel());
+		
+		funeralService.addFuneral(param);
+		
+		String msg = "요청을 수락하셨습니다.";
+		
+		if(nextStepLevel == 3) {
+			msg = "장례종료 확인 요청을 보냈습니다.";
+		}
+		if(nextStepLevel == 4) {
+			msg = "의뢰가 최종 종료되었습니다. 리뷰를 작성해주세요.";
+		}
+		
+		return new ResultData("S-1", msg, "id", id);
 	}
 
 }

@@ -29,4 +29,5 @@ public interface OrderDao {
 	Board getBoard(@Param("id") int id);
 
 	List<Order> getForPrintOrdersByMemberId(Map<String, Object> param);
+	void changeStepLevel(@Param("id") int id, @Param("nextStepLevel") int nextStepLevel);
 }

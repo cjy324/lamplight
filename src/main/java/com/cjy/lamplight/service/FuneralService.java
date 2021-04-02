@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.cjy.lamplight.dao.FuneralDao;
 import com.cjy.lamplight.dto.Assistant;
 import com.cjy.lamplight.dto.Funeral;
+import com.cjy.lamplight.dto.Order;
 import com.cjy.lamplight.dto.ResultData;
 import com.cjy.lamplight.dto.Review;
 
@@ -54,6 +55,12 @@ public class FuneralService {
 	public ResultData asstApplyForFuneral(Map<String, Object> param) {
 		return funeralDao.asstApplyForFuneral(param);
 	}
+
+	public void addFuneral(Map<String, Object> param) {
+		funeralDao.addFuneral(param);
+	}
+
+
 	
 	/*
 	 * public Funeral getFuneral(int id) { return funeralDao.getFuneral(id); }

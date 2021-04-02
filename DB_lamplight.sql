@@ -17,7 +17,7 @@ CREATE TABLE `order` (
     funeralHome CHAR(200) NOT NULL, #장례식장
     `expertId` INT(10) UNSIGNED NOT NULL,
     `clientId` INT(10) UNSIGNED NOT NULL,
-    stepLevel SMALLINT(2) UNSIGNED DEFAULT 1 NOT NULL COMMENT '(1=의뢰요청(의뢰검토),2=의뢰승인(장례진행),3=장례종료(종료확인요청),4=종료확인(최종종료))'
+    stepLevel SMALLINT(2) UNSIGNED DEFAULT 1 NOT NULL COMMENT '(1=의뢰요청(의뢰검토),2=의뢰승인(장례준비중),3=장례진행중,4=장례종료(종료확인요청),5=종료확인(최종종료))'
 );
 
 # 테스트 의뢰 생성
@@ -297,7 +297,7 @@ CREATE TABLE `funeral` (
     funeralHome CHAR(200) NOT NULL, #장례식장
     `expertId` INT(10) UNSIGNED NOT NULL,
     `clientId` INT(10) UNSIGNED NOT NULL,
-    stepLevel SMALLINT(2) UNSIGNED DEFAULT 2 NOT NULL COMMENT '(2=의뢰승인(장례진행),3=장례종료(종료확인요청),4=종료확인(최종종료))'
+    stepLevel SMALLINT(2) UNSIGNED DEFAULT 2 NOT NULL COMMENT '(2=의뢰승인(장례진행중),3=장례종료(종료확인요청),4=종료확인(최종종료))'
 );
 
 # 테스트 의뢰 생성

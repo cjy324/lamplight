@@ -20,4 +20,6 @@ public interface FuneralDao {
 
 	List<Integer> getAssistantIdByFuneralId(@Param("funeralId") int funeralId);
 
+	void addFuneral(Map<String, Object> param);
+
 }

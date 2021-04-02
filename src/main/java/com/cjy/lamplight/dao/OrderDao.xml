@@ -9,8 +9,7 @@
 	<select id="getOrder" resultType="Order">
 		SELECT *
 		FROM `order`
-		WHERE id
-		= #{id}
+		WHERE id = #{id}
 	</select>
 
 	<select id="getForPrintOrder" resultType="Order">
@@ -105,6 +104,15 @@
     		<if test="stepLevel != null">
     			, stepLevel = #{stepLevel}
     		</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="changeStepLevel">
+		UPDATE `order`
+		<set>  
+			updateDate = NOW(),
+			stepLevel = #{nextStepLevel}
 		</set>
 		WHERE id = #{id}
 	</update>

@@ -5,6 +5,24 @@
 
 <mapper namespace="com.cjy.lamplight.dao.FuneralDao">
 
+	<insert id="addFuneral" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO `funeral`
+		<set> <!-- SET 대신 set으로 감싸주는 것이 관례 -->
+			regDate = NOW(),
+			updateDate = NOW(),
+			`head` = #{head},
+    		religion = #{religion},
+    		`startDate` = #{startDate},
+    		`endDate` = #{endDate},
+    		title = #{title},
+    		funeralHome = #{funeralHome},
+    		`body` = #{body},
+    		`expertId` = #{expertId},
+    		`clientId` = #{clientId},
+    		stepLevel = #{stepLevel}
+		</set>
+	</insert>
+
 	<select id="getForPrintFunerals" resultType="Funeral">
 		SELECT F.*,
 		IFNULL(C.name, "탈퇴회원") AS extra__clientName,
