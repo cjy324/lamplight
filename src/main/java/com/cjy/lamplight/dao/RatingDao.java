@@ -12,7 +12,8 @@ public interface RatingDao {
 
 	Rating getRating(@Param("id")int id);
 	void deleteRating(@Param("id")int id);
-	void modifyRating(@Param("id")int id, @Param("body")String body);
 	void addRating(Map<String, Object> param);
+	Rating getRatingRelClient(@Param("relTypeCode")String relTypeCode, @Param("relId")Integer relId,@Param("clientId")Integer clientId);
+	void modifyRating(Map<String, Object> param);
 
 }

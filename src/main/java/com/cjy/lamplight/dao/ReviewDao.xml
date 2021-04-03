@@ -35,6 +35,13 @@
 		AND R.id = #{id}
 	</select>
 	
+	<select id="getForPrintReview" resultType="Review">
+		SELECT R.*
+		FROM `review` AS R
+		WHERE 1
+		AND R.id = #{id}
+	</select>
+	
 	<select id="getReviewByClientIdAndRelId" resultType="Review">
 		SELECT R.*
 		FROM review AS R
@@ -49,7 +56,7 @@
 	</delete>
 	
 	<update id="modifyReview">
-		UPDATE review
+		UPDATE `review`
 		<set>
 			<if test="body != null">
 				updateDate = NOW(),

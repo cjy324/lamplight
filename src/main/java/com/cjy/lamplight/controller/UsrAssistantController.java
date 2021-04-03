@@ -215,5 +215,6 @@ public class UsrAssistantController extends BaseController {
 
 		return new ResultData("S-1", String.format("%s(은)는 사용가능한 로그인아이디 입니다.", loginId), "loginId", loginId);
 	}
+	
 
 }

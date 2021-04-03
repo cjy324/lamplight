@@ -52,7 +52,9 @@
     	AND F.id = (
     	SELECT funeralId 
     	FROM funeralRelAssts
-		WHERE assistantId = #{assistantId})
+		WHERE assistantId = #{assistantId}
+		AND funeralId = F.id
+		)
     	</if>
 		ORDER BY F.id DESC
 	</select>
@@ -60,15 +62,22 @@
 	<select id="getAssistantIdByFuneralId" resultType="Integer">
 		SELECT assistantId
 		FROM funeralRelAssts
+		WHERE funeralId = #{funeralId}
 	</select>
 	
 	<insert id="asstApplyForFuneral" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO `funeralRelAssts`
 		<set> 
-			orderId = #{orderId},
-			asstId = #{asstId}
+			funeralId = #{funeralId},
+			assistantId = #{assistantId}
 		</set>
 	</insert>
 
+	<delete id="asstCancleApplyForFuneral">
+		DELETE FROM `funeralRelAssts`
+		WHERE funeralId = #{funeralId} 
+		AND assistantId = #{assistantId}
+	</delete>
+	
 
 </mapper>

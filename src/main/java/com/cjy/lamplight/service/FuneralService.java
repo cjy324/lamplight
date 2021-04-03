@@ -12,6 +12,7 @@ import com.cjy.lamplight.dto.Funeral;
 import com.cjy.lamplight.dto.Order;
 import com.cjy.lamplight.dto.ResultData;
 import com.cjy.lamplight.dto.Review;
+import com.cjy.lamplight.util.Util;
 
 @Service
 public class FuneralService {
@@ -19,12 +20,11 @@ public class FuneralService {
 	@Autowired
 	private FuneralDao funeralDao;
 	@Autowired
-	private GenFileService genFileService;
-	@Autowired
 	private AssistantService assistantService;
 	
 	public List<Funeral> getForPrintFunerals() {
 		List<Funeral> funerals = funeralDao.getForPrintFunerals();
+		
 		for(Funeral funeral : funerals) {
 			addAssistants(funeral);
 		}
@@ -51,14 +51,41 @@ public class FuneralService {
 				}	
 		}
 	}
+	
+	public boolean isDupApplyAsst(Map<String, Object> param) {
+		int funeralId = Util.getAsInt(param.get("funeralId"), 0);
+		int assistantId = Util.getAsInt(param.get("assistantId"), 0);
+		
+		Integer dupAssistantId = funeralDao.getAssistantIdByFuneralId(funeralId);
+		
+		if(dupAssistantId != null && dupAssistantId == assistantId) {
+			return true;
+		}
+		
+		return false;
+	}
 
 	public ResultData asstApplyForFuneral(Map<String, Object> param) {
-		return funeralDao.asstApplyForFuneral(param);
+		funeralDao.asstApplyForFuneral(param);
+		
+		String msg = param.get("funeralId") + "번 장례에 지원하셨습니다.";
+		
+		return new ResultData("S-1", msg);
 	}
 
 	public void addFuneral(Map<String, Object> param) {
 		funeralDao.addFuneral(param);
 	}
+
+	public ResultData asstCancleApplyForFuneral(Integer funeralId, Integer assistantId) {
+
+		funeralDao.asstCancleApplyForFuneral(funeralId, assistantId);
+
+		String msg = funeralId + "번 장례 지원을 취소했습니다.";
+		return new ResultData("S-1", msg);
+	}
+
+	
 
 
 	

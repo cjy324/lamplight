@@ -14,8 +14,9 @@ public interface ReviewDao {
 	List<Review> getForPrintReviews(@Param("relTypeCode") String relTypeCode);
 	Review getReview(@Param("id")int id);
 	void deleteReview(@Param("id")int id);
-	void modifyReview(@Param("id")int id, @Param("body")String body);
 	void addReview(Map<String, Object> param);
 	Review getReviewByClientIdAndRelId(@Param("clientId") int clientId, @Param("relId") int relId);
+	void modifyReview(Map<String, Object> param);
+	Review getForPrintReview(@Param("id")Integer id);
 
 }

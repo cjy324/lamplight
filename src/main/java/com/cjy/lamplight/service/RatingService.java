@@ -14,8 +14,6 @@ import com.cjy.lamplight.dto.ResultData;
 public class RatingService {
 	@Autowired
 	private RatingDao ratingDao;
-	@Autowired
-	private MemberService memberService;
 	
 	public ResultData addRating(Map<String, Object> param) {
 		ratingDao.addRating(param);
@@ -45,9 +43,14 @@ public class RatingService {
 		return getActorCanDeleteRd(Rating, actor);
 	}
 
-	public ResultData modifyRating(int id, String body) {
-		ratingDao.modifyRating(id, body);
+	public ResultData getRatingRelClient(String relTypeCode, Integer relId, Integer clientId) {
+		Rating rating = ratingDao.getRatingRelClient(relTypeCode,relId,clientId);
+		
+		return new ResultData("S-1", "성공", "rating", rating);
+	}
 
-		return new ResultData("S-1", "댓글을 수정하였습니다.", "id", id);
+	public ResultData modifyRating(Map<String, Object> param) {
+		ratingDao.modifyRating(param);
+		return new ResultData("S-1", "성공");
 	}
 }

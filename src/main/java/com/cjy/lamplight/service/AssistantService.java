@@ -17,7 +17,6 @@ public class AssistantService {
 
 	@Autowired
 	AssistantDao assistantDao;
-
 	@Autowired
 	GenFileService genFileService;
 

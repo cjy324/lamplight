@@ -57,17 +57,21 @@ public class ReviewService {
 		return getActorCanDeleteRd(review, actor);
 	}
 
-	public ResultData modifyReview(int id, String body) {
-		reviewDao.modifyReview(id, body);
-
-		return new ResultData("S-1", "댓글을 수정하였습니다.", "id", id);
-	}
-
 	public boolean isClientCanReview(int clientId, int relId) {
 		Review review = reviewDao.getReviewByClientIdAndRelId(clientId, relId);
 		if(review != null) {
 			return false;
 		}
 		return true;
+	}
+
+	public ResultData modifyReview(Map<String, Object> param) {
+		reviewDao.modifyReview(param);
+		return new ResultData("S-1", "리뷰를 수정하였습니다.");
+	}
+
+	public ResultData getForPrintReview(Integer id) {
+		Review review = reviewDao.getForPrintReview(id);
+		return new ResultData("S-1", "성공", "review", review);
 	}
 }

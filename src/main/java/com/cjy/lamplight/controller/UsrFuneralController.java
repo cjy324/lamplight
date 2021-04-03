@@ -60,19 +60,38 @@ public class UsrFuneralController {
 		return new ResultData("S-1", "성공", "funerals", funerals);
 	}
 	
-	@GetMapping("/usr/funeral/doApply")
+	@PostMapping("/usr/funeral/asstApplyForFuneral")
 	@ResponseBody
-	public ResultData doApply(@RequestParam Map<String, Object> param) {
+	public ResultData asstApplyForFuneral(@RequestParam Map<String, Object> param) {
 		
-	
 		if (param.get("funeralId") == null) {
 			return new ResultData("F-1", "funeralId를 입력해주세요.");
 		}
-		if (param.get("asstId") == null) {
-			return new ResultData("F-1", "asstId를 입력해주세요.");
+		if (param.get("assistantId") == null) {
+			return new ResultData("F-1", "assistantId를 입력해주세요.");
 		}
-
+		
+		boolean isDupApplyAsst = funeralService.isDupApplyAsst(param);
+		
+		if(isDupApplyAsst) {
+			return new ResultData("F-1", "회원님은 해당 장례에 이미 지원하셨습니다.");
+		}
+	
 		return funeralService.asstApplyForFuneral(param);
+	}
+	
+	@GetMapping("/usr/funeral/asstCancleApplyForFuneral")
+	@ResponseBody
+	public ResultData asstCancleApplyForFuneral(HttpServletRequest req, Integer funeralId, Integer assistantId) {
+
+		if (funeralId == null) {
+			return new ResultData("F-1", "funeralId를 입력해주세요.");
+		}
+		if (assistantId == null) {
+			return new ResultData("F-1", "assistantId를 입력해주세요.");
+		}
+		
+		return funeralService.asstCancleApplyForFuneral(funeralId, assistantId);
 	}
 
 	

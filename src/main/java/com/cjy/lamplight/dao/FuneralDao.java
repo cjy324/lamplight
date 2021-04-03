@@ -16,10 +16,12 @@ public interface FuneralDao {
 
 	List<Funeral> getForPrintFunerals();
 	
-	ResultData asstApplyForFuneral(Map<String, Object> param);
+	void asstApplyForFuneral(Map<String, Object> param);
 
-	List<Integer> getAssistantIdByFuneralId(@Param("funeralId") int funeralId);
+	Integer getAssistantIdByFuneralId(@Param("funeralId") int funeralId);
 
 	void addFuneral(Map<String, Object> param);
+
+	void asstCancleApplyForFuneral(@Param("funeralId") Integer funeralId, @Param("assistantId") Integer assistantId);
 
 }

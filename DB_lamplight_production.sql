@@ -1,6 +1,7 @@
 
 SELECT * FROM `order`;
 SELECT * FROM `funeral`;
+SELECT * FROM `funeralRelAssts`;
 SELECT * FROM `client`;
 SELECT * FROM `expert`;
 SELECT * FROM `assistant`;
@@ -11,6 +12,7 @@ SELECT * FROM `rating`;
 TRUNCATE `genFile`;
 TRUNCATE `review`;
 TRUNCATE `rating`;
+TRUNCATE `funeralRelAssts`;
 
 # 게시물 랜덤생성 쿼리
 INSERT INTO article
@@ -88,7 +90,7 @@ ON F.expertId = E.id
 WHERE F.id = (
 SELECT funeralId 
 FROM funeralRelAssts
-WHERE assistantId = 1
+WHERE assistantId = 1 AND funeralId = F.id
 )
 ORDER BY F.id DESC
 

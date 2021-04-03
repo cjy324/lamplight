@@ -53,8 +53,7 @@ public class UsrReviewController {
 			return new ResultData("F-1", "relTypeCode를 입력해주세요.");
 		}
 
-		
-
+	
 		return reviewService.addReview(param);
 	}
 
@@ -70,6 +69,17 @@ public class UsrReviewController {
 		List<Review> reviews = reviewService.getForPrintReviews(relTypeCode);
 
 		return new ResultData("S-1", "성공", "reviews", reviews);
+	}
+	
+	@GetMapping("/usr/review/detail")
+	@ResponseBody
+	public ResultData showDetail(Integer id) {
+
+		if (id == null) {
+			return new ResultData("F-1", "id를 입력해주세요.");
+		}
+		
+		return reviewService.getForPrintReview(id);
 	}
 	
 	@GetMapping("/usr/review/doDelete")
@@ -91,30 +101,21 @@ public class UsrReviewController {
 	
 	@PostMapping("/usr/review/doModify")
 	@ResponseBody
-	public ResultData doModify(Integer id, String body, HttpServletRequest req) {
-		//int loginedMemberId = (int)req.getAttribute("loginedMemberId");
-		Member loginedMember = (Member) req.getAttribute("loginedMember");
+	public ResultData doModify(@RequestParam Map<String, Object> param) {
+		int clientId = Util.getAsInt(param.get("clientId"), 0);
+		if(clientId == 0) {
+			return new ResultData("F-1", "clientId를 확인해주세요.");
+		}
 		
-		if (id == null) {
+		if (param.get("id") == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
 		}
-
-		if (body == null) {
+		
+		if (param.get("body") == null) {
 			return new ResultData("F-1", "body를 입력해주세요.");
 		}
+			
 
-		Review review = reviewService.getReview(id);
-
-		if (review == null) {
-			return new ResultData("F-1", "해당 리뷰는 존재하지 않습니다.");
-		}
-
-		ResultData actorCanModifyRd = reviewService.getActorCanModifyRd(review, loginedMember);
-
-		if (actorCanModifyRd.isFail()) {
-			return actorCanModifyRd;
-		}
-
-		return reviewService.modifyReview(id, body);
+		return reviewService.modifyReview(param);
 	}
 }
