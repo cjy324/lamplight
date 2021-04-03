@@ -28,7 +28,7 @@ public class AssistantService {
 
 		genFileService.changeInputFileRelIds(param, id);
 
-		return new ResultData("S-1", param.get("nickname") + "님, 환영합니다.", "id", id);
+		return new ResultData("S-1", param.get("name") + "님, 환영합니다.", "id", id);
 	}
 
 	public Assistant getAssistant(int id) {

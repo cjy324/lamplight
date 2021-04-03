@@ -42,7 +42,7 @@
 			`name` = #{name},
 			`email` = #{email},
 			`cellphoneNo` = #{cellphoneNo},
-			`region` = #{address},
+			`region` = #{region},
 			`career` = #{career},
 			authKey = CONCAT("authKey3__", UUID(), "__", RAND())
 		</set>

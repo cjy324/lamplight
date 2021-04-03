@@ -42,41 +42,34 @@ public class UsrClientController extends BaseController {
 
 	@PostMapping("/usr/client/doJoin")
 	@ResponseBody
-	public String doJoin(@RequestParam Map<String, Object> param) {
+	public ResultData doJoin(@RequestParam Map<String, Object> param) {
 
 		if (param.get("loginId") == null) {
-			return Util.msgAndBack("loginId를 입력해주세요.");
+			return new ResultData("F-1", "loginId를 입력해주세요.");
 		}
 
 		Client existingClient = clientService.getClientByLoginId((String) param.get("loginId"));
 
 		if (existingClient != null) {
-			return Util.msgAndBack("이미 사용중인 로그인아이디 입니다.");
+			return new ResultData("F-1", "이미 사용중인 로그인아이디 입니다.");
 		}
-
 		if (param.get("loginPw") == null) {
-			return Util.msgAndBack("loginPw를 입력해주세요.");
+			return new ResultData("F-1", "loginPw를 입력해주세요.");
 		}
 		if (param.get("name") == null) {
-			return Util.msgAndBack("name을 입력해주세요.");
+			return new ResultData("F-1", "name을 입력해주세요.");
 		}
 		if (param.get("email") == null) {
-			return Util.msgAndBack("email을 입력해주세요.");
+			return new ResultData("F-1", "email을 입력해주세요.");
 		}
 		if (param.get("cellphoneNo") == null) {
-			return Util.msgAndBack("cellphoneNo를 입력해주세요.");
+			return new ResultData("F-1", "cellphoneNo를 입력해주세요.");
 		}	
 		if (param.get("region") == null) {
-			return Util.msgAndBack("region을 입력해주세요.");
+			return new ResultData("F-1", "region을 입력해주세요.");
 		}
 
-		clientService.join(param);
-
-		String msg = String.format("%s님 환영합니다.", param.get("name"));
-
-		String redirectUrl = Util.ifEmpty((String) param.get("redirectUrl"), "../client/login");
-
-		return Util.msgAndReplace(msg, redirectUrl);
+		return clientService.join(param);
 	}
 
 	@GetMapping("/usr/client/clientByAuthKey")
@@ -115,7 +108,7 @@ public class UsrClientController extends BaseController {
 			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
 		}
 
-		return new ResultData("S-1", String.format("%s님 환영합니다.", existingClient.getName()), "authKey",
+		return new ResultData("S-1", String.format("%s님 반갑습니다.", existingClient.getName()), "authKey",
 				existingClient.getAuthKey(), "client", existingClient);
 	}
 

@@ -50,10 +50,9 @@
 			`name` = #{name},
 			`email` = #{email},
 			`cellphoneNo` = #{cellphoneNo},
-			`region` = #{address},
+			`region` = #{region},
 			`license` = #{license},
 			`career` = #{career},
-			acknowledgment_step = #{acknowledgment_step},
 			authKey = CONCAT("authKey2__", UUID(), "__", RAND())
 		</set>
 
