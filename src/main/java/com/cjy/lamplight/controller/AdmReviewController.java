@@ -93,34 +93,6 @@ public class AdmReviewController {
 		return reviewService.deleteReview(id);
 	}
 	
-	@RequestMapping("/adm/review/doModify")
-	@ResponseBody
-	public ResultData doModify(Integer id, String body, HttpServletRequest req) {
-		//int loginedMemberId = (int)req.getAttribute("loginedMemberId");
-		Member loginedMember = (Member) req.getAttribute("loginedMember");
-
-		if (id == null) {
-			return new ResultData("F-1", "id를 입력해주세요.");
-		}
-
-		if (body == null) {
-			return new ResultData("F-1", "body를 입력해주세요.");
-		}
-
-		Review review = reviewService.getReview(id);
-
-		if (review == null) {
-			return new ResultData("F-1", "해당 리뷰는 존재하지 않습니다.");
-		}
-
-		ResultData actorCanModifyRd = reviewService.getActorCanModifyRd(review, loginedMember);
-
-		if (actorCanModifyRd.isFail()) {
-			return actorCanModifyRd;
-		}
-
-		return reviewService.modifyReview(id, body);
-	}
 	
 	
 }

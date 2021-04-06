@@ -12,7 +12,8 @@ CREATE TABLE `order` (
     religion CHAR(200) NOT NULL, #종교
     `startDate` DATE NOT NULL, #장례시작일
     `endDate` DATE NOT NULL, #장례종료일
-    title CHAR(200) NOT NULL, 
+    deceasedName CHAR(30) NOT NULL, #고인 이름
+    bereavedName CHAR(30) NOT NULL, #유족 이름
     `body` TEXT NOT NULL, #상세요구사항
     funeralHome CHAR(200) NOT NULL, #장례식장
     `expertId` INT(10) UNSIGNED NOT NULL,
@@ -28,7 +29,8 @@ SET regDate = NOW(),
     religion = '기독교',
     `startDate` = '2021-04-01 12:12:12',
     `endDate` = '2021-04-03 20:20:20',
-    title = 'user1님 의뢰',
+    deceasedName = '홍길동',
+    bereavedName = '홍길순',
     funeralHome = '대전장례식장',
     `body` = '기타 요청 사항',
     `expertId` = 1,
@@ -41,11 +43,26 @@ SET regDate = NOW(),
     religion = '불교',
     `startDate` = '2021-04-01 12:12:12',
     `endDate` = '2021-04-03 20:20:20',
-    title = 'user2님 의뢰',
+    deceasedName = '임꺽정',
+    bereavedName = '임꺽순',
     funeralHome = '서울장례식장',
     `body` = '기타 요청 사항',
     `expertId` = 1,
     `clientId` = 2;
+
+INSERT INTO `order`
+SET regDate = NOW(),
+    updateDate = NOW(),
+    head = 300,
+    religion = '기독교',
+    `startDate` = '2021-04-05 12:12:12',
+    `endDate` = '2021-04-07 20:20:20',
+    deceasedName = '김삿갓',
+    bereavedName = '김아무개',
+    funeralHome = '서울장례식장',
+    `body` = '기타 요청 사항',
+    `expertId` = 2,
+    `clientId` = 1;
     
  
 # 의뢰인회원 테이블 생성
@@ -163,6 +180,19 @@ SET regDate = NOW(),
     `email` = 'expert3@expert3.com',
     `cellphoneNo` = 01033333333,
     `region` = '부산광역시',
+    `license` = '장례지도사2급',
+    `career` = '1년';
+    
+INSERT INTO `expert`
+SET regDate = NOW(),
+    updateDate = NOW(),
+    loginId = 'expert4',
+    loginPw = 'expert4',
+    authKey = 'authKey2__4',
+    `name` = 'expert4',
+    `email` = 'expert4@expert4.com',
+    `cellphoneNo` = 01044444444,
+    `region` = '대전광역시',
     `license` = '장례지도사2급',
     `career` = '1년';
     
@@ -292,7 +322,8 @@ CREATE TABLE `funeral` (
     religion CHAR(200) NOT NULL, #종교
     `startDate` DATE NOT NULL, #장례시작일
     `endDate` DATE NOT NULL, #장례종료일
-    title CHAR(200) NOT NULL, 
+    deceasedName CHAR(30) NOT NULL, #고인 이름
+    bereavedName CHAR(30) NOT NULL, #유족 이름
     `body` TEXT NOT NULL, #상세요구사항
     funeralHome CHAR(200) NOT NULL, #장례식장
     `expertId` INT(10) UNSIGNED NOT NULL,
@@ -308,7 +339,8 @@ SET regDate = NOW(),
     religion = '기독교',
     `startDate` = '2021-04-01 12:12:12',
     `endDate` = '2021-04-03 20:20:20',
-    title = 'user1님 의뢰',
+    deceasedName = '홍길동',
+    bereavedName = '홍길순',
     funeralHome = '대전장례식장',
     `body` = '기타 요청 사항',
     `expertId` = 1,
@@ -321,11 +353,26 @@ SET regDate = NOW(),
     religion = '불교',
     `startDate` = '2021-04-01 12:12:12',
     `endDate` = '2021-04-03 20:20:20',
-    title = 'user2님 의뢰',
+    deceasedName = '임꺽정',
+    bereavedName = '임꺽순',
     funeralHome = '서울장례식장',
     `body` = '기타 요청 사항',
     `expertId` = 1,
     `clientId` = 2;
+
+INSERT INTO `funeral`
+SET regDate = NOW(),
+    updateDate = NOW(),
+    head = 300,
+    religion = '기독교',
+    `startDate` = '2021-04-05 12:12:12',
+    `endDate` = '2021-04-07 20:20:20',
+    deceasedName = '김삿갓',
+    bereavedName = '김아무개',
+    funeralHome = '서울장례식장',
+    `body` = '기타 요청 사항',
+    `expertId` = 2,
+    `clientId` = 1;
 
 # 장례와 관련된 도우미 그룹 테이블 생성
 CREATE TABLE `funeralRelAssts`(

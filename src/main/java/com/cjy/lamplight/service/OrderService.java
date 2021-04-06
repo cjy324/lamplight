@@ -118,7 +118,8 @@ public class OrderService {
 		param.put("religion", changedOrder.getReligion());
 		param.put("startDate", changedOrder.getStartDate());
 		param.put("endDate", changedOrder.getEndDate());
-		param.put("title", changedOrder.getTitle());
+		param.put("deceasedName", changedOrder.getDeceasedName());
+		param.put("bereavedName", changedOrder.getBereavedName());
 		param.put("funeralHome", changedOrder.getFuneralHome());
 		param.put("body", changedOrder.getBody());
 		param.put("expertId", changedOrder.getExpertId());

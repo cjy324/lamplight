@@ -15,7 +15,8 @@ public class Order {
 	private String religion;
 	private String startDate;
 	private String endDate;
-	private String title;
+	private String deceasedName;
+	private String bereavedName;
 	private String funeralHome;
 	private String body;
 	private int expertId;
@@ -37,7 +38,7 @@ public class Order {
 	}
 
 	public Order(int id, String regDate, String updateDate, int head, String religion,
-			String startDate, String endDate, String title, String funeralHome, String body, int expertId, int clientId, int stepLevel) {
+			String startDate, String endDate, String deceasedName, String bereavedName, String funeralHome, String body, int expertId, int clientId, int stepLevel) {
 
 		this.id = id;
 		this.regDate = regDate;
@@ -46,7 +47,8 @@ public class Order {
 		this.religion = religion;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.title = title;
+		this.deceasedName = deceasedName;
+		this.bereavedName = bereavedName;
 		this.funeralHome = funeralHome;
 		this.body = body;
 		this.expertId = expertId;
