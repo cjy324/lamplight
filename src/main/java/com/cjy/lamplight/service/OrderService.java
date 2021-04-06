@@ -57,7 +57,7 @@ public class OrderService {
 		// 2. 저장소에서 삭제
 		genFileService.deleteGenFiles("order", id);
 
-		return new ResultData("S-1", "삭제하였습니다.", "id", id);
+		return new ResultData("S-1", "요청을 취소하였습니다.", "id", id);
 	}
 
 	public ResultData modifyOrder(Map<String, Object> param) {

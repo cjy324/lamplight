@@ -92,10 +92,10 @@ public class UsrOrderController extends BaseController {
 
 		int newOrderId = (int) addOrderRd.getBody().get("id");
 
-		return new ResultData("S-1", newOrderId + "작성이 완료되었습니다.", "id", newOrderId);
+		return new ResultData("S-1", "의뢰 요청이 완료되었습니다.", "id", newOrderId);
 	}
 
-	@PostMapping("/usr/order/doDelete")
+	@GetMapping("/usr/order/doDelete")
 	@ResponseBody
 	public ResultData doDelete(Integer id, HttpServletRequest req) {
 		// int 기본타입 -> null이 들어갈 수 없음
