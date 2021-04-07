@@ -18,6 +18,8 @@ public class ReviewService {
 	private ReviewDao reviewDao;
 	@Autowired
 	private MemberService memberService;
+	@Autowired
+	private RatingService ratingService;
 	
 	public ResultData addReview(Map<String, Object> param) {
 		reviewDao.addReview(param);
@@ -47,9 +49,12 @@ public class ReviewService {
 		return new ResultData("F-1", "권한이 없습니다.");
 	}
 
-	public ResultData deleteReview(int id) {
+	public ResultData deleteReview(Map<String, Object> param) {
+		int id = Util.getAsInt(param.get("id"), 0);
 		reviewDao.deleteReview(id);
-
+		
+		ratingService.deleteRating(param);
+		
 		return new ResultData("S-1", "삭제하였습니다.", "id", id);
 	}
 

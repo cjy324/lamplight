@@ -82,8 +82,11 @@ public class ClientService {
 		// 멤버의 섬네일 이미지 가져오기
 		GenFile genFile = genFileService.getGenFile("client", client.getId(), "common", "attachment", 1);
 
+		System.out.println("111111111111111111111111111");
 		// 만약, 멤버의 섬네일 이미지가 있으면 extra__thumbImg 업데이트
 		if (genFile != null) {
+			
+			System.out.println("이미지 가져옴22222222222222222222222");
 			String imgUrl = genFile.getForPrintUrl();
 			client.setExtra__thumbImg(imgUrl);
 		}

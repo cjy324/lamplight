@@ -36,7 +36,10 @@
 
 	<delete id="deleteRating">
 		DELETE FROM `rating`
-		WHERE id = #{id}
+		WHERE 1
+		AND relTypeCode = #{relTypeCode}
+		AND relId = #{relId}
+		AND clientId = #{clientId}
 	</delete>
 	
 	<update id="modifyRating">

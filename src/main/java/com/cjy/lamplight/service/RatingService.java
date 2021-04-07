@@ -33,10 +33,10 @@ public class RatingService {
 		return new ResultData("F-1", "권한이 없습니다.");
 	}
 
-	public ResultData deleteRating(int id) {
-		ratingDao.deleteRating(id);
+	public ResultData deleteRating(Map<String, Object> param) {
+		ratingDao.deleteRating(param);
 
-		return new ResultData("S-1", "삭제하였습니다.", "id", id);
+		return new ResultData("S-1", "삭제하였습니다.");
 	}
 
 	public ResultData getActorCanModifyRd(Rating Rating, Client actor) {

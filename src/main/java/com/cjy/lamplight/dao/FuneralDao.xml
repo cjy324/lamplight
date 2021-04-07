@@ -10,7 +10,6 @@
 		<set> <!-- SET 대신 set으로 감싸주는 것이 관례 -->
 			regDate = NOW(),
 			updateDate = NOW(),
-			`head` = #{head},
     		religion = #{religion},
     		`startDate` = #{startDate},
     		`endDate` = #{endDate},

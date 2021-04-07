@@ -119,7 +119,6 @@ public class OrderService {
 		Order changedOrder = getOrder(id);
 		
 		Map<String, Object> param = new HashMap<>();
-		param.put("head", changedOrder.getHead());
 		param.put("religion", changedOrder.getReligion());
 		param.put("startDate", changedOrder.getStartDate());
 		param.put("endDate", changedOrder.getEndDate());

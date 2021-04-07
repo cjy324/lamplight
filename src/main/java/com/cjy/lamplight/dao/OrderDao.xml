@@ -69,7 +69,6 @@
 		<set> <!-- SET 대신 set으로 감싸주는 것이 관례 -->
 			regDate = NOW(),
 			updateDate = NOW(),
-			`head` = #{head},
     		religion = #{religion},
     		`startDate` = #{startDate},
     		`endDate` = #{endDate},
@@ -94,7 +93,6 @@
 		UPDATE `order`
 		<set>  <!-- set으로 감싸는 이유? 만약 set안의 내용이 채워지지 않았을 경우 다음 단계 진행 안하고 멈춤(쿼리 오류 방지) -->
 			updateDate = NOW(),
-			`head` = #{head},
     		religion = #{religion},
     		`startDate` = #{startDate},
     		`endDate` = #{endDate},

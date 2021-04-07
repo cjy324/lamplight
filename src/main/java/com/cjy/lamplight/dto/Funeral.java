@@ -13,7 +13,6 @@ public class Funeral {
 	private int id;
 	private String regDate;
 	private String updateDate;
-	private int head;
 	private String religion;
 	private String startDate;
 	private String endDate;
@@ -41,13 +40,12 @@ public class Funeral {
 		return extra;
 	}
 
-	public Funeral(int id, String regDate, String updateDate, int head, String religion,
+	public Funeral(int id, String regDate, String updateDate, String religion,
 			String startDate, String endDate, String deceasedName, String bereavedName, String funeralHome, String region, String body, int expertId, int clientId, int stepLevel) {
 
 		this.id = id;
 		this.regDate = regDate;
 		this.updateDate = updateDate;
-		this.head = head;
 		this.religion = religion;
 		this.startDate = startDate;
 		this.endDate = endDate;

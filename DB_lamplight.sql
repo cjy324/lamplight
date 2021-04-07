@@ -8,7 +8,7 @@ CREATE TABLE `order` (
     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     regDate DATETIME NOT NULL,
     updateDate DATETIME NOT NULL,
-    `head` INT(10) UNSIGNED NOT NULL, #예상인원수
+    #`head` INT(10) UNSIGNED NOT NULL, #예상인원수(삭제 21.04.07)
     religion CHAR(200) NOT NULL, #종교
     `startDate` DATE NOT NULL, #장례시작일
     `endDate` DATE NOT NULL, #장례종료일
@@ -19,14 +19,13 @@ CREATE TABLE `order` (
     `region` CHAR(100) NOT NULL, #장례지역
     `expertId` INT(10) UNSIGNED NOT NULL,
     `clientId` INT(10) UNSIGNED NOT NULL,
-    stepLevel SMALLINT(2) UNSIGNED DEFAULT 1 NOT NULL COMMENT '(1=의뢰요청(의뢰검토),2=의뢰승인(장례준비중),3=장례진행중,4=장례종료(종료확인요청),5=종료확인(최종종료))'
+    stepLevel SMALLINT(2) UNSIGNED DEFAULT 1 NOT NULL COMMENT '(1=의뢰요청,2=의뢰검토(장례준비중),3=장례진행중,4=장례종료(종료확인요청),5=종료확인(최종종료),6=취소)'
 );
 
 # 테스트 의뢰 생성
 INSERT INTO `order`
 SET regDate = NOW(),
     updateDate = NOW(),
-    head = 200,
     religion = '기독교',
     `startDate` = '2021-04-01 12:12:12',
     `endDate` = '2021-04-03 20:20:20',
@@ -41,7 +40,6 @@ SET regDate = NOW(),
 INSERT INTO `order`
 SET regDate = NOW(),
     updateDate = NOW(),
-    head = 100,
     religion = '불교',
     `startDate` = '2021-04-01 12:12:12',
     `endDate` = '2021-04-03 20:20:20',
@@ -56,7 +54,6 @@ SET regDate = NOW(),
 INSERT INTO `order`
 SET regDate = NOW(),
     updateDate = NOW(),
-    head = 300,
     religion = '기독교',
     `startDate` = '2021-04-05 12:12:12',
     `endDate` = '2021-04-07 20:20:20',
@@ -322,7 +319,7 @@ CREATE TABLE `funeral` (
     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     regDate DATETIME NOT NULL,
     updateDate DATETIME NOT NULL,
-    `head` INT(10) UNSIGNED NOT NULL, #예상인원수
+    #`head` INT(10) UNSIGNED NOT NULL, #예상인원수
     religion CHAR(200) NOT NULL, #종교
     `startDate` DATE NOT NULL, #장례시작일
     `endDate` DATE NOT NULL, #장례종료일
@@ -340,7 +337,6 @@ CREATE TABLE `funeral` (
 INSERT INTO `funeral`
 SET regDate = NOW(),
     updateDate = NOW(),
-    head = 200,
     religion = '기독교',
     `startDate` = '2021-04-01 12:12:12',
     `endDate` = '2021-04-03 20:20:20',
@@ -355,7 +351,6 @@ SET regDate = NOW(),
 INSERT INTO `funeral`
 SET regDate = NOW(),
     updateDate = NOW(),
-    head = 100,
     religion = '불교',
     `startDate` = '2021-04-01 12:12:12',
     `endDate` = '2021-04-03 20:20:20',
@@ -370,7 +365,6 @@ SET regDate = NOW(),
 INSERT INTO `funeral`
 SET regDate = NOW(),
     updateDate = NOW(),
-    head = 300,
     religion = '기독교',
     `startDate` = '2021-04-05 12:12:12',
     `endDate` = '2021-04-07 20:20:20',

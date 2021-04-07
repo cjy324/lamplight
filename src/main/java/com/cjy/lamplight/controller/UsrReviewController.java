@@ -1,5 +1,6 @@
 package com.cjy.lamplight.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,10 +85,19 @@ public class UsrReviewController {
 	
 	@GetMapping("/usr/review/doDelete")
 	@ResponseBody
-	public ResultData doDelete(Integer id) {
-
+	public ResultData doDelete(String relTypeCode, Integer relId, Integer id, Integer clientId) {
+		
+		if (relTypeCode == null) {
+			return new ResultData("F-1", "relTypeCode를 입력해주세요.");
+		}
+		if (relId == null) {
+			return new ResultData("F-1", "relId를 입력해주세요.");
+		}
 		if (id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
+		}
+		if (clientId == null) {
+			return new ResultData("F-1", "clientId를 입력해주세요.");
 		}
 
 		Review review = reviewService.getReview(id);
@@ -95,8 +105,14 @@ public class UsrReviewController {
 		if (review == null) {
 			return new ResultData("F-1", "해당 리뷰는 존재하지 않습니다.");
 		}
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("relTypeCode", relTypeCode);
+		param.put("relId", relId);
+		param.put("id", id);
+		param.put("clientId", clientId);
 
-		return reviewService.deleteReview(id);
+		return reviewService.deleteReview(param);
 	}
 	
 	@PostMapping("/usr/review/doModify")
