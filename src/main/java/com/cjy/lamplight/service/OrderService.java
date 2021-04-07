@@ -30,6 +30,8 @@ public class OrderService {
 	@Autowired
 	private FuneralService funeralService;
 	@Autowired
+	private AlertService alertService;
+	@Autowired
 	private OrderDao orderDao;
 
 
@@ -45,6 +47,9 @@ public class OrderService {
 		orderDao.addOrder(param);
 
 		int id = Util.getAsInt(param.get("id"), 0);
+		
+		//신규 요청서 등록 시 지도사에게 푸시알람 생성 시작
+		alertService.pushNewOrderToExpert(param);
 
 		return new ResultData("S-1", "성공하였습니다.", "id", id);
 	}
@@ -121,6 +126,7 @@ public class OrderService {
 		param.put("deceasedName", changedOrder.getDeceasedName());
 		param.put("bereavedName", changedOrder.getBereavedName());
 		param.put("funeralHome", changedOrder.getFuneralHome());
+		param.put("region", changedOrder.getRegion());
 		param.put("body", changedOrder.getBody());
 		param.put("expertId", changedOrder.getExpertId());
 		param.put("clientId", changedOrder.getClientId());

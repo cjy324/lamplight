@@ -16,6 +16,7 @@ CREATE TABLE `order` (
     bereavedName CHAR(30) NOT NULL, #유족 이름
     `body` TEXT NOT NULL, #상세요구사항
     funeralHome CHAR(200) NOT NULL, #장례식장
+    `region` CHAR(100) NOT NULL, #장례지역
     `expertId` INT(10) UNSIGNED NOT NULL,
     `clientId` INT(10) UNSIGNED NOT NULL,
     stepLevel SMALLINT(2) UNSIGNED DEFAULT 1 NOT NULL COMMENT '(1=의뢰요청(의뢰검토),2=의뢰승인(장례준비중),3=장례진행중,4=장례종료(종료확인요청),5=종료확인(최종종료))'
@@ -32,6 +33,7 @@ SET regDate = NOW(),
     deceasedName = '홍길동',
     bereavedName = '홍길순',
     funeralHome = '대전장례식장',
+    `region` = '대전광역시',
     `body` = '기타 요청 사항',
     `expertId` = 1,
     `clientId` = 1;
@@ -46,6 +48,7 @@ SET regDate = NOW(),
     deceasedName = '임꺽정',
     bereavedName = '임꺽순',
     funeralHome = '서울장례식장',
+    `region` = '서울특별시',
     `body` = '기타 요청 사항',
     `expertId` = 1,
     `clientId` = 2;
@@ -60,6 +63,7 @@ SET regDate = NOW(),
     deceasedName = '김삿갓',
     bereavedName = '김아무개',
     funeralHome = '서울장례식장',
+    `region` = '서울특별시',
     `body` = '기타 요청 사항',
     `expertId` = 2,
     `clientId` = 1;
@@ -326,12 +330,13 @@ CREATE TABLE `funeral` (
     bereavedName CHAR(30) NOT NULL, #유족 이름
     `body` TEXT NOT NULL, #상세요구사항
     funeralHome CHAR(200) NOT NULL, #장례식장
+    `region` CHAR(100) NOT NULL, #장례지역
     `expertId` INT(10) UNSIGNED NOT NULL,
     `clientId` INT(10) UNSIGNED NOT NULL,
     stepLevel SMALLINT(2) UNSIGNED DEFAULT 2 NOT NULL COMMENT '(2=의뢰승인(장례진행중),3=장례종료(종료확인요청),4=종료확인(최종종료))'
 );
 
-# 테스트 의뢰 생성
+# 테스트 장례 생성
 INSERT INTO `funeral`
 SET regDate = NOW(),
     updateDate = NOW(),
@@ -342,6 +347,7 @@ SET regDate = NOW(),
     deceasedName = '홍길동',
     bereavedName = '홍길순',
     funeralHome = '대전장례식장',
+    `region` = '대전광역시',
     `body` = '기타 요청 사항',
     `expertId` = 1,
     `clientId` = 1;
@@ -356,6 +362,7 @@ SET regDate = NOW(),
     deceasedName = '임꺽정',
     bereavedName = '임꺽순',
     funeralHome = '서울장례식장',
+    `region` = '서울특별시',
     `body` = '기타 요청 사항',
     `expertId` = 1,
     `clientId` = 2;
@@ -370,10 +377,11 @@ SET regDate = NOW(),
     deceasedName = '김삿갓',
     bereavedName = '김아무개',
     funeralHome = '서울장례식장',
+    `region` = '서울특별시',
     `body` = '기타 요청 사항',
     `expertId` = 2,
     `clientId` = 1;
-
+    
 # 장례와 관련된 도우미 그룹 테이블 생성
 CREATE TABLE `funeralRelAssts`(
     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,

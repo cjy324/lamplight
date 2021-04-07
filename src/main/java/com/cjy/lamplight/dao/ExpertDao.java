@@ -27,5 +27,7 @@ public interface ExpertDao {
 
 	List<Expert> getExperts();
 
+	List<Expert> getForPrintExpertsByRegion(@Param("region") String region);
+
 
 }

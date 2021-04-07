@@ -142,4 +142,8 @@ public class ExpertService {
 
 	}
 
+	public List<Expert> getForPrintExpertsByRegion(String region) {
+		return expertDao.getForPrintExpertsByRegion(region);
+	}
+
 }

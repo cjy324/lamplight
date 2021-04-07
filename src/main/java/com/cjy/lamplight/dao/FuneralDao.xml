@@ -17,6 +17,7 @@
     		deceasedName = #{deceasedName},
   			bereavedName = #{bereavedName},
     		funeralHome = #{funeralHome},
+    		region = #{region},
     		`body` = #{body},
     		`expertId` = #{expertId},
     		`clientId` = #{clientId},
