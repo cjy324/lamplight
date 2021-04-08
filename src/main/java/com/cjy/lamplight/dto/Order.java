@@ -25,6 +25,8 @@ public class Order {
 
 	private String extra__clientName;
 	private String extra__expertName;
+	private String extra__clientCellphoneNo;
+	private String extra__expertCellphoneNo;
 
 	private Map<String, Object> extra;
 

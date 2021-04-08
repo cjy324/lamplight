@@ -32,10 +32,6 @@ public class UsrExpertController extends BaseController {
 		List<Expert> experts = expertService.getExperts();
 
 		req.setAttribute("experts", experts);	
-
-		for(Expert expert : experts) {
-			System.out.println(expert.getExtra__ratingPoint());
-		}
 		
 		return new ResultData("S-1", "성공", "experts", experts);
 	}

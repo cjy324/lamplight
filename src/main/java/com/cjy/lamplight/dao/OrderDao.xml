@@ -15,7 +15,9 @@
 	<select id="getForPrintOrder" resultType="Order">
 		SELECT O.*,
 		IFNULL(C.name, "탈퇴회원") AS extra__clientName,
-		IFNULL(E.name, "탈퇴회원") AS extra__expertName
+		IFNULL(E.name, "탈퇴회원") AS extra__expertName,
+		C.cellphoneNo AS extra__clientCellphoneNo,
+		E.cellphoneNo AS extra__expertCellphoneNo
 		FROM `order` AS O
 		LEFT JOIN `client` AS C
 		ON O.clientId = C.id
@@ -35,7 +37,9 @@
 	<select id="getForPrintOrders" resultType="Order">
 		SELECT O.*,
 		IFNULL(C.name, "탈퇴회원") AS extra__clientName,
-		IFNULL(E.name, "탈퇴회원") AS extra__expertName
+		IFNULL(E.name, "탈퇴회원") AS extra__expertName,
+		C.cellphoneNo AS extra__clientCellphoneNo,
+		E.cellphoneNo AS extra__expertCellphoneNo
 		FROM `order` AS O
 		LEFT JOIN `client` AS C
 		ON O.clientId = C.id
@@ -47,7 +51,9 @@
 	<select id="getForPrintOrdersByMemberId" resultType="Order">
 		SELECT O.*,
 		IFNULL(C.name, "탈퇴회원") AS extra__clientName,
-		IFNULL(E.name, "탈퇴회원") AS extra__expertName
+		IFNULL(E.name, "탈퇴회원") AS extra__expertName,
+		C.cellphoneNo AS extra__clientCellphoneNo,
+		E.cellphoneNo AS extra__expertCellphoneNo
 		FROM `order` AS O
 		LEFT JOIN `client` AS C
 		ON O.clientId = C.id
