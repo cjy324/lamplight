@@ -68,30 +68,26 @@ public class AdmReviewController {
 		return new ResultData("S-1", "성공", "reviews", reviews);
 	}
 	
-	@RequestMapping("/adm/review/doDelete")
-	@ResponseBody
-	public ResultData doDelete(Integer id, HttpServletRequest req) {
-		//int loginedMemberId = (int) req.getAttribute("loginedMemberId");
-		Member loginedMember = (Member) req.getAttribute("loginedMember");
-		
-		if (id == null) {
-			return new ResultData("F-1", "id를 입력해주세요.");
-		}
-
-		Review review = reviewService.getReview(id);
-
-		if (review == null) {
-			return new ResultData("F-1", "해당 댓글은 존재하지 않습니다.");
-		}
-
-		ResultData actorCanDeleteRd = reviewService.getActorCanDeleteRd(review, loginedMember);
-
-		if (actorCanDeleteRd.isFail()) {
-			return actorCanDeleteRd;
-		}
-
-		return reviewService.deleteReview(id);
-	}
+	/*
+	 * @RequestMapping("/adm/review/doDelete")
+	 * 
+	 * @ResponseBody public ResultData doDelete(Integer id, HttpServletRequest req)
+	 * { //int loginedMemberId = (int) req.getAttribute("loginedMemberId"); Member
+	 * loginedMember = (Member) req.getAttribute("loginedMember");
+	 * 
+	 * if (id == null) { return new ResultData("F-1", "id를 입력해주세요."); }
+	 * 
+	 * Review review = reviewService.getReview(id);
+	 * 
+	 * if (review == null) { return new ResultData("F-1", "해당 댓글은 존재하지 않습니다."); }
+	 * 
+	 * ResultData actorCanDeleteRd = reviewService.getActorCanDeleteRd(review,
+	 * loginedMember);
+	 * 
+	 * if (actorCanDeleteRd.isFail()) { return actorCanDeleteRd; }
+	 * 
+	 * return reviewService.deleteReview(id); }
+	 */
 	
 	
 	

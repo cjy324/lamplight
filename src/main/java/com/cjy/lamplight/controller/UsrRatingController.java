@@ -39,32 +39,6 @@ public class UsrRatingController {
 
 		return ratingService.addRating(param);
 	}
-
-	
-	@PostMapping("/usr/rating/doDelete")
-	@ResponseBody
-	public ResultData doDelete(Integer id, HttpServletRequest req) {
-		//int loginedClientId = (int) req.getAttribute("loginedClientId");
-		Client loginedClient = (Client) req.getAttribute("loginedClient");
-
-		if (id == null) {
-			return new ResultData("F-1", "id를 입력해주세요.");
-		}
-
-		Rating rating = ratingService.getRating(id);
-
-		if (rating == null) {
-			return new ResultData("F-1", "해당 리뷰는 존재하지 않습니다.");
-		}
-
-		ResultData actorCanDeleteRd = ratingService.getActorCanDeleteRd(rating, loginedClient);
-
-		if (actorCanDeleteRd.isFail()) {
-			return actorCanDeleteRd;
-		}
-
-		return ratingService.deleteRating(id);
-	}
 	
 	@GetMapping("/usr/rating/getRatingRelClient")
 	@ResponseBody
