@@ -27,4 +27,8 @@ public interface ClientDao {
 
 	List<Client> getClients();
 
+	Client getClientByNameAndEmail(Map<String, Object> param);
+
+	Client getMemberByLoginIdAndEmail(Map<String, Object> param);
+
 }

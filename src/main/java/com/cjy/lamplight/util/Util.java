@@ -64,7 +64,7 @@ public class Util {
 
 		return map;
 	}
-	
+
 	// 받은값을 정수로 정제하고 리턴
 	public static int getAsInt(Object object, int defaultValue) {
 		if (object instanceof BigInteger) {
@@ -142,8 +142,7 @@ public class Util {
 			return str;
 		}
 	}
-	
-	
+
 	public static <T> T ifNull(T data, T defaultValue) {
 		return data != null ? data : defaultValue;
 	}
@@ -179,14 +178,14 @@ public class Util {
 	}
 
 	public static <T> T ifEmpty(T data, T defaultValue) {
-		if ( isEmpty(data) ) {
+		if (isEmpty(data)) {
 			return defaultValue;
 		}
 
 		return data;
 	}
 
-	//파일 확장자명 찾는 유틸
+	// 파일 확장자명 찾는 유틸
 	public static String getFileExtTypeCodeFromFileName(String fileName) {
 		String ext = getFileExtFromFileName(fileName).toLowerCase();
 
@@ -207,7 +206,7 @@ public class Util {
 		return "etc";
 	}
 
-	//분포되어있는 파일 확장자명을 모아주는 유틸
+	// 분포되어있는 파일 확장자명을 모아주는 유틸
 	public static String getFileExtType2CodeFromFileName(String fileName) {
 		String ext = getFileExtFromFileName(fileName).toLowerCase();
 
@@ -232,7 +231,7 @@ public class Util {
 		return "etc";
 	}
 
-	//파일 확장자명 가져오는 유틸
+	// 파일 확장자명 가져오는 유틸
 	public static String getFileExtFromFileName(String fileName) {
 		int pos = fileName.lastIndexOf(".");
 		String ext = fileName.substring(pos + 1);
@@ -240,7 +239,7 @@ public class Util {
 		return ext;
 	}
 
-	//현재 년도/월 가져오는 유틸
+	// 현재 년도/월 가져오는 유틸
 	public static String getNowYearMonthDateStr() {
 		SimpleDateFormat format1 = new SimpleDateFormat("yyyy_MM");
 
@@ -248,13 +247,14 @@ public class Util {
 
 		return dateStr;
 	}
-	
-	//문자열을 divideBy 기준으로 쪼개주고 List를 생성해주는 유틸
+
+	// 문자열을 divideBy 기준으로 쪼개주고 List를 생성해주는 유틸
 	public static List<Integer> getListDividedBy(String str, String divideBy) {
-		return Arrays.asList(str.split(divideBy)).stream().map(s -> Integer.parseInt(s.trim())).collect(Collectors.toList());
+		return Arrays.asList(str.split(divideBy)).stream().map(s -> Integer.parseInt(s.trim()))
+				.collect(Collectors.toList());
 	}
 
-	//파일을 저장소에서 삭제시켜주는 유틸
+	// 파일을 저장소에서 삭제시켜주는 유틸
 	public static boolean delteFile(String filePath) {
 		java.io.File ioFile = new java.io.File(filePath);
 		if (ioFile.exists()) {
@@ -264,59 +264,59 @@ public class Util {
 		return true;
 	}
 
-	//숫자 포맷을 ("###,###,###") 형태로 변경해주는 유틸
+	// 숫자 포맷을 ("###,###,###") 형태로 변경해주는 유틸
 	public static String numberFormat(int num) {
 		DecimalFormat df = new DecimalFormat("###,###,###");
 
 		return df.format(num);
 	}
 
-	//만약 String으로 들어오면 int형으로 변환 후 numberFormat으로 리턴
+	// 만약 String으로 들어오면 int형으로 변환 후 numberFormat으로 리턴
 	public static String numberFormat(String numStr) {
 		return numberFormat(Integer.parseInt(numStr));
 	}
 
-	//숫자로만 구성된 문자열인지 여부 판별
+	// 숫자로만 구성된 문자열인지 여부 판별
 	public static boolean allNumberString(String str) {
-		if ( str == null ) {
+		if (str == null) {
 			return false;
 		}
 
-		if ( str.length() == 0 ) {
+		if (str.length() == 0) {
 			return true;
 		}
 
-		for ( int i = 0; i < str.length(); i++ ) {
-			if ( Character.isDigit(str.charAt(i)) == false ) {
+		for (int i = 0; i < str.length(); i++) {
+			if (Character.isDigit(str.charAt(i)) == false) {
 				return false;
 			}
 		}
-		
-		//숫자로만 구성되어 있으면 true 리턴
+
+		// 숫자로만 구성되어 있으면 true 리턴
 		return true;
 	}
 
-	//숫자로 시작하는 문자열인지 여부 판별
+	// 숫자로 시작하는 문자열인지 여부 판별
 	public static boolean startsWithNumberString(String str) {
-		if ( str == null ) {
+		if (str == null) {
 			return false;
 		}
 
-		if ( str.length() == 0 ) {
+		if (str.length() == 0) {
 			return false;
 		}
-		
-		//숫자로 시작하는 문자열이면 true 리턴
+
+		// 숫자로 시작하는 문자열이면 true 리턴
 		return Character.isDigit(str.charAt(0));
 	}
 
 	//
 	public static boolean isStandardLoginIdString(String str) {
-		if ( str == null ) {
+		if (str == null) {
 			return false;
 		}
 
-		if ( str.length() == 0 ) {
+		if (str.length() == 0) {
 			return false;
 		}
 
@@ -325,6 +325,22 @@ public class Util {
 		// 숫자로 시작 금지
 		// _, 알파벳, 숫자로만 구성
 		return Pattern.matches("^[a-zA-Z]{1}[a-zA-Z0-9_]{4,19}$", str);
+	}
+
+	// 임시 패스워드 생성 유틸
+	public static String getTempPassword(int length) {
+		int index = 0;
+		char[] charArr = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
+				'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+
+		StringBuffer sb = new StringBuffer();
+
+		for (int i = 0; i < length; i++) {
+			index = (int) (charArr.length * Math.random());
+			sb.append(charArr[index]);
+		}
+
+		return sb.toString();
 	}
 
 }

@@ -97,5 +97,20 @@
 		WHERE id = #{id}
 	</update>
 
+	<select id="getClientByNameAndEmail" resultType="Client">
+		SELECT *
+		FROM `client`
+		WHERE 1
+		AND `name` = #{name}
+		AND `email` = #{email}
+	</select>
+	
+	<select id="getMemberByLoginIdAndEmail" resultType="Client">
+		SELECT *
+		FROM `client`
+		WHERE 1
+		AND `loginId` = #{loginId}
+		AND `email` = #{email}
+	</select>
 
 </mapper>

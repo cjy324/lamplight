@@ -1,5 +1,6 @@
 package com.cjy.lamplight.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class ClientService {
 
 	public ResultData modifyClient(Map<String, Object> param) {
 		clientDao.modifyClient(param);
-		
+
 		int id = Util.getAsInt(param.get("id"), 0);
 
 		genFileService.changeInputFileRelIds(param, id);
@@ -55,7 +56,7 @@ public class ClientService {
 
 	public Client getForPrintClient(int id) {
 		Client client = clientDao.getForPrintClient(id);
-		
+
 		updateForPrint(client);
 
 		return client;
@@ -85,7 +86,7 @@ public class ClientService {
 		System.out.println("111111111111111111111111111");
 		// 만약, 멤버의 섬네일 이미지가 있으면 extra__thumbImg 업데이트
 		if (genFile != null) {
-			
+
 			System.out.println("이미지 가져옴22222222222222222222222");
 			String imgUrl = genFile.getForPrintUrl();
 			client.setExtra__thumbImg(imgUrl);
@@ -97,5 +98,57 @@ public class ClientService {
 		return clientDao.getClients();
 	}
 
+	public ResultData findLoginIdByNameAndEmail(Map<String, Object> param) {
+		// 해당 이름과 이메일주소를 가진 회원이 존재하는지 확인
+		Client client = clientDao.getClientByNameAndEmail(param);
+
+		if (client == null) {
+			return new ResultData("F-2", "일치하는 회원이 존재하지 않습니다.");
+		}
+		
+		String name = client.getName();
+
+		// 로그인아이디 알림창 보여주고 로그인화면으로 이동
+		return new ResultData("S-1", name + "회원님의 아이디는 \"" + client.getLoginId() + "\"입니다.", "loginId", client.getLoginId());
+	}
+
+	public ResultData getClientByLoginIdAndEmail(Map<String, Object> param) {
+		
+		Client client = clientDao.getMemberByLoginIdAndEmail(param);
+
+		if (client == null) {
+			return new ResultData("F-2", "일치하는 회원이 존재하지 않습니다.");
+		}
+
+		// 임시 비밀번호 생성 후 회원 PW수정
+		ResultData createTempLoginPwAndUpdateInfoRs = createTempLoginPwAndUpdateInfo(client);
+
+		// 임시패스워드 발급 알림
+		return new ResultData("S-1", createTempLoginPwAndUpdateInfoRs.getMsg());
+	}
+
+	// 임시패스워드 발급
+	public ResultData createTempLoginPwAndUpdateInfo(Client actor) {
+		
+		// 임시패스워드 생성
+		String tempPassword = Util.getTempPassword(6);
+
+		// 발급받은 임시패스워드로 회원 정보 업데이트
+		setTempPassword(actor, tempPassword);
+
+		String resultMsg = "회원님의 임시 비밀번호는 \"" + tempPassword + "\"입니다.";
+		
+		return new ResultData("S-1", resultMsg);
+
+	}
+
+	private void setTempPassword(Client actor, String tempPassword) {
+		Map<String, Object> modifyArg = new HashMap<>();
+		modifyArg.put("id", actor.getId());
+		modifyArg.put("loginPw", tempPassword);
+
+		// 회원정보 수정
+		modifyClient(modifyArg);
+	}
 
 }
