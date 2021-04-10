@@ -30,6 +30,9 @@ public class UsrClientController extends BaseController {
 
 		Client client = clientService.getForPrintClient(id);
 
+		if(client == null) {
+			return new ResultData("F-1", "로그인 후 이용가능합니다.");
+		}
 		req.setAttribute("client", client);
 
 		return new ResultData("S-1", "성공", "client", client);

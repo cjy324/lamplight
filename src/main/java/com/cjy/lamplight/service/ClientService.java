@@ -56,8 +56,10 @@ public class ClientService {
 
 	public Client getForPrintClient(int id) {
 		Client client = clientDao.getForPrintClient(id);
-
-		updateForPrint(client);
+		
+		if(client != null) {
+			updateForPrint(client);
+		}
 
 		return client;
 	}
