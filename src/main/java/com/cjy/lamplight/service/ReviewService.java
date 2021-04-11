@@ -79,4 +79,8 @@ public class ReviewService {
 		Review review = reviewDao.getForPrintReview(id);
 		return new ResultData("S-1", "성공", "review", review);
 	}
+
+	public List<Review> getForPrintReviewsByExpertId(String relTypeCode, Integer relId) {
+		return reviewDao.getForPrintReviewsByExpertId(relTypeCode, relId);
+	}
 }

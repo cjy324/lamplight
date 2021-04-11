@@ -18,5 +18,6 @@ public interface ReviewDao {
 	Review getReviewByClientIdAndRelId(@Param("clientId") int clientId, @Param("relId") int relId);
 	void modifyReview(Map<String, Object> param);
 	Review getForPrintReview(@Param("id")Integer id);
+	List<Review> getForPrintReviewsByExpertId(@Param("relTypeCode") String relTypeCode, @Param("relId") Integer relId);
 
 }

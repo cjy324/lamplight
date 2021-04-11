@@ -60,14 +60,17 @@ public class UsrReviewController {
 
 	@GetMapping("/usr/review/list")
 	@ResponseBody
-	public ResultData showList(String relTypeCode) {
+	public ResultData showList(String relTypeCode, Integer relId) {
 
 		if (relTypeCode == null) {
 			return new ResultData("F-1", "relTypeCode를 입력해주세요.");
 		}
+		if (relId == null) {
+			return new ResultData("F-1", "relId를 입력해주세요.");
+		}
 		
 
-		List<Review> reviews = reviewService.getForPrintReviews(relTypeCode);
+		List<Review> reviews = reviewService.getForPrintReviewsByExpertId(relTypeCode, relId);
 
 		return new ResultData("S-1", "성공", "reviews", reviews);
 	}
