@@ -145,4 +145,18 @@ public class OrderService {
 		return new ResultData("S-1", msg, "id", id);
 	}
 
+	public void setSetp2(Integer orderId, Integer expertId) {
+		orderDao.setSetp2(orderId, expertId);
+
+	}
+
+	public void orderReject(Integer orderId, Integer expertId) {
+		orderDao.orderReject(orderId, expertId);
+
+	}
+
+	public List<Order> getForPrintRequestOrdersByExpertRegion(String region) {
+		return orderDao.getForPrintRequestOrdersByExpertRegion(region);
+	}
+
 }

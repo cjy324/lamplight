@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cjy.lamplight.dto.Client;
 import com.cjy.lamplight.dto.Expert;
-import com.cjy.lamplight.dto.Member;
 import com.cjy.lamplight.dto.Order;
 import com.cjy.lamplight.dto.ResultData;
+import com.cjy.lamplight.service.ExpertService;
 import com.cjy.lamplight.service.OrderService;
 import com.cjy.lamplight.util.Util;
 
@@ -27,6 +27,9 @@ public class UsrOrderController extends BaseController {
 
 	@Autowired
 	private OrderService orderService;
+
+	@Autowired
+	private ExpertService expertService;
 
 	@GetMapping("/usr/order/detail")
 	@ResponseBody
@@ -41,8 +44,23 @@ public class UsrOrderController extends BaseController {
 		if (order == null) {
 			return new ResultData("F-2", "존재하지 않는 요청서번호 입니다.");
 		}
-	
+
 		return new ResultData("S-1", "성공", "order", order);
+	}
+
+	@GetMapping("/usr/order/requestListInExpertRegion")
+	@ResponseBody
+	public ResultData showRequestListInExpertRegion(HttpServletRequest req, int memberId) {
+		Expert expert = expertService.getExpert(memberId);
+
+		if (expert == null) {
+			return new ResultData("F-1", "존재하지 않는 회원 입니다.");
+		}
+
+		List<Order> orders = orderService.getForPrintRequestOrdersByExpertRegion(expert.getRegion());
+		
+		
+		return new ResultData("S-1", "성공", "orders", orders);
 	}
 
 	@GetMapping("/usr/order/list")
@@ -50,13 +68,13 @@ public class UsrOrderController extends BaseController {
 	public ResultData showList(HttpServletRequest req, int memberId, String memberType) {
 		int clientId = 0;
 		int expertId = 0;
-		if(memberType.equals("client")) {
+		if (memberType.equals("client")) {
 			clientId = memberId;
 		}
-		if(memberType.equals("expert")) {
+		if (memberType.equals("expert")) {
 			expertId = memberId;
 		}
-		
+
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("clientId", clientId);
 		param.put("expertId", expertId);
@@ -64,10 +82,10 @@ public class UsrOrderController extends BaseController {
 		List<Order> orders = orderService.getForPrintOrdersByMemberId(param);
 
 		req.setAttribute("orders", orders);
-		
+
 		return new ResultData("S-1", "성공", "orders", orders);
 	}
-	
+
 	@GetMapping("/usr/order/listForAsst")
 	@ResponseBody
 	public ResultData showListForAsst(HttpServletRequest req) {
@@ -75,7 +93,7 @@ public class UsrOrderController extends BaseController {
 		List<Order> orders = orderService.getForPrintOrders();
 
 		req.setAttribute("orders", orders);
-		
+
 		return new ResultData("S-1", "성공", "orders", orders);
 	}
 
@@ -100,26 +118,26 @@ public class UsrOrderController extends BaseController {
 	public ResultData doDelete(Integer id, HttpServletRequest req) {
 		// int 기본타입 -> null이 들어갈 수 없음
 		// Integer 객체타입 -> null이 들어갈 수 있음
-		//int loginedMemberId = (int)req.getAttribute("loginedMemberId");
-		
+		// int loginedMemberId = (int)req.getAttribute("loginedMemberId");
+
 		ResultData actorCanDeleteRd = new ResultData("F-1", "권한이 없습니다.");
-		
+
 		if (id == null) {
 			return new ResultData("F-1", "id를 입력해주세요.");
 		}
 
 		Order order = orderService.getOrder(id);
-		
+
 		if (order == null) {
 			return new ResultData("F-1", "해당 요청서는 존재하지 않습니다.");
 		}
-		
-		if(req.getAttribute("loginedClient") != null) {
+
+		if (req.getAttribute("loginedClient") != null) {
 			Client loginedClient = (Client) req.getAttribute("loginedClient");
 			actorCanDeleteRd = orderService.getClientCanDeleteRd(order, loginedClient);
 		}
-		
-		if(req.getAttribute("loginedExpert") != null) {
+
+		if (req.getAttribute("loginedExpert") != null) {
 			Expert loginedExpert = (Expert) req.getAttribute("loginedExpert");
 			actorCanDeleteRd = orderService.getExpertanDeleteRd(order, loginedExpert);
 		}
@@ -134,7 +152,7 @@ public class UsrOrderController extends BaseController {
 	@PostMapping("/usr/order/doModify")
 	@ResponseBody
 	public ResultData doModify(@RequestParam Map<String, Object> param, HttpServletRequest req) {
-		
+
 		ResultData actorCanModifyRd = new ResultData("F-1", "권한이 없습니다.");
 
 		int id = Util.getAsInt(param.get("id"), 0);
@@ -148,13 +166,13 @@ public class UsrOrderController extends BaseController {
 		if (order == null) {
 			return new ResultData("F-1", "해당 요청서는 존재하지 않습니다.", "id", id);
 		}
-		
-		if(req.getAttribute("loginedClient") != null) {
+
+		if (req.getAttribute("loginedClient") != null) {
 			Client loginedClient = (Client) req.getAttribute("loginedClient");
 			actorCanModifyRd = orderService.getActorCanModifyRd(order, loginedClient);
 		}
-		
-		if(req.getAttribute("loginedExpert") != null) {
+
+		if (req.getAttribute("loginedExpert") != null) {
 			Expert loginedExpert = (Expert) req.getAttribute("loginedExpert");
 			actorCanModifyRd = orderService.getActorCanModifyRd(order, loginedExpert);
 		}
@@ -162,19 +180,61 @@ public class UsrOrderController extends BaseController {
 		if (actorCanModifyRd.isFail()) {
 			return actorCanModifyRd;
 		}
-		
+
 		return orderService.modifyOrder(param);
 	}
-	
+
 	@GetMapping("/usr/order/changeStepLevel")
 	@ResponseBody
 	public ResultData doChangeStepLevel(int id, int stepLevel) {
-		
+
 		System.out.println(stepLevel);
 		int nextStepLevel = stepLevel + 1;
 
-		return orderService.changeStepLevel(id, nextStepLevel); 
+		return orderService.changeStepLevel(id, nextStepLevel);
 	}
-	
-	
+
+	@GetMapping("/usr/order/accept")
+	@ResponseBody
+	public ResultData doAccept(Integer orderId, Integer expertId) {
+
+		if (orderId == null) {
+			return new ResultData("F-1", "id를 입력해주세요.");
+		}
+
+		Order order = orderService.getForPrintOrder(orderId);
+
+		if (order == null) {
+			return new ResultData("F-2", "존재하지 않는 게시물번호 입니다.");
+		}
+		if (order.getStepLevel() > 1) {
+			return new ResultData("F-2", "이미 다른 지도사가 수락한 요청입니다.");
+		}
+
+		orderService.setSetp2(orderId, expertId);
+		expertService.setWork2(expertId);
+
+		return new ResultData("S-1", "요청을 수락하였습니다.", "id", orderId);
+	}
+
+	@GetMapping("/usr/order/reject")
+	@ResponseBody
+	public ResultData doReject(Integer orderId, Integer expertId) {
+
+		if (orderId == null) {
+			return new ResultData("F-1", "id를 입력해주세요.");
+		}
+
+		Order order = orderService.getForPrintOrder(orderId);
+
+		if (order == null) {
+			return new ResultData("F-2", "존재하지 않는 게시물번호 입니다.");
+		}
+
+		orderService.orderReject(orderId, expertId);
+		expertService.setWork1(expertId);
+
+		return new ResultData("S-1", "의뢰를 포기하였습니다.", "id", orderId);
+	}
+
 }

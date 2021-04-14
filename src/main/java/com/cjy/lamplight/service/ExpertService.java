@@ -1,5 +1,6 @@
 package com.cjy.lamplight.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -144,6 +145,77 @@ public class ExpertService {
 
 	public List<Expert> getForPrintExpertsByRegion(String region) {
 		return expertDao.getForPrintExpertsByRegion(region);
+	}
+
+	public ResultData findLoginIdByNameAndEmail(Map<String, Object> param) {
+		// 해당 이름과 이메일주소를 가진 회원이 존재하는지 확인
+		Expert expert = expertDao.getExpertByNameAndEmail(param);
+
+		if (expert == null) {
+			return new ResultData("F-2", "일치하는 회원이 존재하지 않습니다.");
+		}
+
+		String name = expert.getName();
+		// 로그인아이디 알림창 보여주고 로그인화면으로 이동
+		return new ResultData("S-1", name + "회원님의 아이디는 \"" + expert.getLoginId() + "\"입니다.", "loginId",
+				expert.getLoginId());
+	}
+
+	public ResultData getClientByLoginIdAndEmail(Map<String, Object> param) {
+		Expert expert = expertDao.getMemberByLoginIdAndEmail(param);
+
+		if (expert == null) {
+			return new ResultData("F-2", "일치하는 회원이 존재하지 않습니다.");
+		}
+
+		// 임시 비밀번호 생성 후 회원 PW수정
+		ResultData createTempLoginPwAndUpdateInfoRs = createTempLoginPwAndUpdateInfo(expert);
+
+		// 임시패스워드 발급 알림
+		return new ResultData("S-1", createTempLoginPwAndUpdateInfoRs.getMsg());
+	}
+
+	// 임시패스워드 발급
+	public ResultData createTempLoginPwAndUpdateInfo(Expert actor) {
+
+		// 임시패스워드 생성
+		String tempPassword = Util.getTempPassword(6);
+
+		// 발급받은 임시패스워드로 회원 정보 업데이트
+		setTempPassword(actor, tempPassword);
+
+		String resultMsg = "회원님의 임시 비밀번호는 \"" + tempPassword + "\"입니다.";
+
+		return new ResultData("S-1", resultMsg);
+	}
+
+	private void setTempPassword(Expert actor, String tempPassword) {
+		Map<String, Object> modifyArg = new HashMap<>();
+		modifyArg.put("id", actor.getId());
+		modifyArg.put("loginPw", tempPassword);
+
+		// 회원정보 수정
+		modifyClient(modifyArg);
+	}
+
+	public ResultData modifyClient(Map<String, Object> param) {
+		expertDao.modifyExpert(param);
+
+		int id = Util.getAsInt(param.get("id"), 0);
+
+		genFileService.changeInputFileRelIds(param, id);
+
+		return new ResultData("S-1", "회원정보가 수정되었습니다.");
+	}
+
+	public void setWork2(Integer expertId) {
+		expertDao.setWork2(expertId);
+
+	}
+
+	public void setWork1(Integer expertId) {
+		expertDao.setWork1(expertId);
+
 	}
 
 }

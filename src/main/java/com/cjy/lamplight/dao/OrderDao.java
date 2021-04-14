@@ -30,4 +30,10 @@ public interface OrderDao {
 
 	List<Order> getForPrintOrdersByMemberId(Map<String, Object> param);
 	void changeStepLevel(@Param("id") int id, @Param("nextStepLevel") int nextStepLevel);
+	
+	void setSetp2(@Param("orderId") Integer orderId, @Param("expertId") Integer expertId);
+
+	void orderReject(@Param("orderId") Integer orderId, @Param("expertId") Integer expertId);
+	
+	List<Order> getForPrintRequestOrdersByExpertRegion(@Param("region") String region);
 }

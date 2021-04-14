@@ -226,5 +226,39 @@ public class UsrExpertController extends BaseController {
 
 		return new ResultData("S-1", String.format("%s(은)는 사용가능한 로그인아이디 입니다.", loginId), "loginId", loginId);
 	}
+	
+	@PostMapping("/usr/expert/doFindLoginId")
+	@ResponseBody
+	public ResultData doFindLoginId(@RequestParam Map<String, Object> param) {
+
+		String name = (String) param.get("name");
+		if (Util.isEmpty(name)) {
+			return new ResultData("F-1", "name을 입력해주세요.");
+		}
+
+		String email = (String) param.get("email");
+		if (Util.isEmpty(email)) {
+			return new ResultData("F-1", "email을 입력해주세요.");
+		}
+
+		return expertService.findLoginIdByNameAndEmail(param);
+	}
+
+	@PostMapping("/usr/expert/doFindLoginPw")
+	@ResponseBody
+	public ResultData doFindLoginPw(@RequestParam Map<String, Object> param) {
+
+		String loginId = (String) param.get("loginId");
+		if (Util.isEmpty(loginId)) {
+			return new ResultData("F-1", "loginId를 입력해주세요.");
+		}
+
+		String email = (String) param.get("email");
+		if (Util.isEmpty(email)) {
+			return new ResultData("F-1", "email을 입력해주세요.");
+		}
+
+		return expertService.getClientByLoginIdAndEmail(param);
+	}
 
 }

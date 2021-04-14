@@ -29,5 +29,13 @@ public interface ExpertDao {
 
 	List<Expert> getForPrintExpertsByRegion(@Param("region") String region);
 
+	Expert getExpertByNameAndEmail(Map<String, Object> param);
+
+	Expert getMemberByLoginIdAndEmail(Map<String, Object> param);
+
+	void setWork2(@Param("expertId") Integer expertId);
+
+	void setWork1(@Param("expertId") Integer expertId);
+
 
 }

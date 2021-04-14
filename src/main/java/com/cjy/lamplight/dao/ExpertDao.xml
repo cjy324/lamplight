@@ -136,6 +136,42 @@
 		</set>
 		WHERE id = #{id}
 	</update>
+	
+	<select id="getExpertByNameAndEmail" resultType="Expert">
+		SELECT *
+		FROM
+		`expert`
+		WHERE 1
+		AND `name` = #{name}
+		AND `email` = #{email}
+	</select>
+
+	<select id="getMemberByLoginIdAndEmail" resultType="Expert">
+		SELECT *
+		FROM
+		`expert`
+		WHERE 1
+		AND `loginId` = #{loginId}
+		AND `email` = #{email}
+	</select>
+	
+	<update id="setWork1">
+		UPDATE `expert`
+		<set>
+			updateDate = NOW(),
+			`work` = 1
+		</set>
+		WHERE id = #{expertId}
+	</update>
+
+	<update id="setWork2">
+		UPDATE `expert`
+		<set>
+			updateDate = NOW(),
+			`work` = 2
+		</set>
+		WHERE id = #{expertId}
+	</update>
 
 
 </mapper>

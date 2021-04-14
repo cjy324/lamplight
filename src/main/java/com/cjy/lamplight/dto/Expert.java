@@ -29,6 +29,7 @@ public class Expert {
 	private String region;
 	private String license;
 	private String career;
+	private int work;
 
 	
 	private String extra__thumbImg;
