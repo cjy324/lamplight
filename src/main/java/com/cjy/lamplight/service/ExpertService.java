@@ -85,7 +85,9 @@ public class ExpertService {
 	public Expert getForPrintExpert(int id) {
 		Expert expert = expertDao.getForPrintExpert(id);
 		
-		updateForPrint(expert);
+		if(expert != null) {
+			updateForPrint(expert);
+		}
 
 		return expert;
 	}
@@ -93,16 +95,20 @@ public class ExpertService {
 	public Expert getForPrintExpertByAuthKey(String authKey) {
 		Expert expert = expertDao.getExpertByAuthKey(authKey);
 
-		updateForPrint(expert);
+		if(expert != null) {
+			updateForPrint(expert);
+		}
 
 		return expert;
 	}
 
 	public Expert getForPrintExpertByLoginId(String loginId) {
 		Expert expert = expertDao.getExpertByLoginId(loginId);
-
-		updateForPrint(expert);
-
+		
+		if(expert != null) {
+			updateForPrint(expert);
+		}
+	
 		return expert;
 	}
 
@@ -161,7 +167,7 @@ public class ExpertService {
 				expert.getLoginId());
 	}
 
-	public ResultData getClientByLoginIdAndEmail(Map<String, Object> param) {
+	public ResultData getExpertByLoginIdAndEmail(Map<String, Object> param) {
 		Expert expert = expertDao.getMemberByLoginIdAndEmail(param);
 
 		if (expert == null) {
@@ -216,6 +222,11 @@ public class ExpertService {
 	public void setWork1(Integer expertId) {
 		expertDao.setWork1(expertId);
 
+	}
+
+	public void expertWithdrawal(int expertId) {
+		expertDao.expertWithdrawal(expertId);
+		
 	}
 
 }

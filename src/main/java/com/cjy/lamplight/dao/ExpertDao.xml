@@ -173,5 +173,9 @@
 		WHERE id = #{expertId}
 	</update>
 
+	<delete id="expertWithdrawal">
+		DELETE FROM `expert`
+		WHERE id = #{expertId}
+	</delete>
 
 </mapper>
