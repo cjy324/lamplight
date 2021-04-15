@@ -246,4 +246,30 @@ public class GenFileService {
 		
 	}
 
+	public ResultData deleteFile(Map<String, Object> param) {
+		
+		/* 삭제 시작 */
+
+			String inputName = (String) param.get("fileName");
+			String[] inputNameBits = inputName.split("__");
+			
+			System.out.println("inputName : " + inputName);
+			
+			if (inputNameBits[0].equals("deleteFile")) {
+				String relTypeCode = inputNameBits[1];
+				int relId = Integer.parseInt(inputNameBits[2]);
+				String typeCode = inputNameBits[3];
+				String type2Code = inputNameBits[4];
+				int fileNo = Integer.parseInt(inputNameBits[5]);
+
+				GenFile oldGenFile = getGenFile(relTypeCode, relId, typeCode, type2Code, fileNo);
+
+				if (oldGenFile != null) {
+					deleteGenFile(oldGenFile);
+				}
+			}
+		
+		return new ResultData("S-1", "파일을 삭제하였습니다.");
+	}
+
 }
