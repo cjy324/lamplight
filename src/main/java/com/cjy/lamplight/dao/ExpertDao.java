@@ -37,7 +37,7 @@ public interface ExpertDao {
 
 	void setWork1(@Param("expertId") Integer expertId);
 
-	void expertWithdrawal(@Param("expertId") int expertId);
+	void delete(@Param("expertId") int expertId);
 
 
 }

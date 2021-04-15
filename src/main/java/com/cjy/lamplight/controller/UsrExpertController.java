@@ -131,11 +131,10 @@ public class UsrExpertController extends BaseController {
 					"회원님은 현재 '가입대기'상태입니다. 회원정보 검토 후 '가입승인'이 완료됩니다.(검토는 최초 신청일로부터 최대 3일이 소요될 수 있습니다.)");
 		}
 		if (existingExpert.getAcknowledgment_step() == 3) {
-			//회원 정보 삭제
-			expertService.expertWithdrawal(existingExpert.getId());
-			
-			return new ResultData("F-4", 
-					"죄송합니다. 회원정보 검토 결과 입력해주신 내용에 미흡한 부분이 발견되어 가입이 '거절'되셨습니다. 다시 회원가입 해주세요.");
+			// 회원 정보 삭제
+			expertService.delete(existingExpert.getId());
+
+			return new ResultData("F-4", "죄송합니다. 회원정보 검토 결과 입력해주신 내용에 미흡한 부분이 발견되어 가입이 '거절'되셨습니다. 다시 회원가입 해주세요.");
 		}
 
 		return new ResultData("S-1", String.format("%s님 환영합니다.", existingExpert.getName()), "authKey",
@@ -267,29 +266,20 @@ public class UsrExpertController extends BaseController {
 
 		return expertService.getExpertByLoginIdAndEmail(param);
 	}
-	
-	@PostMapping("/usr/expert/withdrawal")
+
+	@GetMapping("/usr/expert/doDelete")
 	@ResponseBody
-	public ResultData withdrawalExpert(String loginId, String loginPw) {
-		if (loginId == null) {
-			return new ResultData("F-1", "loginId를 입력해주세요.");
+	public ResultData doDelete(int id) {
+
+		Expert expert = expertService.getForPrintExpert(id);
+
+		if (expert == null) {
+			return new ResultData("F-1", "로그인 후 이용가능합니다.");
 		}
 
-		Expert existingExpert = expertService.getForPrintExpertByLoginId(loginId);
+		expertService.delete(id);
 
-		if (existingExpert == null) {
-			return new ResultData("F-2", "존재하지 않는 로그인아이디 입니다.", "loginId", loginId);
-		}
-		if (loginPw == null) {
-			return new ResultData("F-1", "loginPw를 입력해주세요.");
-		}
-		if (existingExpert.getLoginPw().equals(loginPw) == false) {
-			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
-		}
-
-		expertService.expertWithdrawal(existingExpert.getId());
-			
-		return new ResultData("S-1", "회원 탈퇴 완료");
+		return new ResultData("S-1", "성공", "name", expert.getName());
 	}
 
 }

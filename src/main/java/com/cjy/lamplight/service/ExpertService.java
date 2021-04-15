@@ -224,8 +224,8 @@ public class ExpertService {
 
 	}
 
-	public void expertWithdrawal(int expertId) {
-		expertDao.expertWithdrawal(expertId);
+	public void delete(int expertId) {
+		expertDao.delete(expertId);
 		
 	}
 

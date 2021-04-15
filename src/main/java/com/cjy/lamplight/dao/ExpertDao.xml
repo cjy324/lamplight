@@ -173,7 +173,7 @@
 		WHERE id = #{expertId}
 	</update>
 
-	<delete id="expertWithdrawal">
+	<delete id="delete">
 		DELETE FROM `expert`
 		WHERE id = #{expertId}
 	</delete>

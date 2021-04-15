@@ -31,6 +31,6 @@ public interface ClientDao {
 
 	Client getMemberByLoginIdAndEmail(Map<String, Object> param);
 
-	void clientWithdrawal(@Param("clientId") int clientId);
+	void delete(@Param("clientId") int clientId);
 
 }

@@ -30,7 +30,7 @@ public class UsrClientController extends BaseController {
 
 		Client client = clientService.getForPrintClient(id);
 
-		if(client == null) {
+		if (client == null) {
 			return new ResultData("F-1", "로그인 후 이용가능합니다.");
 		}
 		req.setAttribute("client", client);
@@ -226,7 +226,7 @@ public class UsrClientController extends BaseController {
 	@PostMapping("/usr/client/doFindLoginPw")
 	@ResponseBody
 	public ResultData doFindLoginPw(@RequestParam Map<String, Object> param) {
-		
+
 		String loginId = (String) param.get("loginId");
 		if (Util.isEmpty(loginId)) {
 			return new ResultData("F-1", "loginId를 입력해주세요.");
@@ -236,32 +236,23 @@ public class UsrClientController extends BaseController {
 		if (Util.isEmpty(email)) {
 			return new ResultData("F-1", "email을 입력해주세요.");
 		}
-		
+
 		return clientService.getClientByLoginIdAndEmail(param);
 	}
-	
-	@PostMapping("/usr/client/withdrawal")
+
+	@GetMapping("/usr/client/doDelete")
 	@ResponseBody
-	public ResultData withdrawalClient(String loginId, String loginPw) {
-		if (loginId == null) {
-			return new ResultData("F-1", "loginId를 입력해주세요.");
+	public ResultData doDelete(int id) {
+
+		Client client = clientService.getForPrintClient(id);
+
+		if (client == null) {
+			return new ResultData("F-1", "로그인 후 이용가능합니다.");
 		}
 
-		Client existingClient = clientService.getForPrintClientByLoginId(loginId);
+		clientService.delete(id);
 
-		if (existingClient == null) {
-			return new ResultData("F-2", "존재하지 않는 로그인아이디 입니다.", "loginId", loginId);
-		}
-		if (loginPw == null) {
-			return new ResultData("F-1", "loginPw를 입력해주세요.");
-		}
-		if (existingClient.getLoginPw().equals(loginPw) == false) {
-			return new ResultData("F-3", "비밀번호가 일치하지 않습니다.");
-		}
-
-		clientService.clientWithdrawal(existingClient.getId());
-			
-		return new ResultData("S-1", "회원 탈퇴 완료");
+		return new ResultData("S-1", "성공", "name", client.getName());
 	}
 
 }

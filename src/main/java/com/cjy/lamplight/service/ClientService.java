@@ -155,9 +155,9 @@ public class ClientService {
 		modifyClient(modifyArg);
 	}
 
-	public void clientWithdrawal(int clientId) {
-		clientDao.clientWithdrawal(clientId);
-		
+	public void delete(int clientId) {
+		clientDao.delete(clientId);
+	
 	}
 
 }

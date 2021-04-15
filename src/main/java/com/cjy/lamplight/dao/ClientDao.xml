@@ -113,7 +113,7 @@
 		AND `email` = #{email}
 	</select>
 	
-	<delete id="clientWithdrawal">
+	<delete id="delete">
 		DELETE FROM `client`
 		WHERE id = #{clientId}
 	</delete>
